@@ -27,7 +27,7 @@ set(HEADER_DIR_2 .)
 file(GLOB_RECURSE RES_SOURCES "${DATA_DIR}/data/*")
 
 SET(CMAKE_CXX_COMPILER             "/usr/bin/clang++")
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 ############## Define Project. ###############
 # ---- This the main options of project ---- #
@@ -135,7 +135,13 @@ file(GLOB SRC_FILES
     ${HEADER_DIR_2}/*.hpp
 
     #iamnotexist
-    src/MainFrame/*.cpp
+    # src/MainFrame/*.cpp
+    src/window/RectangleWindow/*.cpp
+    src/window/Drawer/*.cpp
+    src/window/*.cpp
+    src/seet/*.cpp
+    src/camera/*.cpp
+    src/mouse/*.cpp
 )
 ELSE (APPLE)
 file(GLOB SRC_FILES

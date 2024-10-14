@@ -6,7 +6,7 @@
 #include "analizer/src/window/IWindow.hpp"
 #include "engine/vec2si32.h"
 
-class RectangleWindow : IWindow {
+class RectangleWindow : public IWindow {
 public:
     RectangleWindow(arctic::Sprite sprite, arctic::Vec2Si32 windowSize) :
         IWindow(sprite),
