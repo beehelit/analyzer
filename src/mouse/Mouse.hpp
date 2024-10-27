@@ -1,20 +1,46 @@
 #pragma once
 
-#include "analizer/src/window/IWindow.hpp"
+#include "analizer/src/window/IListener.hpp"
+
 #include "engine/easy_input.h"
 #include "engine/vec2si32.h"
 
-class Camera;
+#include <optional>
 
-class Mouse {
+class Mouse : public IListener {
 public:
-    Mouse(IWindow* window) :
-        window_(window) {}
+    auto GetOffset() {
+        return offset_;
+    }
 
-    bool InWindow();
+    bool IsLeftDown() const {
+        return leftMouse_;
+    }
 
-    void Listen(Camera* camera);
+    void Listen() override;
+
+
+    void SafeOffset() {
+        safeOffset_ = offset_;
+    }
+
+    auto GetSafeOffset() {
+        return safeOffset_;
+    }
+
+    bool GetFlag() {
+        return leftMouseFlag_;
+    }
+
+    void SetFlag(bool toSet) {
+        leftMouseFlag_ = toSet;
+    }
 
 private:
-    IWindow* window_;
+    bool leftMouse_ = false;
+
+    arctic::Vec2Si32 offset_ = {};
+    arctic::Vec2Si32 safeOffset_ = {};
+
+    bool leftMouseFlag_ = false;
 };

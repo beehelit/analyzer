@@ -8,6 +8,8 @@
 #include "analizer/src/Logs/LogsReader/LogsReader.hpp"
 #include "analizer/src/Logs/Logs.hpp"
 #include "analizer/src/DrawElements/lines/TransportLine.hpp"
+#include "analizer/src/DrawElements//fps/FpsCounter.hpp"
+#include "analizer/src/DrawElements/fps/Fps.hpp"
 
 #include "engine/arctic_input.h"
 #include "engine/easy.h"
@@ -21,6 +23,7 @@
 
 void EasyMain() {
   std::shared_ptr<Camera> mainCamera = std::make_shared<Camera>();
+  std::shared_ptr<Mouse> globalMouse = std::make_shared<Mouse>();
 
   LogsReader logsReader;
   logsReader.ReadFile("storage_start_err.log", 40000);
@@ -29,6 +32,8 @@ void EasyMain() {
   size_t actorsCount = logs.GetActorsCount();
 
   while (!IsKeyDownward(arctic::kKeyEscape)) {
+    FpsCounter::Start();
+
     arctic::Clear();
     arctic::ResizeScreen(arctic::WindowSize());
 
@@ -42,11 +47,11 @@ void EasyMain() {
       arctic::Vec2Si32(screenSize.x, screenSize.y - marginBottom));
     RectWinDraw mainFrame(mainFrameSprite,
       arctic::Vec2Si32(screenSize.x, screenSize.y - marginBottom),
-      mainCamera);
+      mainCamera.get(), globalMouse.get());
     mainFrame.Fill(arctic::Rgba(232, 227, 227));
 
-    mainCamera->SetMouse(Mouse(&mainFrame));
-    mainCamera->Listen();
+//    mainCamera->SetMouse(Mouse(&mainFrame));
+//    mainCamera->Listen();
 
     arctic::Sprite timeLineSprite;
     timeLineSprite.Reference(arctic::GetEngine()->GetBackbuffer(),
@@ -67,7 +72,26 @@ void EasyMain() {
       mainFrame.AddDrawElement(new TransportLine(event.from, event.to));
     }
 
+
+//----------------
+
+    arctic::Sprite playButtonSprite;
+    playButtonSprite.Reference(timeLineSprite,
+      arctic::Vec2Si32(0, 0),
+      arctic::Vec2Si32(timeLineSprite.Size().y - 1, timeLineSprite.Size().y - 1)
+      );
+
+    
+    RectWinDraw* playButton = new RectWinDraw(playButtonSprite, playButtonSprite.Size());
+    playButton->Fill(arctic::Rgba(255, 0, 0));
+    timeLineFrame.AddSubWindow(playButton);
+    
+
+    mainFrame.AddDrawElement(new Fps());
+    mainFrame.Listen();
+
     mainFrame.Draw();
+    timeLineFrame.Draw();
     arctic::ShowFrame();
   }
 }

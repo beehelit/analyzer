@@ -135,7 +135,6 @@ file(GLOB SRC_FILES
     ${HEADER_DIR_2}/*.hpp
 
     #iamnotexist
-    # src/MainFrame/*.cpp
     src/window/RectangleWindow/*.cpp
     src/window/Drawer/*.cpp
     src/window/*.cpp
@@ -145,6 +144,8 @@ file(GLOB SRC_FILES
     src/Logs/LogsReader/*.cpp
     src/Logs/*.cpp
     src/DrawElements/actors/*.cpp
+    src/DrawElements/fps/*.cpp
+    src/window/MWindow/*.cpp
 )
 ELSE (APPLE)
 file(GLOB SRC_FILES

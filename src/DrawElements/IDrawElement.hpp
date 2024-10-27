@@ -2,11 +2,11 @@
 
 #include "engine/easy_sprite.h"
 #include "engine/vec2si32.h"
-#include "../camera/Camera.hpp"
 
 enum class DrawElementType {
     ACTOR,
-    TRANSPORT_LINE
+    TRANSPORT_LINE,
+    FPS
 };
 
 class Drawer;

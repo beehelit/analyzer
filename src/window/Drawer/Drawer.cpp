@@ -14,6 +14,12 @@ void Drawer::Draw() {
 
         drawElement->Draw(this);
     }
+
+    auto curWindow = GetWindow();
+    for (auto window : curWindow->GetSubWindows()) {
+        auto drawer = dynamic_cast<Drawer*>(window);
+        drawer->Draw();
+    }
 }
 
 void Drawer::AddDrawElement(IDrawElement* drawElement) {

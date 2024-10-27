@@ -3,18 +3,36 @@
 #include "analizer/src/camera/Camera.hpp"
 #include "analizer/src/window/Drawer/Drawer.hpp"
 #include "RectangleWindow/RectangleWindow.hpp"
+#include "analizer/src/window/MWindow/MWindow.hpp"
 #include "engine/vec2si32.h"
 #include <memory>
 
-class RectWinDraw : public RectangleWindow, public Drawer {
+class RectWinDraw : 
+    public RectangleWindow, 
+    public Drawer, 
+    public MWindow {
 public:
-    RectWinDraw(arctic::Sprite sprite, arctic::Vec2Si32 windowSize, std::shared_ptr<Camera> camera) :
-        Drawer(camera),
-        RectangleWindow(sprite, windowSize) {}
+    RectWinDraw(arctic::Sprite sprite, arctic::Vec2Si32 windowSize, 
+                Camera* camera,
+                Mouse* mouse) :
+    RectWinDraw(sprite, windowSize, camera) {
+        SetMouse(mouse);
+    }
+
+    RectWinDraw(arctic::Sprite sprite, arctic::Vec2Si32 windowSize, Camera* camera) :
+        RectWinDraw(sprite, windowSize) {
+        SetCamera(camera);
+    }
 
     RectWinDraw(arctic::Sprite sprite, arctic::Vec2Si32 windowSize) :
-        RectWinDraw(sprite, windowSize, std::make_shared<Camera>()) {}
+        Window(sprite),
+        MWindow(sprite),
+        Drawer(),
+        RectangleWindow(sprite, windowSize) {}
 
     arctic::Sprite GetDrawSprite() override;
-    IWindow* GetWindow() override;
+
+    void Listen() override;
+
+    Window* GetWindow() override;
 };

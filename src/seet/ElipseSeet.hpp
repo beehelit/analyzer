@@ -1,12 +1,12 @@
 #pragma once
 
-#include "analizer/src/window/IWindow.hpp"
+#include "analizer/src/window/Window.hpp"
 #include "engine/arctic_types.h"
 #include "engine/vec2si32.h"
 
 class ElipseSeet {
 public:
-    ElipseSeet(IWindow* window) :
+    ElipseSeet(Window* window) :
         window_(window),
         seetCount_(0) {}
 
@@ -17,6 +17,6 @@ private:
     double ElipseLen();
     arctic::Vec2Si32 PixFromElipseCoord(double eliseCoord);
 
-    IWindow* window_;
+    Window* window_;
     arctic::Ui32 seetCount_;
 };

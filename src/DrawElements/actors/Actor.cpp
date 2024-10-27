@@ -1,6 +1,7 @@
 #include "Actor.hpp"
 
 #include "analizer/src/window/Drawer/Drawer.hpp"
+#include "analizer/src/window/RectWinDraw.hpp"
 
 void Actor::Draw(Drawer* drawer) const {
     auto coord = offset_;
@@ -11,7 +12,7 @@ void Actor::Draw(Drawer* drawer) const {
     // TODO - mouse offset
 
     // TODO for any window, now only for Rectangle
-    auto* window = dynamic_cast<RectangleWindow*>(drawer->GetWindow());
+    auto* window = dynamic_cast<RectWinDraw*>(drawer->GetWindow());
     auto center = window->GetWindowSize() / 2;
 
     coord.x = center.x - (center.x - coord.x) * camera->GetScaleFactor();
