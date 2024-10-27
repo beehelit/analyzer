@@ -1,18 +1,44 @@
 #pragma once
 
 #include "analizer/src/DrawElements/IDrawElement.hpp"
-#include "analizer/src/MainFrame/MainFrame.hpp"
+#include "analizer/src/DrawElements/actors/Actor.hpp"
+#include "analizer/src/window/Drawer/Drawer.hpp"
+
 #include "engine/arctic_types.h"
 #include "engine/vec2si32.h"
-#include "../actors/Actor.hpp"
 
 class TransportLine : public IDrawElement {
 public:
-    void Draw(arctic::Sprite sprite) const override {
-        auto from_coord = dynamic_cast<Actor*>(MainFrame::GetDrawElements()[MainFrame::GetActorsList()[fromTo_.first]])->GetCenter();
-        auto to_coord = dynamic_cast<Actor*>(MainFrame::GetDrawElements()[MainFrame::GetActorsList()[fromTo_.second]])->GetCenter();
+    void Draw(Drawer* drawer) const override {
+        auto fromActor = drawer->GetActorStorage()[fromTo_.first];
+        auto toActor = drawer->GetActorStorage()[fromTo_.second];
 
-        arctic::DrawLine(sprite, from_coord, to_coord, arctic::Rgba(255, 255, 255));
+        auto fromCoord = fromActor->GetOffset();
+        auto toCoord = toActor->GetOffset();
+
+        auto camera = drawer->GetCamera();
+
+        // TODO for any window, now only for Rectangle
+        auto* window = dynamic_cast<RectangleWindow*>(drawer->GetWindow());
+        auto center = window->GetWindowSize() / 2;
+
+        fromCoord -= camera->GetOffset();
+        toCoord -= camera->GetOffset();
+
+        fromCoord.x = center.x - (center.x - fromCoord.x) * camera->GetScaleFactor();
+        fromCoord.y = center.y - (center.y - fromCoord.y) * camera->GetScaleFactor();
+
+        toCoord.x = center.x - (center.x - toCoord.x) * camera->GetScaleFactor();
+        toCoord.y = center.y - (center.y - toCoord.y) * camera->GetScaleFactor();
+
+        arctic::DrawLine(drawer->GetDrawSprite(), 
+                         fromCoord, 
+                         toCoord, 
+                            arctic::Rgba(255, 255, 255));
+    }
+
+    DrawElementType GetDrawElementType() const override {
+        return DrawElementType::TRANSPORT_LINE;
     }
 
     TransportLine(arctic::Si32 from, arctic::Si32 to) :

@@ -3,6 +3,7 @@
 #include "analizer/src/DrawElements/IDrawElement.hpp"
 #include "analizer/src/camera/Camera.hpp"
 #include "analizer/src/window/IWindow.hpp"
+#include "analizer/src/DrawElements/Actors/Actor.hpp"
 #include "engine/easy_sprite.h"
 #include <memory>
 
@@ -18,6 +19,7 @@ public:
     virtual IWindow* GetWindow() = 0;
 
     auto GetCamera() { return camera_; }
+    const auto& GetActorStorage() { return actorStorage_; }
 
     ~Drawer();
 
@@ -27,4 +29,6 @@ private:
 
     std::vector<IDrawElement*> drawStorage_;
     std::shared_ptr<Camera> camera_;
+
+    std::vector<Actor*> actorStorage_;
 };

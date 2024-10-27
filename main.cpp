@@ -5,6 +5,9 @@
 #include "analizer/src/window/RectWinDraw.hpp"
 #include "analizer/src/window/RectangleWindow/RectangleWindow.hpp"
 #include "analizer/src/DrawElements/actors/Actor.hpp"
+#include "analizer/src/Logs/LogsReader/LogsReader.hpp"
+#include "analizer/src/Logs/Logs.hpp"
+#include "analizer/src/DrawElements/lines/TransportLine.hpp"
 
 #include "engine/arctic_input.h"
 #include "engine/easy.h"
@@ -14,12 +17,16 @@
 #include "engine/vec2d.h"
 #include "engine/vec2si32.h"
 
-#include "src/MainFrame/MainFrame.hpp"
-
 #include <iostream>
 
 void EasyMain() {
   std::shared_ptr<Camera> mainCamera = std::make_shared<Camera>();
+
+  LogsReader logsReader;
+  logsReader.ReadFile("storage_start_err.log", 40000);
+  
+  Logs logs(logsReader);
+  size_t actorsCount = logs.GetActorsCount();
 
   while (!IsKeyDownward(arctic::kKeyEscape)) {
     arctic::Clear();
@@ -50,13 +57,17 @@ void EasyMain() {
     timeLineFrame.Fill(arctic::Rgba(34, 88, 224));
 
     ElipseSeet seet(&mainFrame);
-    seet.SeetN(100);
+    seet.SeetN(actorsCount);
 
-    for (int i = 0; i < 100; ++i) {
-      mainFrame.AddDrawElement(new Actor(seet.GetCoord(i), 15));
+    for (int i = 0; i < actorsCount; ++i) {
+      mainFrame.AddDrawElement(new Actor(seet.GetCoord(i), std::max(1ul, 1000 / actorsCount)));
     }
-    mainFrame.Draw();
 
+    for (auto event : logs.GetEvents()) {
+      mainFrame.AddDrawElement(new TransportLine(event.from, event.to));
+    }
+
+    mainFrame.Draw();
     arctic::ShowFrame();
   }
 }

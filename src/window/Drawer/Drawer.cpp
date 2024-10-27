@@ -3,6 +3,10 @@
 #include <stdexcept>
 
 void Drawer::Draw() {
+    for (auto* actor : actorStorage_) {
+        actor->Draw(this);
+    }
+
     for (auto* drawElement : drawStorage_) {
         if (!drawElement) {
             throw std::runtime_error("Null pointer, Draw: drawElement");
@@ -15,6 +19,11 @@ void Drawer::Draw() {
 void Drawer::AddDrawElement(IDrawElement* drawElement) {
     if (!drawElement) {
         throw std::runtime_error("Null pointer, Add: drawElement");
+    }
+
+    if (drawElement->GetDrawElementType() == DrawElementType::ACTOR) {
+        actorStorage_.push_back(dynamic_cast<Actor*>(drawElement));
+        return;
     }
 
     drawStorage_.push_back(drawElement);

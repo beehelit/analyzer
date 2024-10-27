@@ -142,6 +142,9 @@ file(GLOB SRC_FILES
     src/seet/*.cpp
     src/camera/*.cpp
     src/mouse/*.cpp
+    src/Logs/LogsReader/*.cpp
+    src/Logs/*.cpp
+    src/DrawElements/actors/*.cpp
 )
 ELSE (APPLE)
 file(GLOB SRC_FILES
