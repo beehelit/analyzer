@@ -10,7 +10,7 @@ public:
         gFont_.Load("data/arctic_one_bmf.fnt");
     }
 
-    void Draw(Drawer* drawer) const override;
+    void Draw(const Drawer* drawer) const override;
 
     DrawElementType GetDrawElementType() const override {
         return DrawElementType::FPS;

@@ -9,30 +9,30 @@
 
 class RectWinDraw : 
     public RectangleWindow, 
-    public Drawer, 
-    public MWindow {
+    public Drawer {
 public:
-    RectWinDraw(arctic::Sprite sprite, arctic::Vec2Si32 windowSize, 
+    RectWinDraw(arctic::Sprite sprite, 
                 Camera* camera,
                 Mouse* mouse) :
-    RectWinDraw(sprite, windowSize, camera) {
+    RectWinDraw(sprite, camera) {
         SetMouse(mouse);
     }
 
-    RectWinDraw(arctic::Sprite sprite, arctic::Vec2Si32 windowSize, Camera* camera) :
-        RectWinDraw(sprite, windowSize) {
+    RectWinDraw(arctic::Sprite sprite, Camera* camera) :
+        RectWinDraw(sprite) {
         SetCamera(camera);
     }
 
-    RectWinDraw(arctic::Sprite sprite, arctic::Vec2Si32 windowSize) :
+    RectWinDraw(arctic::Sprite sprite) :
         Window(sprite),
-        MWindow(sprite),
         Drawer(),
-        RectangleWindow(sprite, windowSize) {}
+        RectangleWindow(sprite) {}
 
-    arctic::Sprite GetDrawSprite() override;
+    RectWinDraw() = default;
+
+    arctic::Sprite GetDrawSprite() const override;
 
     void Listen() override;
 
-    Window* GetWindow() override;
+    const Window* GetWindow() const override;
 };

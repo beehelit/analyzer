@@ -3,20 +3,21 @@
 #include <vector>
 
 #include "analizer/src/DrawElements/IDrawElement.hpp"
-#include "analizer/src/window/Window.hpp"
+#include "analizer/src/window/MWindow/MWindow.hpp"
 #include "engine/vec2si32.h"
 
-class RectangleWindow : virtual public Window {
+class RectangleWindow : public MWindow {
 public:
-    RectangleWindow(arctic::Sprite sprite, arctic::Vec2Si32 windowSize) :
-        Window(sprite),
-        windowSize_(windowSize) {}
+    RectangleWindow(arctic::Sprite sprite) :
+        Window(sprite) {}
 
-    void Fill(arctic::Rgba color) override;
+    RectangleWindow() = default;
 
-    auto GetWindowSize() {
-        return windowSize_;
+    // void Fill(arctic::Rgba color) override;
+
+    auto GetWindowSize() const {
+        return GetFrameSprite().Size();
     }
-private:
-    arctic::Vec2Si32 windowSize_;
+
+    bool IsMouseIn() const override;
 };

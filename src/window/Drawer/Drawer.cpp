@@ -2,7 +2,7 @@
 #include "analizer/src/DrawElements/IDrawElement.hpp"
 #include <stdexcept>
 
-void Drawer::Draw() {
+void Drawer::Draw() const {
     for (auto* actor : actorStorage_) {
         actor->Draw(this);
     }
@@ -16,7 +16,7 @@ void Drawer::Draw() {
     }
 
     auto curWindow = GetWindow();
-    for (auto window : curWindow->GetSubWindows()) {
+    for (const auto window : curWindow->GetSubWindows()) {
         auto drawer = dynamic_cast<Drawer*>(window);
         drawer->Draw();
     }

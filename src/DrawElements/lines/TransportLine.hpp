@@ -9,7 +9,7 @@
 
 class TransportLine : public IDrawElement {
 public:
-    void Draw(Drawer* drawer) const override {
+    void Draw(const Drawer* drawer) const override {
         auto fromActor = drawer->GetActorStorage()[fromTo_.first];
         auto toActor = drawer->GetActorStorage()[fromTo_.second];
 
@@ -19,8 +19,9 @@ public:
         auto camera = drawer->GetCamera();
 
         // TODO for any window, now only for Rectangle
-        auto* window = dynamic_cast<RectangleWindow*>(drawer->GetWindow());
-        auto center = window->GetWindowSize() / 2;
+        // auto* window = dynamic_cast<RectangleWindow*>(drawer->GetWindow());
+        // auto center = window->GetWindowSize() / 2;
+        auto center = drawer->GetWindow()->GetFrameSprite().Size() / 2;
 
         fromCoord -= camera->GetOffset();
         toCoord -= camera->GetOffset();

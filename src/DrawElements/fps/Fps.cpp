@@ -4,13 +4,11 @@
 
 std::chrono::time_point<std::chrono::steady_clock, std::chrono::nanoseconds> FpsCounter::time_ = {};
 
-void Fps::Draw(Drawer* drawer) const {
+void Fps::Draw(const Drawer* drawer) const {
     auto curFps = FpsCounter::GetFps();
     std::string text = std::to_string(curFps);
 
-    // TODO for any window, now only for Rectangle
-    auto* window = dynamic_cast<RectangleWindow*>(drawer->GetWindow());
-    auto windowHeight = window->GetWindowSize().y;
+    auto windowHeight = drawer->GetWindow()->GetFrameSprite().Size().y;
 
     gFont_.Draw(drawer->GetDrawSprite(), 
                 text.c_str(), 

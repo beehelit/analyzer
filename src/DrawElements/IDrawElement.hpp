@@ -6,7 +6,8 @@
 enum class DrawElementType {
     ACTOR,
     TRANSPORT_LINE,
-    FPS
+    FPS,
+    PLAYER_PAUSE_PLAY_BUTTON
 };
 
 class Drawer;
@@ -14,6 +15,6 @@ class Drawer;
 class IDrawElement {
 public:
     virtual DrawElementType GetDrawElementType() const = 0;
-    virtual void Draw(Drawer*) const = 0;
+    virtual void Draw(const Drawer*) const = 0;
     virtual ~IDrawElement() {}
 };

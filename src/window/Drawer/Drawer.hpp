@@ -11,17 +11,17 @@
 
 class Drawer {
 public:
-    void Draw();
+    virtual void Draw() const;
     void AddDrawElement(IDrawElement* drawElement);
      
-    virtual arctic::Sprite GetDrawSprite() = 0;
-    virtual Window* GetWindow() = 0;
+    virtual arctic::Sprite GetDrawSprite() const = 0;
+    virtual const Window* GetWindow() const = 0;
 
     void SetCamera(Camera* camera) {
         camera_ = camera;
     }
 
-    Camera* GetCamera() { 
+    Camera* GetCamera() const { 
         if (camera_ == std::nullopt) {
             return nullptr;
         }
@@ -29,9 +29,9 @@ public:
         return *camera_;
     }
 
-    const auto& GetActorStorage() { return actorStorage_; }
+    const auto& GetActorStorage() const { return actorStorage_; }
 
-    ~Drawer();
+    virtual ~Drawer();
     Drawer() = default;
 
 private:

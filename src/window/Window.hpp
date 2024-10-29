@@ -1,11 +1,17 @@
 #pragma once
 
+#include "engine/easy_drawing.h"
 #include "engine/easy_sprite.h"
 #include "engine/rgba.h"
+#include "engine/vec2si32.h"
+
+const arctic::Sprite kNoneSprite = arctic::Sprite();
 
 class Window {
 public:
-    virtual void Fill(arctic::Rgba color) = 0;
+    virtual void Fill(arctic::Rgba color) const {
+        arctic::DrawRectangle(frameSprite_, arctic::Vec2Si32(0, 0), frameSprite_.Size(), color);
+    }
     
     auto GetFrameSprite() const {
         return frameSprite_;
@@ -18,7 +24,7 @@ public:
         subWindows_.push_back(window);
     }
 
-    const auto& GetSubWindows() {
+    const auto& GetSubWindows()const  {
         return subWindows_;
     }
 
@@ -28,8 +34,19 @@ public:
         }
     }
 
+    Window() {
+        frameSprite_ = kNoneSprite;
+    }
+
+    virtual void SetSprite(arctic::Sprite sprite) {
+        frameSprite_ = sprite;
+    }
+
+    void ClearSprite() {
+        frameSprite_ = kNoneSprite;
+    }
+
 private:
-    Window() = delete;
     Window(const Window&) = delete;
     Window& operator=(const Window&) = delete;
 

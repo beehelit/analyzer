@@ -17,7 +17,7 @@ public:
         radius_(radius),
         offset_(offset) {}
 
-    void Draw(Drawer* drawer) const override;
+    void Draw(const Drawer* drawer) const override;
 
     DrawElementType GetDrawElementType() const override {
         return DrawElementType::ACTOR;

@@ -135,7 +135,7 @@ file(GLOB SRC_FILES
     ${HEADER_DIR_2}/*.hpp
 
     #iamnotexist
-    src/window/RectangleWindow/*.cpp
+    # src/window/RectangleWindow/*.cpp
     src/window/Drawer/*.cpp
     src/window/*.cpp
     src/seet/*.cpp
@@ -146,6 +146,9 @@ file(GLOB SRC_FILES
     src/DrawElements/actors/*.cpp
     src/DrawElements/fps/*.cpp
     src/window/MWindow/*.cpp
+    src/window/buttons/cbutton/*.cpp
+    src/window/buttons/cbutton/player_pause_play/*.cpp
+    src/window/RectangleWindow/*.cpp
 )
 ELSE (APPLE)
 file(GLOB SRC_FILES

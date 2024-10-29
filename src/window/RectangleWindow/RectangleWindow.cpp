@@ -1,14 +1,16 @@
 #include "RectangleWindow.hpp"
-#include "engine/easy_drawing.h"
-#include "engine/vec2si32.h"
-#include <stdexcept>
 
-void RectangleWindow::Fill(arctic::Rgba color) {
-    auto rightCorner = GetWindowSize();
-    rightCorner.x--;
-    rightCorner.y--;
+bool RectangleWindow::IsMouseIn() const {
+    if (!GetMouse()) {
+        return false;
+    }
 
-    auto leftCorner = arctic::Vec2Si32(0, 0);
+    auto mouse = GetMouse();
 
-    arctic::DrawRectangle(GetFrameSprite(), leftCorner, rightCorner, color);
+    auto spritePos = GetFrameSprite().RefPos();
+    auto mousePos = mouse->GetOffset();
+    auto spriteSize = GetFrameSprite().Size();
+
+    return mousePos.x > spritePos.x && mousePos.y > spritePos.y &&
+           mousePos.x < spritePos.x + spriteSize.x && mousePos.y < spritePos.y + spriteSize.y;
 }

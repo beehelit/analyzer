@@ -9,11 +9,11 @@
 #include "engine/vec2d.h"
 #include "engine/vec2si32.h"
 
-arctic::Sprite RectWinDraw::GetDrawSprite() {
+arctic::Sprite RectWinDraw::GetDrawSprite() const {
     return GetFrameSprite();
 }
 
-Window* RectWinDraw::GetWindow() {
+const Window* RectWinDraw::GetWindow() const {
     return this;
 }
 

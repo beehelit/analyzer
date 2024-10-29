@@ -17,6 +17,10 @@ public:
         return leftMouse_;
     }
 
+    bool IsLeftDownward() const {
+        return leftMouseDownward_;
+    }
+
     void Listen() override;
 
 
@@ -43,4 +47,6 @@ private:
     arctic::Vec2Si32 safeOffset_ = {};
 
     bool leftMouseFlag_ = false;
+
+    bool leftMouseDownward_ = false;
 };

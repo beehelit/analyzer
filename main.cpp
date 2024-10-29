@@ -10,20 +10,34 @@
 #include "analizer/src/DrawElements/lines/TransportLine.hpp"
 #include "analizer/src/DrawElements//fps/FpsCounter.hpp"
 #include "analizer/src/DrawElements/fps/Fps.hpp"
+#include "analizer/src/window/buttons/cbutton/CButton.hpp"
+#include "analizer/src/window/Drawer/DrawBox.hpp"
+#include "analizer/src/window/RectangleWindow/Footer.hpp"
 
+#include "analizer/src/window/buttons/cbutton/CButton.hpp"
+#include "analizer/src/window/buttons/cbutton/player_pause_play/PlayerPausePlay.hpp"
 #include "engine/arctic_input.h"
 #include "engine/easy.h"
 #include "engine/easy_advanced.h"
 #include "engine/easy_input.h"
 #include "engine/easy_util.h"
+#include "engine/rgba.h"
 #include "engine/vec2d.h"
 #include "engine/vec2si32.h"
 
 #include <iostream>
+#include <memory>
 
 void EasyMain() {
   std::shared_ptr<Camera> mainCamera = std::make_shared<Camera>();
   std::shared_ptr<Mouse> globalMouse = std::make_shared<Mouse>();
+  std::shared_ptr<PlayerPausePlay> pausePlay = std::make_shared<PlayerPausePlay>();
+  
+  pausePlay->SetMouse(globalMouse.get());
+  pausePlay->SetAction([](){
+    std::cout << "A" << std::endl;
+  });
+
 
   LogsReader logsReader;
   logsReader.ReadFile("storage_start_err.log", 40000);
@@ -46,20 +60,15 @@ void EasyMain() {
       leftBottomCorner,
       arctic::Vec2Si32(screenSize.x, screenSize.y - marginBottom));
     RectWinDraw mainFrame(mainFrameSprite,
-      arctic::Vec2Si32(screenSize.x, screenSize.y - marginBottom),
       mainCamera.get(), globalMouse.get());
     mainFrame.Fill(arctic::Rgba(232, 227, 227));
 
-//    mainCamera->SetMouse(Mouse(&mainFrame));
-//    mainCamera->Listen();
-
-    arctic::Sprite timeLineSprite;
-    timeLineSprite.Reference(arctic::GetEngine()->GetBackbuffer(),
+    arctic::Sprite footerSprite;
+    footerSprite.Reference(arctic::GetEngine()->GetBackbuffer(),
       arctic::Vec2Si32(0, 0),
       arctic::Vec2Si32(screenSize.x - 1, marginBottom - 1));
-    RectWinDraw timeLineFrame(timeLineSprite,
-      arctic::Vec2Si32(screenSize.x, marginBottom));
-    timeLineFrame.Fill(arctic::Rgba(34, 88, 224));
+    Footer footer(footerSprite);
+    footer.Fill(arctic::Rgba(34, 88, 224));
 
     ElipseSeet seet(&mainFrame);
     seet.SeetN(actorsCount);
@@ -68,30 +77,37 @@ void EasyMain() {
       mainFrame.AddDrawElement(new Actor(seet.GetCoord(i), std::max(1ul, 1000 / actorsCount)));
     }
 
+/*
     for (auto event : logs.GetEvents()) {
       mainFrame.AddDrawElement(new TransportLine(event.from, event.to));
     }
-
+*/
 
 //----------------
 
     arctic::Sprite playButtonSprite;
-    playButtonSprite.Reference(timeLineSprite,
+    playButtonSprite.Reference(footerSprite,
       arctic::Vec2Si32(0, 0),
-      arctic::Vec2Si32(timeLineSprite.Size().y - 1, timeLineSprite.Size().y - 1)
+      arctic::Vec2Si32(footerSprite.Size().y, footerSprite.Size().y)
       );
 
-    
-    RectWinDraw* playButton = new RectWinDraw(playButtonSprite, playButtonSprite.Size());
-    playButton->Fill(arctic::Rgba(255, 0, 0));
-    timeLineFrame.AddSubWindow(playButton);
+/*
+    PlayerPausePlay* playButton = new PlayerPausePlay(playButtonSprite, globalMouse.get(),
+      []() {
+        std::cout << "A" << std::endl;
+      });
+*/
+    pausePlay->SetSprite(playButtonSprite);    
+    // playButton->Fill(arctic::Rgba(255, 0, 0));
+    footer.AddSubWindow(new DrawBox(pausePlay.get()));
     
 
     mainFrame.AddDrawElement(new Fps());
     mainFrame.Listen();
+    footer.Listen();
 
     mainFrame.Draw();
-    timeLineFrame.Draw();
+    footer.Draw();
     arctic::ShowFrame();
   }
 }

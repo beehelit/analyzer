@@ -9,6 +9,7 @@
 
 void Mouse::Listen() {
     leftMouse_ = arctic::IsKeyDown(arctic::KeyCode::kKeyMouseLeft);
+    leftMouseDownward_ = arctic::IsKeyDownward(arctic::KeyCode::kKeyMouseLeft);
 
     offset_ = arctic::MousePos();
 }
