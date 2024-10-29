@@ -13,6 +13,7 @@
 #include "analizer/src/window/buttons/cbutton/CButton.hpp"
 #include "analizer/src/window/Drawer/DrawBox.hpp"
 #include "analizer/src/window/RectangleWindow/Footer.hpp"
+#include "analizer/src/window/buttons/cbutton/time_line/TimeLine.hpp"
 
 #include "analizer/src/window/buttons/cbutton/CButton.hpp"
 #include "analizer/src/window/buttons/cbutton/player_pause_play/PlayerPausePlay.hpp"
@@ -29,21 +30,29 @@
 #include <memory>
 
 void EasyMain() {
-  std::shared_ptr<Camera> mainCamera = std::make_shared<Camera>();
-  std::shared_ptr<Mouse> globalMouse = std::make_shared<Mouse>();
-  std::shared_ptr<PlayerPausePlay> pausePlay = std::make_shared<PlayerPausePlay>();
-  
-  pausePlay->SetMouse(globalMouse.get());
-  pausePlay->SetAction([](){
-    std::cout << "A" << std::endl;
-  });
-
-
   LogsReader logsReader;
   logsReader.ReadFile("storage_start_err.log", 40000);
   
   Logs logs(logsReader);
+  logs.Normalize();
+
   size_t actorsCount = logs.GetActorsCount();
+
+  std::shared_ptr<Camera> mainCamera = std::make_shared<Camera>();
+  std::shared_ptr<Mouse> globalMouse = std::make_shared<Mouse>();
+  std::shared_ptr<PlayerPausePlay> pausePlay = std::make_shared<PlayerPausePlay>();
+  std::shared_ptr<TimeLine> timeLine = std::make_shared<TimeLine>();
+  
+  pausePlay->SetMouse(globalMouse.get());
+  pausePlay->SetAction([&timeLine](){
+    timeLine->SetStatus(!timeLine->GetStatus());
+  });
+
+  timeLine->SetMouse(globalMouse.get());
+  timeLine->SetMaxTime(logs.GetMaxTime());
+
+  std::cout << logs.GetMaxTime() << std::endl;
+
 
   while (!IsKeyDownward(arctic::kKeyEscape)) {
     FpsCounter::Start();
@@ -90,17 +99,16 @@ void EasyMain() {
       arctic::Vec2Si32(0, 0),
       arctic::Vec2Si32(footerSprite.Size().y, footerSprite.Size().y)
       );
-
-/*
-    PlayerPausePlay* playButton = new PlayerPausePlay(playButtonSprite, globalMouse.get(),
-      []() {
-        std::cout << "A" << std::endl;
-      });
-*/
     pausePlay->SetSprite(playButtonSprite);    
-    // playButton->Fill(arctic::Rgba(255, 0, 0));
     footer.AddSubWindow(new DrawBox(pausePlay.get()));
     
+
+    arctic::Sprite timeLineSprite;
+    timeLineSprite.Reference(footerSprite,
+      arctic::Vec2Si32(playButtonSprite.Size().x, footerSprite.Size().y / 24 * 8),
+      arctic::Vec2Si32(footerSprite.Size().x - 4*playButtonSprite.Size().x, footerSprite.Size().y / 24 * 9));
+    timeLine->SetSprite(timeLineSprite);
+    footer.AddSubWindow(new DrawBox(timeLine.get()));
 
     mainFrame.AddDrawElement(new Fps());
     mainFrame.Listen();

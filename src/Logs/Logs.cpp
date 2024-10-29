@@ -51,3 +51,25 @@ size_t Logs::GetActorsCount() const {
 
     return actorsIds.size();
 }
+
+Time Logs::GetMaxTime() const {
+    auto ret = events[0].end;
+
+    for (auto event : events) {
+        ret = std::max(event.end, ret);
+    }
+
+    return ret;
+}
+
+void Logs::Normalize() {
+    auto minTime = events[0].start;
+    for (auto event : events) {
+        minTime = std::min(minTime, event.start);
+    }
+
+    for (auto& event : events) {
+        event.start -= minTime;
+        event.end -= minTime;
+    }
+}

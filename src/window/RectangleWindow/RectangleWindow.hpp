@@ -6,7 +6,7 @@
 #include "analizer/src/window/MWindow/MWindow.hpp"
 #include "engine/vec2si32.h"
 
-class RectangleWindow : public MWindow {
+class RectangleWindow : virtual public MWindow {
 public:
     RectangleWindow(arctic::Sprite sprite) :
         Window(sprite) {}

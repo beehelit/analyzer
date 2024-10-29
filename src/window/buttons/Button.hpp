@@ -4,7 +4,7 @@
 #include "analizer/src/window/MWindow/MWindow.hpp"
 #include <functional>
 
-class Button : public MWindow, public ActionHandler {
+class Button : virtual public MWindow, public ActionHandler {
 public:
     Button(arctic::Sprite sprite, std::function<void()> action) :
         Window(sprite),

@@ -25,7 +25,7 @@ void PlayerPausePlay::Draw(const Drawer* drawer) const {
     for (size_t i = 0; i < usePix_.size(); ++i) {
         for (size_t j = 0; j < usePix_[i].size(); ++j) {
             if (usePix_[i][j]) {
-                arctic::SetPixel(GetFrameSprite(), j, i, color);
+                arctic::SetPixel(drawer->GetDrawSprite(), j, i, color);
             }
         }
     }

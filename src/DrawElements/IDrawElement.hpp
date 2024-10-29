@@ -7,7 +7,8 @@ enum class DrawElementType {
     ACTOR,
     TRANSPORT_LINE,
     FPS,
-    PLAYER_PAUSE_PLAY_BUTTON
+    PLAYER_PAUSE_PLAY_BUTTON,
+    TIME_LINE
 };
 
 class Drawer;

@@ -149,6 +149,7 @@ file(GLOB SRC_FILES
     src/window/buttons/cbutton/*.cpp
     src/window/buttons/cbutton/player_pause_play/*.cpp
     src/window/RectangleWindow/*.cpp
+    src/window/buttons/cbutton/time_line/*.cpp
 )
 ELSE (APPLE)
 file(GLOB SRC_FILES
