@@ -1,5 +1,3 @@
-// Copyright (c) <year> Your name
-
 #include "analizer/src/camera/Camera.hpp"
 #include "analizer/src/seet/ElipseSeet.hpp"
 #include "analizer/src/window/RectWinDraw.hpp"
@@ -32,7 +30,7 @@
 
 void EasyMain() {
   LogsReader logsReader;
-  logsReader.ReadFile("storage_start_err.log", 40000);
+  logsReader.ReadFile("data/storage_start_err.log", 40000);
   
   Logs logs(logsReader);
   logs.Normalize();

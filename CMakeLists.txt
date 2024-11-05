@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 ################### Variables. ####################
 # Change if you want modify path or other values. #
@@ -19,9 +18,9 @@ set(PROJECT_NAME analizer)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 # Folders files
 set(DATA_DIR .)
-set(CPP_DIR_1 ../arctic/engine)
+set(CPP_DIR_1 submodules/arctic/engine)
 set(CPP_DIR_2 .)
-set(HEADER_DIR_1 ../arctic/engine)
+set(HEADER_DIR_1 submodules/arctic/engine)
 set(HEADER_DIR_2 .)
 
 file(GLOB_RECURSE RES_SOURCES "${DATA_DIR}/data/*")
@@ -94,7 +93,8 @@ ELSE (APPLE)
 ENDIF (APPLE)
 
 include_directories(${CMAKE_SOURCE_DIR}/..)
-include_directories(${CMAKE_SOURCE_DIR}/../arctic)
+include_directories(${CMAKE_SOURCE_DIR}/submodules)
+include_directories(${CMAKE_SOURCE_DIR}/submodules/arctic)
 
 ################# Flags ################
 # Defines Flags for Windows and Linux. #
