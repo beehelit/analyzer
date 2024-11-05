@@ -14,6 +14,7 @@
 #include "analizer/src/window/Drawer/DrawBox.hpp"
 #include "analizer/src/window/RectangleWindow/Footer.hpp"
 #include "analizer/src/window/buttons/cbutton/time_line/TimeLine.hpp"
+#include "analizer/src/DrawElements/messages/message.hpp"
 
 #include "analizer/src/window/buttons/cbutton/CButton.hpp"
 #include "analizer/src/window/buttons/cbutton/player_pause_play/PlayerPausePlay.hpp"
@@ -86,11 +87,16 @@ void EasyMain() {
       mainFrame.AddDrawElement(new Actor(seet.GetCoord(i), std::max(1ul, 1000 / actorsCount)));
     }
 
-/*
     for (auto event : logs.GetEvents()) {
-      mainFrame.AddDrawElement(new TransportLine(event.from, event.to));
+      if (event.start <= timeLine->GetTime() && event.end >= timeLine->GetTime()) {
+        auto tLine = new TransportLine(event.from, event.to);
+        mainFrame.AddDrawElement(tLine);
+        mainFrame.AddDrawElement(new Message(
+          tLine, (1.0 * timeLine->GetTime() - event.start) / (event.end - event.start)
+        ));
+      }
     }
-*/
+
 
 //----------------
 

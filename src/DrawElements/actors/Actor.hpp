@@ -27,6 +27,10 @@ public:
         return offset_;
     }
     
+
+    auto GetRadius() const {
+        return radius_;
+    }
 private:
     arctic::Si32 radius_;
     arctic::Vec2Si32 offset_;

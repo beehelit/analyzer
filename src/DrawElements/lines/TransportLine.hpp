@@ -17,10 +17,6 @@ public:
         auto toCoord = toActor->GetOffset();
 
         auto camera = drawer->GetCamera();
-
-        // TODO for any window, now only for Rectangle
-        // auto* window = dynamic_cast<RectangleWindow*>(drawer->GetWindow());
-        // auto center = window->GetWindowSize() / 2;
         auto center = drawer->GetWindow()->GetFrameSprite().Size() / 2;
 
         fromCoord -= camera->GetOffset();
@@ -35,7 +31,7 @@ public:
         arctic::DrawLine(drawer->GetDrawSprite(), 
                          fromCoord, 
                          toCoord, 
-                            arctic::Rgba(255, 255, 255));
+                            arctic::Rgba(255, 0, 0));
     }
 
     DrawElementType GetDrawElementType() const override {
@@ -44,6 +40,11 @@ public:
 
     TransportLine(arctic::Si32 from, arctic::Si32 to) :
         fromTo_(from, to) {}
+
+    auto GetFromTo() const {
+        return fromTo_;
+    }
+    
 
 private:
     std::pair<arctic::Si32, arctic::Si32> fromTo_;

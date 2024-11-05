@@ -9,12 +9,6 @@ void Actor::Draw(const Drawer* drawer) const {
     auto camera = drawer->GetCamera();
     coord -= camera->GetOffset();
 
-    // TODO - mouse offset
-
-    // TODO for any window, now only for Rectangle
-    // auto* window = dynamic_cast<RectWinDraw*>(drawer->GetWindow());
-    // auto center = window->GetWindowSize() / 2;
-
     auto center = drawer->GetWindow()->GetFrameSprite().Size() / 2;
 
     coord.x = center.x - (center.x - coord.x) * camera->GetScaleFactor();
