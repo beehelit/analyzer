@@ -29,6 +29,7 @@ public:
 
         if (status_ && time_ < maxTime_) {
             time_ += speed_;
+            time_ = std::min(time_, maxTime_);
         }
     }
 

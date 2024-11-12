@@ -37,6 +37,7 @@ void EasyMain() {
   logs.Normalize();
 
   size_t actorsCount = logs.GetActorsCount();
+  ActorId maxActorId = logs.GetMaxActorNum();
 
   std::shared_ptr<Camera> mainCamera = std::make_shared<Camera>();
   std::shared_ptr<Mouse> globalMouse = std::make_shared<Mouse>();
@@ -86,7 +87,7 @@ void EasyMain() {
     ElipseSeet seet(&mainFrame);
     seet.SeetN(actorsCount);
 
-    for (int i = 0; i < actorsCount; ++i) {
+    for (int i = 0; i <= maxActorId; ++i) {
       mainFrame.AddDrawElement(new Actor(seet.GetCoord(i), std::max(1ul, 1000 / actorsCount)));
     }
 

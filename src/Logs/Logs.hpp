@@ -15,6 +15,7 @@ public:
     }
 
     size_t GetActorsCount() const;
+    ActorId GetMaxActorNum() const;
     Time GetMaxTime() const;
 
     void Normalize();

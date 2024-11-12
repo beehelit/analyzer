@@ -14,6 +14,16 @@ size_t Logs::GetActorsCount() const {
     return actorsIds.size();
 }
 
+ActorId Logs::GetMaxActorNum() const {
+    ActorId curMax = 0;
+    for (const auto& event: events_) {
+        curMax = std::max(curMax, event.from);
+        curMax = std::max(curMax, event.to);
+    }
+
+    return curMax;
+}
+
 Time Logs::GetMaxTime() const {
     auto ret = events_[0].end;
 
