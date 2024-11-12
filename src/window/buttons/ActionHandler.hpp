@@ -18,5 +18,5 @@ public:
     ActionHandler() = default;
 
 private:
-    std::function<void()> action_;
+    std::function<void()> action_ = [](){};
 };

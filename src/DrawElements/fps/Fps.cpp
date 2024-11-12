@@ -15,7 +15,7 @@ void Fps::Draw(const Drawer* drawer) const {
                 0, windowHeight,
                 arctic::kTextOriginTop,
                 arctic::kTextAlignmentLeft,
-                arctic::kDrawBlendingModeAlphaBlend,
+                arctic::kDrawBlendingModeColorize,
                 arctic::kFilterNearest,
-                arctic::Rgba(0, 0, 0));
+                arctic::Rgba(0, 255, 0));
 }

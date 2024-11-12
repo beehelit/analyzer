@@ -57,14 +57,11 @@ void PlayerPausePlay::DrawPicture() {
     auto paddingWidth = usePix_.front().size() / 10;
     auto paddingHeight = usePix_.size() / 10;
 
-    auto color = arctic::Rgba();
-
     int del = 0;
     int x = paddingWidth;
 
     int pauseBarWidth = paddingWidth * 2;
     if (!isActive_) { // play Icon
-        color = arctic::Rgba(0, 255, 0);
         while (height > 2 * del) {
             for (int y = paddingHeight + del; y < height - del - paddingHeight; ++y) {
                 usePix_[y][x] = true;

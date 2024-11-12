@@ -15,6 +15,7 @@ public:
         time_ = 0;
         maxTime_ = 0;
         status_ = false;
+        speed_ = 1;
     }
 
     void SetMaxTime(Time maxTime) {
@@ -27,7 +28,7 @@ public:
         CButton::Listen();
 
         if (status_ && time_ < maxTime_) {
-            time_++;
+            time_ += speed_;
         }
     }
 
@@ -47,9 +48,14 @@ public:
         return DrawElementType::TIME_LINE;
     }
 
+    auto GetSpeed() const { return speed_; }
+    void SetSpeed(int speed) { speed_ = speed; }
+
 private:
     Time time_;
     Time maxTime_;
 
     bool status_;
+
+    int speed_;
 };

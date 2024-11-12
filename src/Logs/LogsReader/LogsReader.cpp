@@ -7,6 +7,9 @@
 #include <queue>
 #include <set>
 #include <map>
+#include <algorithm>
+
+static Time fromTimestempToTime(std::string timeStemp);
 
 void LogsReader::ReadFile(std::string fileName, size_t count) {
     std::ifstream logIn(fileName);
@@ -15,7 +18,6 @@ void LogsReader::ReadFile(std::string fileName, size_t count) {
     std::vector<std::string> logLines;
 
     size_t readCount = 0;
-
     while (std::getline(logIn, logLine)) {
         if (count != std::dynamic_extent && readCount >= count) {
             break;
@@ -25,124 +27,78 @@ void LogsReader::ReadFile(std::string fileName, size_t count) {
         readCount++;
     }
 
-    ActorId maxId = std::min(logLines.size() / 2, 200ul);;
-
-    std::queue<std::pair<ActorId, ActorId>> sended;
-    std::map<std::pair<ActorId, ActorId>, EventId> eventsIdMap;
-    std::set<EventId> eventsIdSet;
-    
+    std::vector<std::pair<std::string, Time>> received;
+    std::vector<std::tuple<std::string, std::string, Time>> sended;
     for (const auto& logLine : logLines) {
         std::stringstream logLineStream(logLine);
 
         std::string what;
         logLineStream >> what;
         
-        std::pair<ActorId, ActorId> fromTo;
-        EventId curId = arctic::Random64();
-
         if (what == "Receive") {
-            fromTo = sended.front();
-            sended.pop();
-            curId = eventsIdMap[fromTo];
+            std::string from, message, time;
 
-            eventsType.push_back(LogsReader::EventType::RECEIVE);
+            logLineStream >> from >> message >> time;
+            received.push_back({from, fromTimestempToTime(time)});
         } else if (what == "Send") {
-            fromTo = std::make_pair(arctic::Random(0, maxId), arctic::Random(0, maxId));
-            sended.push(fromTo);
+            std::string from, to, message, time;
 
-            while (eventsIdSet.count(curId)) {
-                curId = arctic::Random64();
-            }
+            logLineStream >> from >> to >> message >> time;
+            sended.push_back({from, to, fromTimestempToTime(time)});
+        }
+    }
 
-            eventsIdMap[fromTo] = curId;
-            eventsIdSet.insert(curId);
+    std::sort(received.begin(), received.end());
 
-            eventsType.push_back(LogsReader::EventType::SEND);
-        } else {
-            continue;
+    ActorId curId = 0;
+    std::map<std::string, ActorId> actorId;
+
+    for (auto evStr : sended) {
+        std::string from, to;
+        Time time = 0;
+
+        from = std::get<0>(evStr);
+        to = std::get<1>(evStr);
+        time = std::get<2>(evStr);
+
+        if (!actorId.count(from)) {
+            actorId[from] = curId++;
         }
 
-        
-        std::string time;
-        logLineStream >> time;
+        if (!actorId.count(to)) {
+            actorId[to] = curId++;
+        }
 
-        auto delTime = time.find(':');
-        Time curTime = 0;
-        curTime += 1ull * 60 * 1000 * (std::stoi(time.substr(delTime + 1, 2))) +
-                   1ull * 1000 * (std::stoi(time.substr(delTime + 4, 2))) +
-                   std::stoi(time.substr(delTime + 7, 4));
+        Event curEvent = {};
+        curEvent.from = actorId[from];
+        curEvent.to = actorId[to];
+        curEvent.start = time;
 
-        actorsEvents.push_back(fromTo);
-        eventsId.push_back(curId);
-        eventsTime.push_back(curTime);
+        auto receivedIt = 
+            std::lower_bound(received.begin(), received.end(), std::pair{from, 0});
+
+        if (receivedIt != received.end() && receivedIt->first == from) {
+            curEvent.end = receivedIt->second;
+            received.erase(receivedIt);
+            events_.push_back(curEvent);
+        }
     }
 }
 
-std::vector<Event> LogsReader::CreateLogEvents() {
-    std::map<EventId, Event> eventIdMap;
-    std::set<EventId> sended;
-    std::set<EventId> received;
+static Time fromTimestempToTime(std::string timeStemp) {
+    std::string tailWithMcS = timeStemp.substr(timeStemp.length() - 8);
+    timeStemp.resize(timeStemp.length() - 8);
+    tailWithMcS.pop_back();
+    tailWithMcS.erase(tailWithMcS.begin());
 
-    for (size_t i = 0; i < eventsType.size(); ++i) {
-        switch (eventsType[i]) {
-            case LogsReader::EventType::SEND: {
-                eventIdMap[eventsId[i]].from = actorsEvents[i].first;
-                eventIdMap[eventsId[i]].to = actorsEvents[i].second;
-                eventIdMap[eventsId[i]].start = eventsTime[i];
-                eventIdMap[eventsId[i]].id = eventsId[i];
+    std::tm tm = {};
+    std::stringstream tsStream(timeStemp);
+    tsStream >> std::get_time(&tm, "%Y-%m-%dT%H%N%S");
+    auto tp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
 
-                sended.insert(eventsId[i]);
-                break;
-            }
+    Time cur = std::chrono::duration_cast<std::chrono::seconds>(tp.time_since_epoch()).count();
+    cur *= 1'000'000;
+    cur += std::stoi(tailWithMcS);
 
-            case LogsReader::EventType::RECEIVE: {
-                eventIdMap[eventsId[i]].end = eventsTime[i];
-
-                received.insert(eventsId[i]);
-                break;
-            }
-        }
-    }
-
-    std::vector<Event> logEvents;
-
-    for (auto eventId: sended) {
-        if (received.contains(eventId)) {
-            logEvents.push_back(eventIdMap[eventId]);
-        }
-    }
-
-    return logEvents;
+    return cur;
 }
-
-/*
-using token = int64_t;
-class th {
-public:
-    void generate() {
-        while (true) {
-            sleep(1000 - );
-            for (int i = 0; i < N; ++i) {
-                generated.fetch_add(1);
-                cv.notify_one();
-            }
-        }
-    }
-
-    token get() {
-        cv.wait(mut, [&]{
-            return cur < generated;
-        });
-
-        return cur.fetch_add(1);
-    }
-
-private:
-    std::atomic<token> generated = 0;
-    std::atomic<token> cur = 0;
-
-    std::condition_variable cv;
-    std::mutex mut;
-    std::mutex mut2;
-};
-*/

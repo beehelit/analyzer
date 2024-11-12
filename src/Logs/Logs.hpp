@@ -6,10 +6,12 @@
 
 class Logs {
 public:
-    Logs(const LogsReader& logsReader);
+    Logs(LogsReader& logsReader) {
+        events_ = logsReader.MoveEvents();
+    }
 
     const std::vector<Event>& GetEvents() const {
-        return events;
+        return events_;
     }
 
     size_t GetActorsCount() const;
@@ -22,5 +24,5 @@ private:
     Logs() = delete;
     Logs(const Logs&) = delete;
 
-    std::vector<Event> events;
+    std::vector<Event> events_;
 };

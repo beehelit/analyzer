@@ -11,6 +11,7 @@
 #include "analizer/src/window/buttons/cbutton/CButton.hpp"
 #include "analizer/src/window/Drawer/DrawBox.hpp"
 #include "analizer/src/window/RectangleWindow/Footer.hpp"
+#include "analizer/src/window/buttons/cbutton/speed/SpeedUpButton.hpp"
 #include "analizer/src/window/buttons/cbutton/time_line/TimeLine.hpp"
 #include "analizer/src/DrawElements/messages/message.hpp"
 
@@ -30,7 +31,7 @@
 
 void EasyMain() {
   LogsReader logsReader;
-  logsReader.ReadFile("data/storage_start_err.log", 40000);
+  logsReader.ReadFile("data/storage_start_err.log", 10000);
   
   Logs logs(logsReader);
   logs.Normalize();
@@ -41,16 +42,20 @@ void EasyMain() {
   std::shared_ptr<Mouse> globalMouse = std::make_shared<Mouse>();
   std::shared_ptr<PlayerPausePlay> pausePlay = std::make_shared<PlayerPausePlay>();
   std::shared_ptr<TimeLine> timeLine = std::make_shared<TimeLine>();
+  std::shared_ptr<SpeedUpButton> speedUp = std::make_shared<SpeedUpButton>();
   
   pausePlay->SetMouse(globalMouse.get());
   pausePlay->SetAction([&timeLine](){
     timeLine->SetStatus(!timeLine->GetStatus());
   });
 
+  speedUp->SetMouse(globalMouse.get());
+  speedUp->SetAction([&timeLine]() {
+    timeLine->SetSpeed(timeLine->GetSpeed() + 1);
+  });
+
   timeLine->SetMouse(globalMouse.get());
   timeLine->SetMaxTime(logs.GetMaxTime());
-
-  std::cout << logs.GetMaxTime() << std::endl;
 
 
   while (!IsKeyDownward(arctic::kKeyEscape)) {
@@ -113,6 +118,13 @@ void EasyMain() {
       arctic::Vec2Si32(footerSprite.Size().x - 4*playButtonSprite.Size().x, footerSprite.Size().y / 24 * 9));
     timeLine->SetSprite(timeLineSprite);
     footer.AddSubWindow(new DrawBox(timeLine.get()));
+
+    arctic::Sprite speedUpSprite;
+    speedUpSprite.Reference(footerSprite,
+      arctic::Vec2Si32(footerSprite.Size().x - playButtonSprite.Size().x, 0),
+      arctic::Vec2Si32(footerSprite.Size().x, footerSprite.Size().y));
+    speedUp->SetSprite(speedUpSprite);
+    footer.AddSubWindow(new DrawBox(speedUp.get()));
 
     mainFrame.AddDrawElement(new Fps());
     mainFrame.Listen();

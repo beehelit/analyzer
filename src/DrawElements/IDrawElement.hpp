@@ -8,6 +8,7 @@ enum class DrawElementType {
     TRANSPORT_LINE,
     FPS,
     PLAYER_PAUSE_PLAY_BUTTON,
+    SPEED_UP_BUTTON,
     TIME_LINE,
     MESSAGE
 };
