@@ -1,9 +1,9 @@
 #include "CButton.hpp"
 
 void CButton::Listen() {
-    GetMouse()->Listen();
+  GetMouse()->Listen();
 
-    if (GetMouse()->IsLeftDownward() && IsMouseIn()) {
-        Action();
-    }
+  if (GetMouse()->IsLeftDownward() && IsMouseIn()) {
+    Action();
+  }
 }

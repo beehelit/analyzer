@@ -8,8 +8,8 @@
 #include <optional>
 
 void Mouse::Listen() {
-    leftMouse_ = arctic::IsKeyDown(arctic::KeyCode::kKeyMouseLeft);
-    leftMouseDownward_ = arctic::IsKeyDownward(arctic::KeyCode::kKeyMouseLeft);
+  leftMouse_ = arctic::IsKeyDown(arctic::KeyCode::kKeyMouseLeft);
+  leftMouseDownward_ = arctic::IsKeyDownward(arctic::KeyCode::kKeyMouseLeft);
 
-    offset_ = arctic::MousePos();
+  offset_ = arctic::MousePos();
 }

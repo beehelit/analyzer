@@ -6,15 +6,13 @@
 
 class CButton : public Button {
 public:
-    CButton(arctic::Sprite sprite, std::function<void()> action) :
-        Window(sprite),
-        Button(sprite, action) {}
+  CButton(arctic::Sprite sprite, std::function<void()> action)
+      : Window(sprite), Button(sprite, action) {}
 
-    CButton(arctic::Sprite sprite, Mouse* mouse, std::function<void()> action) :
-        Window(sprite),
-        Button(sprite, mouse, action) {}
+  CButton(arctic::Sprite sprite, Mouse *mouse, std::function<void()> action)
+      : Window(sprite), Button(sprite, mouse, action) {}
 
-    CButton() = default;
+  CButton() = default;
 
-    void Listen() override;
+  void Listen() override;
 };

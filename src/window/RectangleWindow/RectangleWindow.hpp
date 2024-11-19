@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #include <vector>
 
@@ -9,16 +9,13 @@
 
 class RectangleWindow : virtual public MWindow {
 public:
-    RectangleWindow(arctic::Sprite sprite) :
-        Window(sprite) {}
+  RectangleWindow(arctic::Sprite sprite) : Window(sprite) {}
 
-    RectangleWindow() = default;
+  RectangleWindow() = default;
 
-    // void Fill(arctic::Rgba color) override;
+  // void Fill(arctic::Rgba color) override;
 
-    auto GetWindowSize() const {
-        return GetFrameSprite().Size();
-    }
+  auto GetWindowSize() const { return GetFrameSprite().Size(); }
 
-    bool IsMouseIn() const override;
+  bool IsMouseIn() const override;
 };

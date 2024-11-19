@@ -1,35 +1,32 @@
 #pragma once
 
 #include <DrawElements/IDrawElement.hpp>
-#include <window/buttons/cbutton/CButton.hpp>
 #include <window/Drawer/Drawer.hpp>
+#include <window/buttons/cbutton/CButton.hpp>
 
-
-class SpeedUpButton : 
-    public IDrawElement,
-    public CButton {
+class SpeedUpButton : public IDrawElement, public CButton {
 public:
-    SpeedUpButton(arctic::Sprite sprite, Mouse* mouse, std::function<void()> action) :
-        Window(sprite),
-        CButton(sprite, mouse, action) {}
+  SpeedUpButton(arctic::Sprite sprite, Mouse *mouse,
+                std::function<void()> action)
+      : Window(sprite), CButton(sprite, mouse, action) {}
 
-    SpeedUpButton() {}
+  SpeedUpButton() {}
 
-    void Action() override;
+  void Action() override;
 
-    bool IsMouseIn() const override;
+  bool IsMouseIn() const override;
 
-    void Listen() override;
+  void Listen() override;
 
-    void SetSprite(arctic::Sprite sprite) override;
+  void SetSprite(arctic::Sprite sprite) override;
 
-    void Draw(const Drawer* drawer) const override;
-    DrawElementType GetDrawElementType() const override {
-        return DrawElementType::SPEED_UP_BUTTON;
-    }
+  void Draw(const Drawer *drawer) const override;
+  DrawElementType GetDrawElementType() const override {
+    return DrawElementType::SPEED_UP_BUTTON;
+  }
 
 private:
-    void DrawPicture();
+  void DrawPicture();
 
-    std::vector<std::vector<bool>> usePix_;
+  std::vector<std::vector<bool>> usePix_;
 };

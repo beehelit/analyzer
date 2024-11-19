@@ -1,8 +1,8 @@
 #pragma once
 
-#include <window/Window.hpp>
-#include <window/IListener.hpp>
 #include <mouse/Mouse.hpp>
+#include <window/IListener.hpp>
+#include <window/Window.hpp>
 
 #include "engine/vec2si32.h"
 
@@ -12,43 +12,39 @@ const arctic::Vec2Si32 kUndefinedMousePosition = arctic::Vec2Si32(-1, -1);
 
 class MWindow : virtual public Window, public IListener {
 public:
-    void Listen() override {
-        if (mouse_) {
-            (*mouse_)->Listen();
-        }
+  void Listen() override {
+    if (mouse_) {
+      (*mouse_)->Listen();
+    }
+  }
+
+  virtual bool IsMouseIn() const = 0;
+
+  arctic::Vec2Si32 GetMouseOffset() const;
+
+  void SetMouse(Mouse *mouse) { mouse_ = mouse; }
+
+  Mouse *GetMouse() const {
+    if (!mouse_) {
+      return nullptr;
     }
 
-    virtual bool IsMouseIn() const = 0;
-    
-    arctic::Vec2Si32 GetMouseOffset() const;
+    return *mouse_;
+  }
 
-    void SetMouse(Mouse* mouse) {
-        mouse_ = mouse;
-    }
+  MWindow(arctic::Sprite sprite, Mouse *mouse) : MWindow(sprite) {
+    mouse_ = mouse;
+  }
 
-    Mouse* GetMouse() const {
-        if (!mouse_) {
-            return nullptr;
-        }
+  MWindow(arctic::Sprite sprite) : Window(sprite) {}
 
-        return *mouse_;
-    }
+  ~MWindow() = default;
 
-    MWindow(arctic::Sprite sprite, Mouse* mouse) :
-        MWindow(sprite) {
-        mouse_ = mouse;
-    }
-
-    MWindow(arctic::Sprite sprite) :
-        Window(sprite) {}
-
-    ~MWindow() = default;
-
-    MWindow() = default;
+  MWindow() = default;
 
 private:
-    MWindow(const MWindow&) = delete;
-    MWindow& operator=(const MWindow&) = delete;
+  MWindow(const MWindow &) = delete;
+  MWindow &operator=(const MWindow &) = delete;
 
-    std::optional<Mouse*> mouse_;
+  std::optional<Mouse *> mouse_;
 };

@@ -9,44 +9,29 @@
 
 class Mouse : public IListener {
 public:
-    auto GetOffset() {
-        return offset_;
-    }
+  auto GetOffset() { return offset_; }
 
-    bool IsLeftDown() const {
-        return leftMouse_;
-    }
+  bool IsLeftDown() const { return leftMouse_; }
 
-    bool IsLeftDownward() const {
-        return leftMouseDownward_;
-    }
+  bool IsLeftDownward() const { return leftMouseDownward_; }
 
-    void Listen() override;
+  void Listen() override;
 
+  void SafeOffset() { safeOffset_ = offset_; }
 
-    void SafeOffset() {
-        safeOffset_ = offset_;
-    }
+  auto GetSafeOffset() { return safeOffset_; }
 
-    auto GetSafeOffset() {
-        return safeOffset_;
-    }
+  bool GetFlag() { return leftMouseFlag_; }
 
-    bool GetFlag() {
-        return leftMouseFlag_;
-    }
-
-    void SetFlag(bool toSet) {
-        leftMouseFlag_ = toSet;
-    }
+  void SetFlag(bool toSet) { leftMouseFlag_ = toSet; }
 
 private:
-    bool leftMouse_ = false;
+  bool leftMouse_ = false;
 
-    arctic::Vec2Si32 offset_ = {};
-    arctic::Vec2Si32 safeOffset_ = {};
+  arctic::Vec2Si32 offset_ = {};
+  arctic::Vec2Si32 safeOffset_ = {};
 
-    bool leftMouseFlag_ = false;
+  bool leftMouseFlag_ = false;
 
-    bool leftMouseDownward_ = false;
+  bool leftMouseDownward_ = false;
 };

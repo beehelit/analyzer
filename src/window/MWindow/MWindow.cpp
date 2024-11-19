@@ -2,10 +2,10 @@
 #include "engine/vec2si32.h"
 
 arctic::Vec2Si32 MWindow::GetMouseOffset() const {
-    auto mouse = *mouse_;
+  auto mouse = *mouse_;
 
-    auto spritePos = GetFrameSprite().RefPos();
-    auto mousePos = mouse->GetOffset();
+  auto spritePos = GetFrameSprite().RefPos();
+  auto mousePos = mouse->GetOffset();
 
-    return mousePos - spritePos;
+  return mousePos - spritePos;
 }

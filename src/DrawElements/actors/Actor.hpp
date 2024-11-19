@@ -12,26 +12,20 @@
 
 class Actor : public IDrawElement {
 public:
+  Actor(arctic::Vec2Si32 offset, arctic::Si32 radius)
+      : radius_(radius), offset_(offset) {}
 
-    Actor(arctic::Vec2Si32 offset, arctic::Si32 radius) :
-        radius_(radius),
-        offset_(offset) {}
+  void Draw(const Drawer *drawer) const override;
 
-    void Draw(const Drawer* drawer) const override;
+  DrawElementType GetDrawElementType() const override {
+    return DrawElementType::ACTOR;
+  }
 
-    DrawElementType GetDrawElementType() const override {
-        return DrawElementType::ACTOR;
-    }
+  auto GetOffset() const { return offset_; }
 
-    auto GetOffset() const {
-        return offset_;
-    }
-    
+  auto GetRadius() const { return radius_; }
 
-    auto GetRadius() const {
-        return radius_;
-    }
 private:
-    arctic::Si32 radius_;
-    arctic::Vec2Si32 offset_;
+  arctic::Si32 radius_;
+  arctic::Vec2Si32 offset_;
 };

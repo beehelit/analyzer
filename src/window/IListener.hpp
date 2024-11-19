@@ -2,5 +2,5 @@
 
 class IListener {
 public:
-    virtual void Listen() = 0;
+  virtual void Listen() = 0;
 };

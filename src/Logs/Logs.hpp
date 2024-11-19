@@ -6,24 +6,21 @@
 
 class Logs {
 public:
-    Logs(LogsReader& logsReader) {
-        events_ = logsReader.MoveEvents();
-    }
+  Logs(LogsReader &logsReader) { events_ = logsReader.MoveEvents(); }
 
-    const std::vector<Event>& GetEvents() const {
-        return events_;
-    }
+  const std::vector<Event> &GetEvents() const { return events_; }
 
-    size_t GetActorsCount() const;
-    ActorId GetMaxActorNum() const;
-    Time GetMaxTime() const;
+  size_t GetActorsCount() const;
+  ActorId GetMaxActorNum() const;
+  Time GetMaxTime() const;
 
-    void Normalize();
+  void Normalize();
 
-    ~Logs() = default;
+  ~Logs() = default;
+
 private:
-    Logs() = delete;
-    Logs(const Logs&) = delete;
+  Logs() = delete;
+  Logs(const Logs &) = delete;
 
-    std::vector<Event> events_;
+  std::vector<Event> events_;
 };

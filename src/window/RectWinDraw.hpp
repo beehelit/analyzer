@@ -9,32 +9,25 @@
 #include "engine/vec2si32.h"
 #include <memory>
 
-class RectWinDraw : 
-    public RectangleWindow, 
-    public Drawer {
+class RectWinDraw : public RectangleWindow, public Drawer {
 public:
-    RectWinDraw(arctic::Sprite sprite, 
-                Camera* camera,
-                Mouse* mouse) :
-    RectWinDraw(sprite, camera) {
-        SetMouse(mouse);
-    }
+  RectWinDraw(arctic::Sprite sprite, Camera *camera, Mouse *mouse)
+      : RectWinDraw(sprite, camera) {
+    SetMouse(mouse);
+  }
 
-    RectWinDraw(arctic::Sprite sprite, Camera* camera) :
-        RectWinDraw(sprite) {
-        SetCamera(camera);
-    }
+  RectWinDraw(arctic::Sprite sprite, Camera *camera) : RectWinDraw(sprite) {
+    SetCamera(camera);
+  }
 
-    RectWinDraw(arctic::Sprite sprite) :
-        Window(sprite),
-        Drawer(),
-        RectangleWindow(sprite) {}
+  RectWinDraw(arctic::Sprite sprite)
+      : Window(sprite), Drawer(), RectangleWindow(sprite) {}
 
-    RectWinDraw() = default;
+  RectWinDraw() = default;
 
-    arctic::Sprite GetDrawSprite() const override;
+  arctic::Sprite GetDrawSprite() const override;
 
-    void Listen() override;
+  void Listen() override;
 
-    const Window* GetWindow() const override;
+  const Window *GetWindow() const override;
 };

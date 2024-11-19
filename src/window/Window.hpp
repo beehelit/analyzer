@@ -9,47 +9,35 @@ const arctic::Sprite kNoneSprite = arctic::Sprite();
 
 class Window {
 public:
-    virtual void Fill(arctic::Rgba color) const {
-        arctic::DrawRectangle(frameSprite_, arctic::Vec2Si32(0, 0), frameSprite_.Size(), color);
-    }
-    
-    auto GetFrameSprite() const {
-        return frameSprite_;
-    }
+  virtual void Fill(arctic::Rgba color) const {
+    arctic::DrawRectangle(frameSprite_, arctic::Vec2Si32(0, 0),
+                          frameSprite_.Size(), color);
+  }
 
-    Window(arctic::Sprite frameSprite) :
-        frameSprite_(frameSprite) {}
+  auto GetFrameSprite() const { return frameSprite_; }
 
-    void AddSubWindow(Window* window) {
-        subWindows_.push_back(window);
-    }
+  Window(arctic::Sprite frameSprite) : frameSprite_(frameSprite) {}
 
-    const auto& GetSubWindows()const  {
-        return subWindows_;
-    }
+  void AddSubWindow(Window *window) { subWindows_.push_back(window); }
 
-    virtual ~Window() {
-        for (auto window : subWindows_) {
-            delete window;
-        }
-    }
+  const auto &GetSubWindows() const { return subWindows_; }
 
-    Window() {
-        frameSprite_ = kNoneSprite;
+  virtual ~Window() {
+    for (auto window : subWindows_) {
+      delete window;
     }
+  }
 
-    virtual void SetSprite(arctic::Sprite sprite) {
-        frameSprite_ = sprite;
-    }
+  Window() { frameSprite_ = kNoneSprite; }
 
-    void ClearSprite() {
-        frameSprite_ = kNoneSprite;
-    }
+  virtual void SetSprite(arctic::Sprite sprite) { frameSprite_ = sprite; }
+
+  void ClearSprite() { frameSprite_ = kNoneSprite; }
 
 private:
-    Window(const Window&) = delete;
-    Window& operator=(const Window&) = delete;
+  Window(const Window &) = delete;
+  Window &operator=(const Window &) = delete;
 
-    arctic::Sprite frameSprite_;
-    std::vector<Window*> subWindows_;
+  arctic::Sprite frameSprite_;
+  std::vector<Window *> subWindows_;
 };

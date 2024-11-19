@@ -4,19 +4,14 @@
 
 class ActionHandler {
 public:
-    ActionHandler(std::function<void()> action) :
-        action_(action) {}
+  ActionHandler(std::function<void()> action) : action_(action) {}
 
-    virtual void Action() {
-        action_();
-    }
+  virtual void Action() { action_(); }
 
-    void SetAction(std::function<void()> action) {
-        action_ = action;
-    }
+  void SetAction(std::function<void()> action) { action_ = action; }
 
-    ActionHandler() = default;
+  ActionHandler() = default;
 
 private:
-    std::function<void()> action_ = [](){};
+  std::function<void()> action_ = []() {};
 };
