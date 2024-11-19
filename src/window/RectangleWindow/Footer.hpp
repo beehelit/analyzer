@@ -1,9 +1,10 @@
 #pragma once
 
-#include "analizer/src/window/IListener.hpp"
-#include "analizer/src/window/Drawer/Drawer.hpp"
-#include "analizer/src/window/Drawer/DrawBox.hpp"
-#include "analizer/src/window/RectangleWindow/RectangleWindow.hpp"
+#include <window/IListener.hpp>
+#include <window/Drawer/Drawer.hpp>
+#include <window/Drawer/DrawBox.hpp>
+#include <window/RectangleWindow/RectangleWindow.hpp>
+
 #include "engine/easy_sprite.h"
 
 class Footer : 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ActionHandler.hpp"
-#include "analizer/src/window/MWindow/MWindow.hpp"
+#include <window/MWindow/MWindow.hpp>
 #include <functional>
 
 class Button : virtual public MWindow, public ActionHandler {

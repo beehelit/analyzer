@@ -1,8 +1,8 @@
 #pragma once
 
-#include "analizer/src/window/Window.hpp"
-#include "analizer/src/window/IListener.hpp"
-#include "analizer/src/mouse/Mouse.hpp"
+#include <window/Window.hpp>
+#include <window/IListener.hpp>
+#include <mouse/Mouse.hpp>
 
 #include "engine/vec2si32.h"
 

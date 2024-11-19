@@ -1,7 +1,7 @@
 #pragma once
 
-#include "analizer/src/DrawElements/IDrawElement.hpp"
-#include "analizer/src/DrawElements/lines/TransportLine.hpp"
+#include <DrawElements/IDrawElement.hpp>
+#include <DrawElements/lines/TransportLine.hpp>
 #include <_types/_uint64_t.h>
 
 class Message : public IDrawElement {

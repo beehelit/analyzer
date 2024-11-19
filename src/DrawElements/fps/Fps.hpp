@@ -1,6 +1,6 @@
 #pragma once
 
-#include "analizer/src/DrawElements/IDrawElement.hpp"
+#include <DrawElements/IDrawElement.hpp>
 
 #include "engine/font.h"
 

@@ -1,8 +1,9 @@
 #pragma once
 
-#include "analizer/src/DrawElements/IDrawElement.hpp"
-#include "analizer/src/window/Drawer/Drawer.hpp"
-#include "analizer/src/window/buttons/cbutton/CButton.hpp"
+#include <DrawElements/IDrawElement.hpp>
+#include <window/Drawer/Drawer.hpp>
+#include <window/buttons/cbutton/CButton.hpp>
+
 #include "engine/vec2si32.h"
 
 #include <functional>

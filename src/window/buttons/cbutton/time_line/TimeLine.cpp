@@ -1,6 +1,6 @@
 #include "TimeLine.hpp"
 
-#include "analizer/src/window/Drawer/Drawer.hpp"
+#include <window/Drawer/Drawer.hpp>
 
 #include "engine/easy_drawing.h"
 #include "engine/rgba.h"

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "analizer/src/DrawElements/IDrawElement.hpp"
-#include "analizer/src/camera/Camera.hpp"
-#include "analizer/src/window/Window.hpp"
-#include "analizer/src/DrawElements/actors/Actor.hpp"
+#include <DrawElements/IDrawElement.hpp>
+#include <camera/Camera.hpp>
+#include <window/Window.hpp>
+#include <DrawElements/actors/Actor.hpp>
 
 #include "engine/easy_sprite.h"
 

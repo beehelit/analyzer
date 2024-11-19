@@ -1,6 +1,7 @@
 #pragma once
 
-#include "analizer/src/window/Window.hpp"
+#include <window/Window.hpp>
+
 #include "Drawer.hpp"
 #include "engine/arctic_types.h"
 

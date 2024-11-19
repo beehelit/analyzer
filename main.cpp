@@ -1,22 +1,24 @@
-#include "analizer/src/camera/Camera.hpp"
-#include "analizer/src/seet/ElipseSeet.hpp"
-#include "analizer/src/window/RectWinDraw.hpp"
-#include "analizer/src/window/RectangleWindow/RectangleWindow.hpp"
-#include "analizer/src/DrawElements/actors/Actor.hpp"
-#include "analizer/src/Logs/LogsReader/LogsReader.hpp"
-#include "analizer/src/Logs/Logs.hpp"
-#include "analizer/src/DrawElements/lines/TransportLine.hpp"
-#include "analizer/src/DrawElements//fps/FpsCounter.hpp"
-#include "analizer/src/DrawElements/fps/Fps.hpp"
-#include "analizer/src/window/buttons/cbutton/CButton.hpp"
-#include "analizer/src/window/Drawer/DrawBox.hpp"
-#include "analizer/src/window/RectangleWindow/Footer.hpp"
-#include "analizer/src/window/buttons/cbutton/speed/SpeedUpButton.hpp"
-#include "analizer/src/window/buttons/cbutton/time_line/TimeLine.hpp"
-#include "analizer/src/DrawElements/messages/message.hpp"
+#include <camera/Camera.hpp>
+#include <seet/ElipseSeet.hpp>
+#include <seet/GreedSeet.hpp>
+#include <window/RectWinDraw.hpp>
+#include <window/RectangleWindow/RectangleWindow.hpp>
+#include <DrawElements/actors/Actor.hpp>
+#include <Logs/LogsReader/LogsReader.hpp>
+#include <Logs/Logs.hpp>
+#include <DrawElements/lines/TransportLine.hpp>
+#include <DrawElements//fps/FpsCounter.hpp>
+#include <DrawElements/fps/Fps.hpp>
+#include <window/buttons/cbutton/CButton.hpp>
+#include <window/Drawer/DrawBox.hpp>
+#include <window/RectangleWindow/Footer.hpp>
+#include <window/buttons/cbutton/speed/SpeedUpButton.hpp>
+#include <window/buttons/cbutton/time_line/TimeLine.hpp>
+#include <DrawElements/messages/message.hpp>
 
-#include "analizer/src/window/buttons/cbutton/CButton.hpp"
-#include "analizer/src/window/buttons/cbutton/player_pause_play/PlayerPausePlay.hpp"
+#include <window/buttons/cbutton/CButton.hpp>
+#include <window/buttons/cbutton/player_pause_play/PlayerPausePlay.hpp>
+
 #include "engine/arctic_input.h"
 #include "engine/easy.h"
 #include "engine/easy_advanced.h"
@@ -32,6 +34,9 @@
 void EasyMain() {
   LogsReader logsReader;
   logsReader.ReadFile("data/storage_start_err.log", 10000);
+  logsReader.ReadConfig("data/seet.config", Config::SEET);
+
+  auto seetInfo = logsReader.GetSeetInfo();
   
   Logs logs(logsReader);
   logs.Normalize();
@@ -63,7 +68,7 @@ void EasyMain() {
     FpsCounter::Start();
 
     arctic::Clear();
-    arctic::ResizeScreen(arctic::WindowSize());
+    arctic::ResizeScreen(arctic::WindowSize() / 2);
 
     auto screenSize = arctic::ScreenSize();
     auto marginBottom = screenSize.y / 10;
@@ -86,6 +91,8 @@ void EasyMain() {
 
     ElipseSeet seet(&mainFrame);
     seet.SeetN(actorsCount);
+
+    GreedSeet gseet(&mainFrame, logsReader);
 
     for (int i = 0; i <= maxActorId; ++i) {
       mainFrame.AddDrawElement(new Actor(seet.GetCoord(i), std::max(1ul, 1000 / actorsCount)));

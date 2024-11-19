@@ -2,8 +2,9 @@
 
 #include <vector>
 
-#include "analizer/src/DrawElements/IDrawElement.hpp"
-#include "analizer/src/window/MWindow/MWindow.hpp"
+#include <DrawElements/IDrawElement.hpp>
+#include <window/MWindow/MWindow.hpp>
+
 #include "engine/vec2si32.h"
 
 class RectangleWindow : virtual public MWindow {

@@ -7,7 +7,11 @@
 #include <string>
 #include <map>
 
-#include "../Event/Event.hpp"
+#include <Logs/Event/Event.hpp>
+
+enum class Config {
+    SEET
+};
 
 class LogsReader {
 public:
@@ -16,8 +20,25 @@ public:
         return std::move(events_);
     }
 
+    void ReadConfig(std::string fileName, Config cfg);
+
+    auto GetSeetInfo() const {
+        return actorNameSeet_;
+    }
+
+    auto GetActorIdName() const {
+        return actorIdName_;
+    }
+
+    auto GetNameActorId() const {
+        return nameActorId_;
+    }
+
 private:
     using EventId = arctic::Ui64;
 
     std::vector<Event> events_;
+    std::map<std::string, size_t> actorNameSeet_;
+    std::map<ActorId, std::string> actorIdName_;
+    std::map<std::string, std::vector<ActorId>> nameActorId_;
 };

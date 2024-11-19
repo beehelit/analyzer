@@ -1,8 +1,8 @@
 #pragma once
 
-#include "analizer/src/DrawElements/IDrawElement.hpp"
-#include "analizer/src/window/buttons/cbutton/CButton.hpp"
-#include "analizer/src/window/Drawer/Drawer.hpp"
+#include <DrawElements/IDrawElement.hpp>
+#include <window/buttons/cbutton/CButton.hpp>
+#include <window/Drawer/Drawer.hpp>
 
 
 class SpeedUpButton : 

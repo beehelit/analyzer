@@ -1,9 +1,11 @@
 #pragma once
 
-#include "analizer/src/camera/Camera.hpp"
-#include "analizer/src/window/Drawer/Drawer.hpp"
+#include <camera/Camera.hpp>
+#include <window/Drawer/Drawer.hpp>
+
 #include "RectangleWindow/RectangleWindow.hpp"
-#include "analizer/src/window/MWindow/MWindow.hpp"
+#include <window/MWindow/MWindow.hpp>
+
 #include "engine/vec2si32.h"
 #include <memory>
 

@@ -95,6 +95,7 @@ ENDIF (APPLE)
 include_directories(${CMAKE_SOURCE_DIR}/..)
 include_directories(${CMAKE_SOURCE_DIR}/submodules)
 include_directories(${CMAKE_SOURCE_DIR}/submodules/arctic)
+include_directories(${CMAKE_SOURCE_DIR}/src)
 
 ################# Flags ################
 # Defines Flags for Windows and Linux. #

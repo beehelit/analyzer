@@ -1,6 +1,6 @@
 #pragma once
 
-#include "analizer/src/window/IListener.hpp"
+#include <window/IListener.hpp>
 
 #include "engine/easy_input.h"
 #include "engine/vec2si32.h"

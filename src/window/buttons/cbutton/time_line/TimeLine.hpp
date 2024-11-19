@@ -1,8 +1,8 @@
 #pragma once
 
-#include "analizer/src/DrawElements/IDrawElement.hpp"
-#include "analizer/src/window/RectangleWindow/RectangleWindow.hpp"
-#include "analizer/src/window/buttons/cbutton/CButton.hpp"
+#include <DrawElements/IDrawElement.hpp>
+#include <window/RectangleWindow/RectangleWindow.hpp>
+#include <window/buttons/cbutton/CButton.hpp>
 
 using Time = uint64_t;
 

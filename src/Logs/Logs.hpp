@@ -1,7 +1,7 @@
 #pragma once
 
 #include "LogsReader/LogsReader.hpp"
-#include "analizer/src/Logs/Event/Event.hpp"
+#include <Logs/Event/Event.hpp>
 #include <_types/_uint64_t.h>
 
 class Logs {

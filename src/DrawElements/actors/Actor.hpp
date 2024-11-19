@@ -1,8 +1,8 @@
 #pragma once
 
-#include "analizer/src/DrawElements/IDrawElement.hpp"
-#include "analizer/src/camera/Camera.hpp"
-#include "analizer/src/window/RectangleWindow/RectangleWindow.hpp"
+#include <DrawElements/IDrawElement.hpp>
+#include <camera/Camera.hpp>
+#include <window/RectangleWindow/RectangleWindow.hpp>
 
 #include "engine/arctic_types.h"
 #include "engine/easy_drawing.h"

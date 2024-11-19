@@ -1,6 +1,7 @@
 #pragma once
 
-#include "analizer/src/window/Window.hpp"
+#include <window/Window.hpp>
+
 #include "engine/arctic_types.h"
 #include "engine/vec2si32.h"
 

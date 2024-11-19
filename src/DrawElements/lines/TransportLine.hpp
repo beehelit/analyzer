@@ -1,8 +1,8 @@
 #pragma once
 
-#include "analizer/src/DrawElements/IDrawElement.hpp"
-#include "analizer/src/DrawElements/actors/Actor.hpp"
-#include "analizer/src/window/Drawer/Drawer.hpp"
+#include <DrawElements/IDrawElement.hpp>
+#include <DrawElements/actors/Actor.hpp>
+#include <window/Drawer/Drawer.hpp>
 
 #include "engine/arctic_types.h"
 #include "engine/vec2si32.h"

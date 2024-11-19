@@ -27,7 +27,7 @@ void LogsReader::ReadFile(std::string fileName, size_t count) {
         readCount++;
     }
 
-    std::vector<std::pair<std::string, Time>> received;
+    std::vector<std::tuple<std::string, Time, std::string>> received;
     std::vector<std::tuple<std::string, std::string, Time>> sended;
     for (const auto& logLine : logLines) {
         std::stringstream logLineStream(logLine);
@@ -36,14 +36,14 @@ void LogsReader::ReadFile(std::string fileName, size_t count) {
         logLineStream >> what;
         
         if (what == "Receive") {
-            std::string from, message, time;
+            std::string actorName, to, message, time;
 
-            logLineStream >> from >> message >> time;
-            received.push_back({from, fromTimestempToTime(time)});
+            logLineStream >> actorName >> to >> message >> time;
+            received.push_back({to, fromTimestempToTime(time), actorName});
         } else if (what == "Send") {
-            std::string from, to, message, time;
+            std::string to, from, message, time;
 
-            logLineStream >> from >> to >> message >> time;
+            logLineStream >> to >> from >> message >> time;
             sended.push_back({from, to, fromTimestempToTime(time)});
         }
     }
@@ -75,12 +75,33 @@ void LogsReader::ReadFile(std::string fileName, size_t count) {
         curEvent.start = time;
 
         auto receivedIt = 
-            std::lower_bound(received.begin(), received.end(), std::pair{from, 0});
+            std::lower_bound(received.begin(), received.end(), std::tuple{to, 0, ""});
 
-        if (receivedIt != received.end() && receivedIt->first == from) {
-            curEvent.end = receivedIt->second;
+        if (receivedIt != received.end() && std::get<0>(*receivedIt) == to) {
+            curEvent.end = std::get<1>(*receivedIt);
+            actorIdName_[actorId[to]] = std::get<2>(*receivedIt);
             received.erase(receivedIt);
             events_.push_back(curEvent);
+        }
+    }
+
+    for (auto it : actorIdName_) {
+        nameActorId_[it.second].push_back(it.first);
+    }
+}
+
+void LogsReader::ReadConfig(std::string fileName, Config cfg) {
+    switch (cfg) {
+        case Config::SEET: {
+            std::ifstream seetIn(fileName);
+
+            std::string actorName;
+            size_t actorSeet;
+            while (seetIn >> actorName) {
+                seetIn >> actorSeet;
+
+                actorNameSeet_[actorName] = actorSeet;
+            }
         }
     }
 }
