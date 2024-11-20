@@ -5,7 +5,7 @@
 #include "engine/vec2si32.h"
 
 bool PlayerPausePlay::IsMouseIn() const {
-  auto curMouseCoord = GetMouseOffset();
+  arctic::Vec2Si32 curMouseCoord = GetMouseOffset();
   if (curMouseCoord.x > usePix_.front().size() || curMouseCoord.x < 0 ||
       curMouseCoord.y > usePix_.size() || curMouseCoord.y < 0) {
     return false;
@@ -19,7 +19,7 @@ bool PlayerPausePlay::IsMouseIn() const {
 }
 
 void PlayerPausePlay::Draw(const Drawer *drawer) const {
-  auto color = (!isActive_) ? arctic::Rgba(0, 255, 0) : arctic::Rgba(255, 0, 0);
+  arctic::Rgba color = (!isActive_) ? arctic::Rgba(0, 255, 0) : arctic::Rgba(255, 0, 0);
 
   for (size_t i = 0; i < usePix_.size(); ++i) {
     for (size_t j = 0; j < usePix_[i].size(); ++j) {
@@ -42,7 +42,7 @@ void PlayerPausePlay::SetSprite(arctic::Sprite sprite) {
 
   usePix_.clear();
   usePix_.resize(GetFrameSprite().Size().y);
-  for (auto &line : usePix_) {
+  for (std::vector<bool>& line : usePix_) {
     line.resize(GetFrameSprite().Size().x);
   }
 
@@ -50,11 +50,11 @@ void PlayerPausePlay::SetSprite(arctic::Sprite sprite) {
 }
 
 void PlayerPausePlay::DrawPicture() {
-  auto height = usePix_.size();
-  auto width = usePix_.front().size();
+  size_t height = usePix_.size();
+  size_t width = usePix_.front().size();
 
-  auto paddingWidth = usePix_.front().size() / 10;
-  auto paddingHeight = usePix_.size() / 10;
+  size_t paddingWidth = usePix_.front().size() / 10;
+  size_t paddingHeight = usePix_.size() / 10;
 
   int del = 0;
   int x = paddingWidth;

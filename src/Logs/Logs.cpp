@@ -6,7 +6,7 @@
 
 size_t Logs::GetActorsCount() const {
   std::set<ActorId> actorsIds;
-  for (const auto &event : events_) {
+  for (const Event& event : events_) {
     actorsIds.insert(event.from);
     actorsIds.insert(event.to);
   }
@@ -16,7 +16,7 @@ size_t Logs::GetActorsCount() const {
 
 ActorId Logs::GetMaxActorNum() const {
   ActorId curMax = 0;
-  for (const auto &event : events_) {
+  for (const Event& event : events_) {
     curMax = std::max(curMax, event.from);
     curMax = std::max(curMax, event.to);
   }
@@ -25,9 +25,9 @@ ActorId Logs::GetMaxActorNum() const {
 }
 
 Time Logs::GetMaxTime() const {
-  auto ret = events_[0].end;
+  Time ret = events_[0].end;
 
-  for (auto event : events_) {
+  for (Event event : events_) {
     ret = std::max(event.end, ret);
   }
 
@@ -35,12 +35,12 @@ Time Logs::GetMaxTime() const {
 }
 
 void Logs::Normalize() {
-  auto minTime = events_[0].start;
-  for (auto event : events_) {
+  Time minTime = events_[0].start;
+  for (Event event : events_) {
     minTime = std::min(minTime, event.start);
   }
 
-  for (auto &event : events_) {
+  for (Event& event : events_) {
     event.start -= minTime;
     event.end -= minTime;
   }

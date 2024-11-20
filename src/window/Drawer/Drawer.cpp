@@ -3,11 +3,11 @@
 #include <stdexcept>
 
 void Drawer::Draw() const {
-  for (auto *actor : actorStorage_) {
+  for (Actor* actor : actorStorage_) {
     actor->Draw(this);
   }
 
-  for (auto *drawElement : drawStorage_) {
+  for (IDrawElement* drawElement : drawStorage_) {
     if (!drawElement) {
       throw std::runtime_error("Null pointer, Draw: drawElement");
     }
@@ -15,9 +15,9 @@ void Drawer::Draw() const {
     drawElement->Draw(this);
   }
 
-  auto curWindow = GetWindow();
-  for (const auto window : curWindow->GetSubWindows()) {
-    auto drawer = dynamic_cast<Drawer *>(window);
+  const Window* curWindow = GetWindow();
+  for (Window* window : curWindow->GetSubWindows()) {
+    Drawer* drawer = dynamic_cast<Drawer *>(window);
     drawer->Draw();
   }
 }
@@ -36,7 +36,7 @@ void Drawer::AddDrawElement(IDrawElement *drawElement) {
 }
 
 Drawer::~Drawer() {
-  for (auto *drawElement : drawStorage_) {
+  for (IDrawElement* drawElement : drawStorage_) {
     if (drawElement) {
       delete drawElement;
     }

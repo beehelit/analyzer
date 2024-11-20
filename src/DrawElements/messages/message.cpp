@@ -20,12 +20,12 @@ void Message::Draw(const Drawer *drawer) const {
       arctic::Vec2Si32((arctic::Vec2D(to->GetOffset() - from->GetOffset())) /
                        len * cur);
 
-  auto coord = curOffset;
+  arctic::Vec2Si32 coord = curOffset;
 
-  auto camera = drawer->GetCamera();
+  Camera* camera = drawer->GetCamera();
   coord -= camera->GetOffset();
 
-  auto center = drawer->GetWindow()->GetFrameSprite().Size() / 2;
+  arctic::Vec2Si32 center = drawer->GetWindow()->GetFrameSprite().Size() / 2;
 
   coord.x = center.x - (center.x - coord.x) * camera->GetScaleFactor();
   coord.y = center.y - (center.y - coord.y) * camera->GetScaleFactor();

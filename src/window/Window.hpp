@@ -14,16 +14,16 @@ public:
                           frameSprite_.Size(), color);
   }
 
-  auto GetFrameSprite() const { return frameSprite_; }
+  arctic::Sprite GetFrameSprite() const { return frameSprite_; }
 
   Window(arctic::Sprite frameSprite) : frameSprite_(frameSprite) {}
 
   void AddSubWindow(Window *window) { subWindows_.push_back(window); }
 
-  const auto &GetSubWindows() const { return subWindows_; }
+  const std::vector<Window*>& GetSubWindows() const { return subWindows_; }
 
   virtual ~Window() {
-    for (auto window : subWindows_) {
+    for (Window* window : subWindows_) {
       delete window;
     }
   }

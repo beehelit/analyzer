@@ -13,8 +13,6 @@ public:
 
   RectangleWindow() = default;
 
-  // void Fill(arctic::Rgba color) override;
-
   auto GetWindowSize() const { return GetFrameSprite().Size(); }
 
   bool IsMouseIn() const override;

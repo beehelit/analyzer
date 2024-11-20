@@ -15,7 +15,7 @@ public:
   void AddDrawElement(IDrawElement *drawElement);
 
   virtual arctic::Sprite GetDrawSprite() const = 0;
-  virtual const Window *GetWindow() const = 0;
+  virtual const Window* GetWindow() const = 0;
 
   void SetCamera(Camera *camera) { camera_ = camera; }
 
@@ -27,7 +27,7 @@ public:
     return *camera_;
   }
 
-  const auto &GetActorStorage() const { return actorStorage_; }
+  const std::vector<Actor*>& GetActorStorage() const { return actorStorage_; }
 
   virtual ~Drawer();
   Drawer() = default;

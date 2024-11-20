@@ -16,9 +16,9 @@ public:
   void Listen() override {
     RectangleWindow::Listen();
 
-    for (auto window : GetSubWindows()) {
-      auto elem = dynamic_cast<Drawer *>(window)->GetWindow();
-      auto nonConst = const_cast<Window *>(elem);
+    for (Window* window : GetSubWindows()) {
+      const Window* elem = dynamic_cast<Drawer *>(window)->GetWindow();
+      Window* nonConst = const_cast<Window *>(elem);
       dynamic_cast<IListener *>(nonConst)->Listen();
     }
   }

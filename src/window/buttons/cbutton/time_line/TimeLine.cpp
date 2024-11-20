@@ -7,15 +7,15 @@
 #include "engine/vec2si32.h"
 
 void TimeLine::Action() {
-  auto mouseCoordX = GetMouseOffset().x;
-  auto width = GetFrameSprite().Size().x;
+  arctic::Si32 mouseCoordX = GetMouseOffset().x;
+  arctic::Si32 width = GetFrameSprite().Size().x;
 
   time_ = (1.0 * mouseCoordX / width) * maxTime_;
 }
 
 void TimeLine::Draw(const Drawer *drawer) const {
-  auto width = drawer->GetDrawSprite().Size().x;
-  auto curX = (1.0 * time_ / maxTime_) * width;
+  arctic::Si32 width = drawer->GetDrawSprite().Size().x;
+  double curX = (1.0 * time_ / maxTime_) * width;
 
   arctic::DrawRectangle(drawer->GetDrawSprite(), arctic::Vec2Si32(0, 0),
                         drawer->GetDrawSprite().Size(),

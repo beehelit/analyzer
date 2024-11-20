@@ -14,11 +14,7 @@ public:
 
     element_->Draw(this);
   }
-  /*
-      ~DrawBox() override {
-          delete element_;
-      }
-  */
+  
   arctic::Sprite GetDrawSprite() const override {
     return element_->GetFrameSprite();
   }

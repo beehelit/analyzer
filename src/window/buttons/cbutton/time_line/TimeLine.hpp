@@ -17,7 +17,7 @@ public:
 
   void SetMaxTime(Time maxTime) { maxTime_ = maxTime; }
 
-  void Draw(const Drawer *drawer) const override;
+  void Draw(const Drawer* drawer) const override;
   void Action() override;
   void Listen() override {
     CButton::Listen();
@@ -38,7 +38,7 @@ public:
     return DrawElementType::TIME_LINE;
   }
 
-  auto GetSpeed() const { return speed_; }
+  int GetSpeed() const { return speed_; }
   void SetSpeed(int speed) { speed_ = speed; }
 
 private:

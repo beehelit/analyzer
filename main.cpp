@@ -36,13 +36,16 @@ void EasyMain() {
   logsReader.ReadFile("data/storage_start_err.log", 10000);
   logsReader.ReadConfig("data/seet.config", Config::SEET);
 
-  auto seetInfo = logsReader.GetSeetInfo();
+  // TODO никаких auto без разрешения (итератору можно)
+  std::map<std::string, size_t> seetInfo = logsReader.GetSeetInfo();
   
   Logs logs(logsReader);
   logs.Normalize();
 
   size_t actorsCount = logs.GetActorsCount();
   ActorId maxActorId = logs.GetMaxActorNum();
+
+  // 
 
   std::shared_ptr<Camera> mainCamera = std::make_shared<Camera>();
   std::shared_ptr<Mouse> globalMouse = std::make_shared<Mouse>();
@@ -70,9 +73,9 @@ void EasyMain() {
     arctic::Clear();
     arctic::ResizeScreen(arctic::WindowSize() / 2);
 
-    auto screenSize = arctic::ScreenSize();
-    auto marginBottom = screenSize.y / 10;
-    auto leftBottomCorner = arctic::Vec2Si32(0, marginBottom);
+    arctic::Vec2Si32 screenSize = arctic::ScreenSize();
+    int marginBottom = screenSize.y / 10;
+    arctic::Vec2Si32 leftBottomCorner = arctic::Vec2Si32(0, marginBottom);
 
     arctic::Sprite mainFrameSprite;
     mainFrameSprite.Reference(arctic::GetEngine()->GetBackbuffer(), 
@@ -95,12 +98,12 @@ void EasyMain() {
     GreedSeet gseet(&mainFrame, logsReader);
 
     for (int i = 0; i <= maxActorId; ++i) {
-      mainFrame.AddDrawElement(new Actor(seet.GetCoord(i), std::max(1ul, 1000 / actorsCount)));
+      mainFrame.AddDrawElement(new Actor(gseet.GetCoord(i), std::max(1ul, 1000 / actorsCount)));
     }
 
-    for (auto event : logs.GetEvents()) {
+    for (Event event : logs.GetEvents()) {
       if (event.start <= timeLine->GetTime() && event.end >= timeLine->GetTime()) {
-        auto tLine = new TransportLine(event.from, event.to);
+        TransportLine* tLine = new TransportLine(event.from, event.to);
         mainFrame.AddDrawElement(tLine);
         mainFrame.AddDrawElement(new Message(
           tLine, (1.0 * timeLine->GetTime() - event.start) / (event.end - event.start)

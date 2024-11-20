@@ -11,8 +11,12 @@
 
 static Time fromTimestempToTime(std::string timeStemp);
 
+// LOgReader
+
 void LogsReader::ReadFile(std::string fileName, size_t count) {
   std::ifstream logIn(fileName);
+
+  // TODO считать файл .read как в arctic 
 
   std::string logLine;
   std::vector<std::string> logLines;
@@ -27,10 +31,16 @@ void LogsReader::ReadFile(std::string fileName, size_t count) {
     readCount++;
   }
 
+  // TODO сделать структуру вместо кортежа
+  // TODO избавиться от строк (разделители '\0')
+
   std::vector<std::tuple<std::string, Time, std::string>> received;
   std::vector<std::tuple<std::string, std::string, Time>> sended;
-  for (const auto &logLine : logLines) {
+  for (const std::string& logLine : logLines) {
     std::stringstream logLineStream(logLine);
+
+    // TODO сделать reserve, посчитать сколько для send и receive, никаких фигурных скобок
+    // TODO обратывать неспаренные send/receive (рисовать что он дошел до середины)
 
     std::string what;
     logLineStream >> what;
@@ -43,6 +53,8 @@ void LogsReader::ReadFile(std::string fileName, size_t count) {
     } else if (what == "Send") {
       std::string to, from, message, time;
 
+      // sended -> sent
+
       logLineStream >> to >> from >> message >> time;
       sended.push_back({from, to, fromTimestempToTime(time)});
     }
@@ -53,7 +65,7 @@ void LogsReader::ReadFile(std::string fileName, size_t count) {
   ActorId curId = 0;
   std::map<std::string, ActorId> actorId;
 
-  for (auto evStr : sended) {
+  for (std::tuple<std::string, std::string, Time> evStr : sended) {
     std::string from, to;
     Time time = 0;
 
@@ -85,11 +97,12 @@ void LogsReader::ReadFile(std::string fileName, size_t count) {
     }
   }
 
-  for (auto it : actorIdName_) {
+  for (std::pair<ActorId, std::string> it : actorIdName_) {
     nameActorId_[it.second].push_back(it.first);
   }
 }
 
+// TODO функции уникальные для всех cfg (чтение config положить в greed seeter)
 void LogsReader::ReadConfig(std::string fileName, Config cfg) {
   switch (cfg) {
   case Config::SEET: {
@@ -105,6 +118,8 @@ void LogsReader::ReadConfig(std::string fileName, Config cfg) {
   }
   }
 }
+
+// TODO убрать аллокации
 
 static Time fromTimestempToTime(std::string timeStemp) {
   std::string tailWithMcS = timeStemp.substr(timeStemp.length() - 8);

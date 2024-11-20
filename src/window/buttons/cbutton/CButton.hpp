@@ -9,7 +9,7 @@ public:
   CButton(arctic::Sprite sprite, std::function<void()> action)
       : Window(sprite), Button(sprite, action) {}
 
-  CButton(arctic::Sprite sprite, Mouse *mouse, std::function<void()> action)
+  CButton(arctic::Sprite sprite, Mouse* mouse, std::function<void()> action)
       : Window(sprite), Button(sprite, mouse, action) {}
 
   CButton() = default;

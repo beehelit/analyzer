@@ -9,7 +9,7 @@ public:
   Button(arctic::Sprite sprite, std::function<void()> action)
       : Window(sprite), MWindow(sprite), ActionHandler(action) {}
 
-  Button(arctic::Sprite sprite, Mouse *mouse, std::function<void()> action)
+  Button(arctic::Sprite sprite, Mouse* mouse, std::function<void()> action)
       : Button(sprite, action) {
     SetMouse(mouse);
   }

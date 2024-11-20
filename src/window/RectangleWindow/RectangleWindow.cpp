@@ -5,11 +5,11 @@ bool RectangleWindow::IsMouseIn() const {
     return false;
   }
 
-  auto mouse = GetMouse();
+  Mouse* mouse = GetMouse();
 
-  auto spritePos = GetFrameSprite().RefPos();
-  auto mousePos = mouse->GetOffset();
-  auto spriteSize = GetFrameSprite().Size();
+  arctic::Vec2Si32 spritePos = GetFrameSprite().RefPos();
+  arctic::Vec2Si32 mousePos = mouse->GetOffset();
+  arctic::Vec2Si32 spriteSize = GetFrameSprite().Size();
 
   return mousePos.x > spritePos.x && mousePos.y > spritePos.y &&
          mousePos.x < spritePos.x + spriteSize.x &&

@@ -4,13 +4,13 @@
 
 double ElipseSeet::ElipseLen() {
   // TODO for all window
-  auto window = dynamic_cast<RectangleWindow *>(window_);
-  auto frameSize = window->GetWindowSize();
+  RectangleWindow* window = dynamic_cast<RectangleWindow *>(window_);
+  arctic::Vec2Si32 frameSize = window->GetWindowSize();
 
-  auto widthHalf = frameSize.x / 2;
-  auto heightHalf = frameSize.y / 2;
-  const auto &a = widthHalf;
-  const auto &b = heightHalf;
+  int widthHalf = frameSize.x / 2;
+  int heightHalf = frameSize.y / 2;
+  const int& a = widthHalf;
+  const int& b = heightHalf;
 
   // ramanudjana formula
   double elipseLen =
@@ -25,8 +25,8 @@ arctic::Vec2Si32 ElipseSeet::PixFromElipseCoord(double elipseCoord) {
   double radCoord = (elipseCoord / ElipseLen()) * 2 * std::acos(-1);
 
   // TODO for all window
-  auto window = dynamic_cast<RectangleWindow *>(window_);
-  auto frameSize = window->GetWindowSize();
+  RectangleWindow* window = dynamic_cast<RectangleWindow *>(window_);
+  arctic::Vec2Si32 frameSize = window->GetWindowSize();
 
   double x = (frameSize.x / 2.0) * std::cos(radCoord);
   double y = (frameSize.y / 2.0) * std::sin(radCoord);
@@ -35,8 +35,8 @@ arctic::Vec2Si32 ElipseSeet::PixFromElipseCoord(double elipseCoord) {
 }
 
 arctic::Vec2Si32 ElipseSeet::GetCoord(arctic::Ui32 number) {
-  auto elipseLen = ElipseLen();
-  auto delta = elipseLen / seetCount_;
+  double elipseLen = ElipseLen();
+  double delta = elipseLen / seetCount_;
 
   return PixFromElipseCoord(delta * number);
 }

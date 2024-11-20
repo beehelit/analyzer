@@ -9,25 +9,25 @@ GreedSeet::GreedSeet(Window *window, const LogsReader &logsReader)
 
   tables_.resize(1);
 
-  auto name_id = logsReader.GetNameActorId();
-  auto id_name = logsReader.GetActorIdName();
-  auto info = logsReader.GetSeetInfo();
+  std::map<std::string, std::vector<ActorId>> name_id = logsReader.GetNameActorId();
+  std::map<ActorId, std::string> id_name = logsReader.GetActorIdName();
+  std::map<std::string, size_t> info = logsReader.GetSeetInfo();
 
   std::map<ActorId, size_t> actorIdSeetLevel;
 
-  for (auto it : info) {
+  for (std::pair<std::string, size_t> it : info) {
     if (it.second >= tables_.size()) {
       tables_.resize(it.second + 1);
     }
 
     if (name_id.count(it.first)) {
-      for (auto id : name_id[it.first]) {
+      for (ActorId id : name_id[it.first]) {
         tables_[it.second].push_back(id);
       }
     }
   }
 
-  for (auto it : id_name) {
+  for (std::pair<ActorId, std::string> it : id_name) {
     if (!info.count(it.second)) {
       tables_[0].push_back(it.first);
     }
