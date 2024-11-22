@@ -21,9 +21,9 @@ public:
     return DrawElementType::ACTOR;
   }
 
-  auto GetOffset() const { return offset_; }
+  arctic::Vec2Si32 GetOffset() const { return offset_; }
 
-  auto GetRadius() const { return radius_; }
+  arctic::Si32 GetRadius() const { return radius_; }
 
 private:
   arctic::Si32 radius_;

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "LogsReader/LogsReader.hpp"
+#include <Logs/log_reader/LogReader.hpp>
 #include <Logs/Event/Event.hpp>
 #include <_types/_uint64_t.h>
 
 class Logs {
 public:
-  Logs(LogsReader &logsReader) { events_ = logsReader.MoveEvents(); }
+  Logs(LogReader &logsReader) { events_ = logsReader.MoveEvents(); }
 
   const std::vector<Event> &GetEvents() const { return events_; }
 

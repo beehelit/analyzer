@@ -1,4 +1,5 @@
-#include "analizer/src/Logs/LogsReader/LogsReader.hpp"
+#include "LogReader.hpp"
+
 #include "analizer/src/Logs/Event/Event.hpp"
 #include "engine/easy_util.h"
 #include <algorithm>
@@ -11,9 +12,7 @@
 
 static Time fromTimestempToTime(std::string timeStemp);
 
-// LOgReader
-
-void LogsReader::ReadFile(std::string fileName, size_t count) {
+void LogReader::ReadFile(std::string fileName, size_t count) {
   std::ifstream logIn(fileName);
 
   // TODO считать файл .read как в arctic 
@@ -103,7 +102,7 @@ void LogsReader::ReadFile(std::string fileName, size_t count) {
 }
 
 // TODO функции уникальные для всех cfg (чтение config положить в greed seeter)
-void LogsReader::ReadConfig(std::string fileName, Config cfg) {
+void LogReader::ReadConfig(std::string fileName, Config cfg) {
   switch (cfg) {
   case Config::SEET: {
     std::ifstream seetIn(fileName);

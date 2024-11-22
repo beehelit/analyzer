@@ -11,18 +11,18 @@
 
 enum class Config { SEET };
 
-class LogsReader {
+class LogReader {
 public:
   void ReadFile(std::string fileName, size_t count = std::dynamic_extent);
   std::vector<Event> &&MoveEvents() { return std::move(events_); }
 
   void ReadConfig(std::string fileName, Config cfg);
 
-  auto GetSeetInfo() const { return actorNameSeet_; }
+  const std::map<std::string, size_t>& GetSeetInfo() const { return actorNameSeet_; }
 
-  auto GetActorIdName() const { return actorIdName_; }
+  const std::map<ActorId, std::string>& GetActorIdName() const { return actorIdName_; }
 
-  auto GetNameActorId() const { return nameActorId_; }
+  const std::map<std::string, std::vector<ActorId>>& GetNameActorId() const { return nameActorId_; }
 
 private:
   using EventId = arctic::Ui64;

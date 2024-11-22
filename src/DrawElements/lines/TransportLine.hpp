@@ -10,14 +10,14 @@
 class TransportLine : public IDrawElement {
 public:
   void Draw(const Drawer *drawer) const override {
-    auto fromActor = drawer->GetActorStorage()[fromTo_.first];
-    auto toActor = drawer->GetActorStorage()[fromTo_.second];
+    Actor* fromActor = drawer->GetActorStorage()[fromTo_.first];
+    Actor* toActor = drawer->GetActorStorage()[fromTo_.second];
 
-    auto fromCoord = fromActor->GetOffset();
-    auto toCoord = toActor->GetOffset();
+    arctic::Vec2Si32 fromCoord = fromActor->GetOffset();
+    arctic::Vec2Si32 toCoord = toActor->GetOffset();
 
-    auto camera = drawer->GetCamera();
-    auto center = drawer->GetWindow()->GetFrameSprite().Size() / 2;
+    Camera* camera = drawer->GetCamera();
+    arctic::Vec2Si32 center = drawer->GetWindow()->GetFrameSprite().Size() / 2;
 
     fromCoord -= camera->GetOffset();
     toCoord -= camera->GetOffset();
@@ -40,7 +40,7 @@ public:
 
   TransportLine(arctic::Si32 from, arctic::Si32 to) : fromTo_(from, to) {}
 
-  auto GetFromTo() const { return fromTo_; }
+  std::pair<arctic::Si32, arctic::Si32> GetFromTo() const { return fromTo_; }
 
 private:
   std::pair<arctic::Si32, arctic::Si32> fromTo_;

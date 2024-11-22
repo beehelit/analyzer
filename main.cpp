@@ -4,7 +4,7 @@
 #include <window/RectWinDraw.hpp>
 #include <window/RectangleWindow/RectangleWindow.hpp>
 #include <DrawElements/actors/Actor.hpp>
-#include <Logs/LogsReader/LogsReader.hpp>
+#include <Logs/log_reader/LogReader.hpp>
 #include <Logs/Logs.hpp>
 #include <DrawElements/lines/TransportLine.hpp>
 #include <DrawElements//fps/FpsCounter.hpp>
@@ -32,14 +32,13 @@
 #include <memory>
 
 void EasyMain() {
-  LogsReader logsReader;
-  logsReader.ReadFile("data/storage_start_err.log", 10000);
-  logsReader.ReadConfig("data/seet.config", Config::SEET);
+  LogReader logReader;
+  logReader.ReadFile("data/storage_start_err.log", 10000);
+  logReader.ReadConfig("data/seet.config", Config::SEET);
 
-  // TODO никаких auto без разрешения (итератору можно)
-  std::map<std::string, size_t> seetInfo = logsReader.GetSeetInfo();
+  std::map<std::string, size_t> seetInfo = logReader.GetSeetInfo();
   
-  Logs logs(logsReader);
+  Logs logs(logReader);
   logs.Normalize();
 
   size_t actorsCount = logs.GetActorsCount();
@@ -95,7 +94,7 @@ void EasyMain() {
     ElipseSeet seet(&mainFrame);
     seet.SeetN(actorsCount);
 
-    GreedSeet gseet(&mainFrame, logsReader);
+    GreedSeet gseet(&mainFrame, logReader);
 
     for (int i = 0; i <= maxActorId; ++i) {
       mainFrame.AddDrawElement(new Actor(gseet.GetCoord(i), std::max(1ul, 1000 / actorsCount)));

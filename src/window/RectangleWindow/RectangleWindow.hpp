@@ -13,7 +13,7 @@ public:
 
   RectangleWindow() = default;
 
-  auto GetWindowSize() const { return GetFrameSprite().Size(); }
+  arctic::Vec2Si32 GetWindowSize() const { return GetFrameSprite().Size(); }
 
   bool IsMouseIn() const override;
 };

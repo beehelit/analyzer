@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <iostream>
 
-GreedSeet::GreedSeet(Window *window, const LogsReader &logsReader)
+GreedSeet::GreedSeet(Window *window, const LogReader &logsReader)
     : window_(window) {
 
   tables_.resize(1);

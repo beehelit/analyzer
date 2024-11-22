@@ -9,7 +9,7 @@
 
 class Mouse : public IListener {
 public:
-  auto GetOffset() { return offset_; }
+  arctic::Vec2Si32 GetOffset() { return offset_; }
 
   bool IsLeftDown() const { return leftMouse_; }
 
@@ -19,7 +19,7 @@ public:
 
   void SafeOffset() { safeOffset_ = offset_; }
 
-  auto GetSafeOffset() { return safeOffset_; }
+  arctic::Vec2Si32 GetSafeOffset() { return safeOffset_; }
 
   bool GetFlag() { return leftMouseFlag_; }
 

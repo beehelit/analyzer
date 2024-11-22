@@ -7,7 +7,7 @@ class FpsCounter {
 public:
   static void Start() { time_ = std::chrono::steady_clock::now(); }
 
-  static auto GetFps() {
+  static long long GetFps() {
     auto oldTime = time_;
     time_ = std::chrono::steady_clock::now();
     auto delta =

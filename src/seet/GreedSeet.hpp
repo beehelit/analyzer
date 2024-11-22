@@ -2,12 +2,12 @@
 
 #include "arctic/engine/vec2si32.h"
 #include <Logs/Event/Event.hpp>
-#include <Logs/LogsReader/LogsReader.hpp>
+#include <Logs/log_reader/LogReader.hpp>
 #include <window/Window.hpp>
 
 class GreedSeet {
 public:
-  GreedSeet(Window *window, const LogsReader &logsReader);
+  GreedSeet(Window *window, const LogReader &logsReader);
   arctic::Vec2Si32 GetCoord(arctic::Ui32 number);
 
 private:
