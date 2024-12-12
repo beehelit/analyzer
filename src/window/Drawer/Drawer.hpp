@@ -2,8 +2,10 @@
 
 #include <DrawElements/IDrawElement.hpp>
 #include <DrawElements/actors/Actor.hpp>
+#include <_types/_uint64_t.h>
 #include <camera/Camera.hpp>
 #include <window/Window.hpp>
+#include <map>
 
 #include "engine/easy_sprite.h"
 
@@ -29,6 +31,8 @@ public:
 
   const std::vector<Actor*>& GetActorStorage() const { return actorStorage_; }
 
+  const std::map<uint64_t, size_t>& GetActorIdToStorageInd() const { return actorIdToStorageInd_; }
+
   virtual ~Drawer();
   Drawer() = default;
 
@@ -39,4 +43,5 @@ private:
   std::optional<Camera *> camera_;
 
   std::vector<Actor *> actorStorage_;
+  std::map<uint64_t, size_t> actorIdToStorageInd_;
 };

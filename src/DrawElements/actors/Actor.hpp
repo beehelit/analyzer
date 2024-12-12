@@ -1,6 +1,7 @@
 #pragma once
 
 #include <DrawElements/IDrawElement.hpp>
+#include <_types/_uint64_t.h>
 #include <camera/Camera.hpp>
 #include <window/RectangleWindow/RectangleWindow.hpp>
 
@@ -12,8 +13,8 @@
 
 class Actor : public IDrawElement {
 public:
-  Actor(arctic::Vec2Si32 offset, arctic::Si32 radius)
-      : radius_(radius), offset_(offset) {}
+  Actor(arctic::Vec2Si32 offset, arctic::Si32 radius, uint64_t id)
+      : radius_(radius), offset_(offset), id_(id) {}
 
   void Draw(const Drawer *drawer) const override;
 
@@ -25,7 +26,11 @@ public:
 
   arctic::Si32 GetRadius() const { return radius_; }
 
+  uint64_t GetId() const { return id_; }
+
 private:
   arctic::Si32 radius_;
   arctic::Vec2Si32 offset_;
+
+  uint64_t id_;
 };

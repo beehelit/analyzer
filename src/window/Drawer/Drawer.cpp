@@ -29,6 +29,7 @@ void Drawer::AddDrawElement(IDrawElement *drawElement) {
 
   if (drawElement->GetDrawElementType() == DrawElementType::ACTOR) {
     actorStorage_.push_back(dynamic_cast<Actor *>(drawElement));
+    actorIdToStorageInd_[dynamic_cast<Actor *>(drawElement)->GetId()] = actorStorage_.size() - 1;
     return;
   }
 

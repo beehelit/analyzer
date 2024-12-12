@@ -142,8 +142,8 @@ file(GLOB SRC_FILES
     src/seet/*.cpp
     src/camera/*.cpp
     src/mouse/*.cpp
-    src/Logs/log_reader/*.cpp
-    src/Logs/*.cpp
+    src/log/log_reader/*.cpp
+    src/log/*.cpp
     src/DrawElements/actors/*.cpp
     src/DrawElements/fps/*.cpp
     src/window/MWindow/*.cpp
@@ -207,3 +207,6 @@ target_link_libraries(
   #  ${GLES_LIBRARY}
 )
 ENDIF (APPLE)
+
+
+add_subdirectory(test)

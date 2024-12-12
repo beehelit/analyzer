@@ -10,8 +10,12 @@
 class TransportLine : public IDrawElement {
 public:
   void Draw(const Drawer *drawer) const override {
-    Actor* fromActor = drawer->GetActorStorage()[fromTo_.first];
-    Actor* toActor = drawer->GetActorStorage()[fromTo_.second];
+    Actor* fromActor = drawer->GetActorStorage()[
+      drawer->GetActorIdToStorageInd().at(fromTo_.first)
+    ];
+    Actor* toActor = drawer->GetActorStorage()[
+      drawer->GetActorIdToStorageInd().at(fromTo_.second)
+    ];
 
     arctic::Vec2Si32 fromCoord = fromActor->GetOffset();
     arctic::Vec2Si32 toCoord = toActor->GetOffset();

@@ -4,8 +4,12 @@
 #include "engine/vec2si32.h"
 
 void Message::Draw(const Drawer *drawer) const {
-  Actor *from = drawer->GetActorStorage()[line_->GetFromTo().first];
-  Actor *to = drawer->GetActorStorage()[line_->GetFromTo().second];
+  Actor *from = drawer->GetActorStorage()[
+    drawer->GetActorIdToStorageInd().at(line_->GetFromTo().first)
+  ];
+  Actor *to = drawer->GetActorStorage()[
+    drawer->GetActorIdToStorageInd().at(line_->GetFromTo().second)
+  ];
 
   double len = std::sqrt((1.0 * from->GetOffset().x - to->GetOffset().x) *
                              (1.0 * from->GetOffset().x - to->GetOffset().x) +

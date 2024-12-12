@@ -4,8 +4,8 @@
 #include <window/RectWinDraw.hpp>
 #include <window/RectangleWindow/RectangleWindow.hpp>
 #include <DrawElements/actors/Actor.hpp>
-#include <Logs/log_reader/LogReader.hpp>
-#include <Logs/Logs.hpp>
+#include <log/log_reader/LogReader.hpp>
+#include <log/Logs.hpp>
 #include <DrawElements/lines/TransportLine.hpp>
 #include <DrawElements//fps/FpsCounter.hpp>
 #include <DrawElements/fps/Fps.hpp>
@@ -32,19 +32,7 @@
 #include <memory>
 
 void EasyMain() {
-  LogReader logReader;
-  logReader.ReadFile("data/storage_start_err.log", 10000);
-  logReader.ReadConfig("data/seet.config", Config::SEET);
-
-  std::map<std::string, size_t> seetInfo = logReader.GetSeetInfo();
-  
-  Logs logs(logReader);
-  logs.Normalize();
-
-  size_t actorsCount = logs.GetActorsCount();
-  ActorId maxActorId = logs.GetMaxActorNum();
-
-  // 
+  Logs::ReadLogs("data/storage_start_err.log");
 
   std::shared_ptr<Camera> mainCamera = std::make_shared<Camera>();
   std::shared_ptr<Mouse> globalMouse = std::make_shared<Mouse>();
@@ -63,14 +51,14 @@ void EasyMain() {
   });
 
   timeLine->SetMouse(globalMouse.get());
-  timeLine->SetMaxTime(logs.GetMaxTime());
+  timeLine->SetMaxTime(Logs::GetMaxTime());
 
 
   while (!IsKeyDownward(arctic::kKeyEscape)) {
     FpsCounter::Start();
 
     arctic::Clear();
-    arctic::ResizeScreen(arctic::WindowSize() / 2);
+    arctic::ResizeScreen(arctic::WindowSize());
 
     arctic::Vec2Si32 screenSize = arctic::ScreenSize();
     int marginBottom = screenSize.y / 10;
@@ -92,15 +80,26 @@ void EasyMain() {
     footer.Fill(arctic::Rgba(34, 88, 224));
 
     ElipseSeet seet(&mainFrame);
-    seet.SeetN(actorsCount);
+    seet.SeetN(Logs::GetMaxActorId() + 1);
 
-    GreedSeet gseet(&mainFrame, logReader);
+    GreedSeet gseet(std::pair(mainFrame.GetWindowSize().x, mainFrame.GetWindowSize().y), 
+                std::max(1ull, 9000 / Logs::GetMaxActorId()));
 
-    for (int i = 0; i <= maxActorId; ++i) {
-      mainFrame.AddDrawElement(new Actor(gseet.GetCoord(i), std::max(1ul, 1000 / actorsCount)));
+    mainFrame.SetGreedSeet(&gseet);
+
+    for (int i = 0; i < Logs::GetMaxActorId(); ++i) {
+      if (!gseet.HaveCoord(i)) {
+        continue;
+      }
+
+      mainFrame.AddDrawElement(new Actor(gseet.GetCoord(i), std::max(1ull, 9000 / Logs::GetMaxActorId()), i));
     }
 
-    for (Event event : logs.GetEvents()) {
+    for (Logs::LogMessage event : Logs::GetLogMessages()) {
+      if (!gseet.HaveCoord(event.from) || !gseet.HaveCoord(event.to)) {
+        continue;
+      }
+
       if (event.start <= timeLine->GetTime() && event.end >= timeLine->GetTime()) {
         TransportLine* tLine = new TransportLine(event.from, event.to);
         mainFrame.AddDrawElement(tLine);
