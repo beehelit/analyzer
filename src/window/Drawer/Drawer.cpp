@@ -36,6 +36,7 @@ void Drawer::AddDrawElement(IDrawElement *drawElement) {
   drawStorage_.push_back(drawElement);
 }
 
+/*
 Drawer::~Drawer() {
   for (IDrawElement* drawElement : drawStorage_) {
     if (drawElement) {
@@ -43,3 +44,4 @@ Drawer::~Drawer() {
     }
   }
 }
+*/

@@ -1,30 +1,52 @@
 #pragma once
 
 #include <window/Window.hpp>
+#include "DrawBoxOptions.hpp"
 
+#include "DrawElements/IDrawElement.hpp"
 #include "Drawer.hpp"
 #include "engine/arctic_types.h"
+#include "engine/easy_sprite.h"
 
-template <class T> class DrawBox : public Drawer, public Window {
+#include <vector>
+
+class DrawBox : public Drawer {
 public:
-  DrawBox(T *element) : Window(element->GetFrameSprite()), element_(element) {}
+  void SetDrawOptions(DrawBoxOptions options) {
+    options_ = options;
+  }
 
   void Draw() const override {
-    Drawer::Draw();
-
-    element_->Draw(this);
+    DrawWithOption();
   }
+
+  void DrawWithOption() const;
   
   arctic::Sprite GetDrawSprite() const override {
-    return element_->GetFrameSprite();
+    return space_;
   }
 
-  const Window *GetWindow() const override { return element_; }
+  void SetDrawSprite(arctic::Sprite sprite) override {
+    space_ = sprite;
+  }
 
-  const T *GetElement() const { return element_; }
+  const Window *GetWindow() const override { return nullptr; }
+
+  void AddDrawer(Drawer* drawer) {
+    drawers_.push_back(drawer);
+  }
+
+  void SetDrawElement(IDrawElement* drawElement) {
+    drawElement_ = drawElement;
+  }
 
 private:
-  DrawBox() = delete;
 
-  T *element_;
+  arctic::Sprite space_;
+
+  std::vector<Drawer*> drawers_;
+
+  IDrawElement* drawElement_ = nullptr;
+
+  DrawBoxOptions options_;
 };

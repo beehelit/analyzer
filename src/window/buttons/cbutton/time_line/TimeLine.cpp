@@ -6,6 +6,8 @@
 #include "engine/rgba.h"
 #include "engine/vec2si32.h"
 
+#include <iostream>
+
 void TimeLine::Action() {
   arctic::Si32 mouseCoordX = GetMouseOffset().x;
   arctic::Si32 width = GetFrameSprite().Size().x;
@@ -21,6 +23,12 @@ void TimeLine::Draw(const Drawer *drawer) const {
                         drawer->GetDrawSprite().Size(),
                         arctic::Rgba(255, 255, 255));
 
+/*
+  std::cout << drawer->GetDrawSprite().Size().x << " "
+            << drawer->GetDrawSprite().Size().y << std::endl;
+*/
+
+  //std::cout << GetMouseOffset().x << " " << GetMouseOffset().y << std::endl;
   arctic::DrawRectangle(
       drawer->GetDrawSprite(), arctic::Vec2Si32(0, 0),
       arctic::Vec2Si32(curX, drawer->GetDrawSprite().Size().y),

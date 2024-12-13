@@ -17,6 +17,8 @@ public:
   void AddDrawElement(IDrawElement *drawElement);
 
   virtual arctic::Sprite GetDrawSprite() const = 0;
+  virtual void SetDrawSprite(arctic::Sprite sprite) = 0;
+
   virtual const Window* GetWindow() const = 0;
 
   void SetCamera(Camera *camera) { camera_ = camera; }
@@ -33,7 +35,7 @@ public:
 
   const std::map<uint64_t, size_t>& GetActorIdToStorageInd() const { return actorIdToStorageInd_; }
 
-  virtual ~Drawer();
+  ~Drawer() = default;
   Drawer() = default;
 
 private:

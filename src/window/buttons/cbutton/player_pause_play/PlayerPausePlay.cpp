@@ -3,6 +3,7 @@
 #include "engine/easy_drawing.h"
 #include "engine/rgba.h"
 #include "engine/vec2si32.h"
+#include <iostream>
 
 bool PlayerPausePlay::IsMouseIn() const {
   arctic::Vec2Si32 curMouseCoord = GetMouseOffset();

@@ -36,6 +36,8 @@ public:
 
   arctic::Sprite GetDrawSprite() const override;
 
+  void SetDrawSprite(arctic::Sprite sprite) override;
+
   void Listen() override;
 
   const Window *GetWindow() const override;
@@ -50,8 +52,11 @@ public:
 
   void Draw() const override;
 
+  void SetBackgroundColor(arctic::Rgba color);
+
 private:
   std::optional<GreedSeet*> gs_;
-
   mutable arctic::Font gFont_;
+
+  arctic::Rgba backgroundColor_;
 };

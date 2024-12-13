@@ -26,4 +26,8 @@ public:
   const Window *GetWindow() const override { return this; }
 
   arctic::Sprite GetDrawSprite() const override { return GetFrameSprite(); }
+
+  void SetDrawSprite(arctic::Sprite sprite) override {
+    SetSprite(sprite);
+  }
 };

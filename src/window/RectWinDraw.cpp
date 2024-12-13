@@ -6,6 +6,7 @@
 #include "analizer/src/window/RectangleWindow/RectangleWindow.hpp"
 #include "analizer/src/window/Window.hpp"
 
+#include "engine/rgba.h"
 #include "engine/vec2d.h"
 #include "engine/vec2si32.h"
 #include "seet/GreedSeet.hpp"
@@ -13,10 +14,14 @@
 #include <iostream>
 
 arctic::Sprite RectWinDraw::GetDrawSprite() const { return GetFrameSprite(); }
+void RectWinDraw::SetDrawSprite(arctic::Sprite sprite) { SetSprite(sprite); }
 
 const Window *RectWinDraw::GetWindow() const { return this; }
 
 void RectWinDraw::Draw() const {
+  arctic::DrawRectangle(GetDrawSprite(), arctic::Vec2Si32(0, 0),
+                        GetDrawSprite().Size(), backgroundColor_);
+
   Drawer::Draw();
 
   for (const Actor* actor : GetActorStorage()) {
@@ -102,4 +107,8 @@ void RectWinDraw::Listen() {
 */
     }
   }
+}
+
+void RectWinDraw::SetBackgroundColor(arctic::Rgba color) {
+  backgroundColor_ = color;
 }

@@ -23,10 +23,12 @@
 #include "engine/easy.h"
 #include "engine/easy_advanced.h"
 #include "engine/easy_input.h"
+#include "engine/easy_sprite.h"
 #include "engine/easy_util.h"
 #include "engine/rgba.h"
 #include "engine/vec2d.h"
 #include "engine/vec2si32.h"
+#include "window/Drawer/DrawBoxOptions.hpp"
 
 #include <iostream>
 #include <memory>
@@ -34,57 +36,84 @@
 void EasyMain() {
   Logs::ReadLogs("data/storage_start_err.log");
 
-  std::shared_ptr<Camera> mainCamera = std::make_shared<Camera>();
-  std::shared_ptr<Mouse> globalMouse = std::make_shared<Mouse>();
-  std::shared_ptr<PlayerPausePlay> pausePlay = std::make_shared<PlayerPausePlay>();
-  std::shared_ptr<TimeLine> timeLine = std::make_shared<TimeLine>();
-  std::shared_ptr<SpeedUpButton> speedUp = std::make_shared<SpeedUpButton>();
-  
-  pausePlay->SetMouse(globalMouse.get());
-  pausePlay->SetAction([&timeLine](){
-    timeLine->SetStatus(!timeLine->GetStatus());
+  Camera camera;
+  Mouse mouse;
+  PlayerPausePlay ppp;
+  ppp.SetMouse(&mouse);
+
+  TimeLine timeLine;
+  timeLine.SetMouse(&mouse);
+  timeLine.SetMaxTime(Logs::GetMaxTime());
+
+  ppp.SetAction([&timeLine](){
+    timeLine.SetStatus(!timeLine.GetStatus());
   });
 
-  speedUp->SetMouse(globalMouse.get());
-  speedUp->SetAction([&timeLine]() {
-    timeLine->SetSpeed(timeLine->GetSpeed() + 1);
+  SpeedUpButton speedUpButton;
+  speedUpButton.SetMouse(&mouse);
+  speedUpButton.SetAction([&timeLine]() {
+    timeLine.SetSpeed(timeLine.GetSpeed() + 10);
   });
-
-  timeLine->SetMouse(globalMouse.get());
-  timeLine->SetMaxTime(Logs::GetMaxTime());
-
 
   while (!IsKeyDownward(arctic::kKeyEscape)) {
-    FpsCounter::Start();
-
     arctic::Clear();
     arctic::ResizeScreen(arctic::WindowSize());
 
-    arctic::Vec2Si32 screenSize = arctic::ScreenSize();
-    int marginBottom = screenSize.y / 10;
-    arctic::Vec2Si32 leftBottomCorner = arctic::Vec2Si32(0, marginBottom);
+    DrawBox screen;
+    screen.SetDrawSprite(arctic::GetEngine()->GetBackbuffer());
+    screen.SetDrawOptions(DrawBoxOptions{
+      .flex_type="column",
+      .flex_list={0.05, 0.95}  
+    });
 
-    arctic::Sprite mainFrameSprite;
-    mainFrameSprite.Reference(arctic::GetEngine()->GetBackbuffer(), 
-      leftBottomCorner,
-      arctic::Vec2Si32(screenSize.x, screenSize.y - marginBottom));
-    RectWinDraw mainFrame(mainFrameSprite,
-      mainCamera.get(), globalMouse.get());
-    mainFrame.Fill(arctic::Rgba(232, 227, 227));
+    DrawBox footer;
+    footer.SetDrawOptions(DrawBoxOptions{
+      .flex_type="row",
+      .background_color=arctic::Rgba(131, 131, 131),
+      .flex_list={0.02, 0.96, 0.02}
+    });
 
-    arctic::Sprite footerSprite;
-    footerSprite.Reference(arctic::GetEngine()->GetBackbuffer(),
-      arctic::Vec2Si32(0, 0),
-      arctic::Vec2Si32(screenSize.x - 1, marginBottom - 1));
-    Footer footer(footerSprite);
-    footer.Fill(arctic::Rgba(34, 88, 224));
+    DrawBox playerPausePlay;
+    DrawBox timeLineBox;
+    timeLineBox.SetDrawOptions(DrawBoxOptions{
+      .background_color=arctic::Rgba(255, 0, 255)
+    });
+    DrawBox speedUpBox;
+    speedUpBox.SetDrawOptions(DrawBoxOptions{
+      .background_color=arctic::Rgba(100, 100, 140)
+    });
 
-    ElipseSeet seet(&mainFrame);
-    seet.SeetN(Logs::GetMaxActorId() + 1);
+    timeLineBox.SetDrawElement(&timeLine);
+    
+    playerPausePlay.SetDrawOptions(DrawBoxOptions{
+      .background_color=arctic::Rgba(0, 0, 0, 0)
+    });
 
+    playerPausePlay.SetDrawElement(&ppp);
+
+    speedUpBox.SetDrawElement(&speedUpButton);
+    speedUpBox.SetDrawOptions(DrawBoxOptions{
+      .background_color=arctic::Rgba(130, 56, 90)
+    });
+
+    footer.AddDrawer(&playerPausePlay);
+    footer.AddDrawer(&timeLineBox);
+    footer.AddDrawer(&speedUpBox);
+
+    RectWinDraw mainFrame;
+
+    screen.AddDrawer(&footer);
+    screen.AddDrawer(&mainFrame);
+
+    mainFrame.SetBackgroundColor(arctic::Rgba(232, 227, 227));
+
+    screen.Draw();
+
+    mainFrame.SetCamera(&camera);
+    mainFrame.SetMouse(&mouse);
+    
     GreedSeet gseet(std::pair(mainFrame.GetWindowSize().x, mainFrame.GetWindowSize().y), 
                 std::max(1ull, 9000 / Logs::GetMaxActorId()));
-
     mainFrame.SetGreedSeet(&gseet);
 
     for (int i = 0; i < Logs::GetMaxActorId(); ++i) {
@@ -100,47 +129,21 @@ void EasyMain() {
         continue;
       }
 
-      if (event.start <= timeLine->GetTime() && event.end >= timeLine->GetTime()) {
+      if (event.start <= timeLine.GetTime() && event.end >= timeLine.GetTime()) {
         TransportLine* tLine = new TransportLine(event.from, event.to);
         mainFrame.AddDrawElement(tLine);
         mainFrame.AddDrawElement(new Message(
-          tLine, (1.0 * timeLine->GetTime() - event.start) / (event.end - event.start)
+          tLine, (1.0 * timeLine.GetTime() - event.start) / (event.end - event.start)
         ));
       }
     }
 
-
-//----------------
-
-    arctic::Sprite playButtonSprite;
-    playButtonSprite.Reference(footerSprite,
-      arctic::Vec2Si32(0, 0),
-      arctic::Vec2Si32(footerSprite.Size().y, footerSprite.Size().y)
-      );
-    pausePlay->SetSprite(playButtonSprite);    
-    footer.AddSubWindow(new DrawBox(pausePlay.get()));
-    
-
-    arctic::Sprite timeLineSprite;
-    timeLineSprite.Reference(footerSprite,
-      arctic::Vec2Si32(playButtonSprite.Size().x, footerSprite.Size().y / 24 * 8),
-      arctic::Vec2Si32(footerSprite.Size().x - 4*playButtonSprite.Size().x, footerSprite.Size().y / 24 * 9));
-    timeLine->SetSprite(timeLineSprite);
-    footer.AddSubWindow(new DrawBox(timeLine.get()));
-
-    arctic::Sprite speedUpSprite;
-    speedUpSprite.Reference(footerSprite,
-      arctic::Vec2Si32(footerSprite.Size().x - playButtonSprite.Size().x, 0),
-      arctic::Vec2Si32(footerSprite.Size().x, footerSprite.Size().y));
-    speedUp->SetSprite(speedUpSprite);
-    footer.AddSubWindow(new DrawBox(speedUp.get()));
-
-    mainFrame.AddDrawElement(new Fps());
+    screen.Draw();
+    ppp.Listen();
+    timeLine.Listen();
+    speedUpButton.Listen();
     mainFrame.Listen();
-    footer.Listen();
 
-    mainFrame.Draw();
-    footer.Draw();
     arctic::ShowFrame();
   }
 }
