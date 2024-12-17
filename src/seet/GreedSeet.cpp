@@ -6,27 +6,24 @@
 #include <fstream>
 #include <set>
 
-void GreedSeet::ReadConfig(std::string fileName, Config cfg) {
-  switch (cfg) {
-    case Config::SEET: {
-      std::ifstream seetIn(fileName);
+void GreedSeet::ReadConfig(std::string fileName) {
+  std::ifstream seetIn(fileName);
 
-      std::string actorName;
-      size_t actorSeet;
-      while (seetIn >> actorName) {
-        seetIn >> actorSeet;
+  std::string actorName;
+  size_t actorSeet;
+  while (seetIn >> actorName) {
+    seetIn >> actorSeet;
 
-        actorNameSeet_[actorName] = actorSeet;
-      }
-    }
+    actorNameSeet_[actorName] = actorSeet;
   }
+
 }
 
 GreedSeet::GreedSeet(std::pair<uint64_t, uint64_t> windowSize, uint64_t actorRadius) {
 
   tables_.resize(1);
 
-  ReadConfig("data/seet.config", Config::SEET);
+  ReadConfig("data/seet.config");
 
   const std::map<std::string_view, std::vector<ActorId>>& name_id = Logs::GetActorTypeToActorId();
   const std::map<ActorId, std::string_view>& id_name = Logs::GetActorIdToActorType();
@@ -60,21 +57,25 @@ GreedSeet::GreedSeet(std::pair<uint64_t, uint64_t> windowSize, uint64_t actorRad
   std::vector<size_t> tablesHeight(tables_.size());
   for (size_t tableNum = 0; tableNum < tables_.size(); ++tableNum) {
     tablesHeight[tableNum] = (tables_[tableNum].size() / actorPerLine + 
-                             (tables_[tableNum].size() % actorPerLine > 0)) * 10*actorRadius;
+                             (tables_[tableNum].size() % actorPerLine > 0)) * 5*actorRadius;
   }
 
-  size_t curHeightAdd = 20*actorRadius;
-  for (int i = 0; i < tables_.size(); ++i) {
-    for (int j = 0; j < tables_[i].size(); ++j) {
+  size_t curHeightAdd = 15*actorRadius;
+  for (size_t i = 0; i < tables_.size(); ++i) {
+    for (size_t j = 0; j < tables_[i].size(); ++j) {
+
       coords_[tables_[i][j]] =
-          arctic::Vec2Si32((j % actorPerLine) * 10*actorRadius - 4*actorRadius, j / actorPerLine * 5*actorRadius + curHeightAdd);
+          arctic::Vec2Si32(
+            (j % actorPerLine) * 10*actorRadius, 
+            j / actorPerLine * 5*actorRadius + curHeightAdd
+          );
 
       coordActorId_[std::pair(coords_[tables_[i][j]].x, coords_[tables_[i][j]].y)] = tables_[i][j];
 
       coordedId_.insert(tables_[i][j]);
     }
 
-    curHeightAdd += tablesHeight[i] + 15*actorRadius;
+    curHeightAdd += tablesHeight[i] + 20*actorRadius;
   }
 
 }

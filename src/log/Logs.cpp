@@ -12,6 +12,7 @@ std::map<std::string_view, std::vector<std::size_t>> Logs::messageToParsedLineIn
 std::vector<Logs::LogMessage> Logs::logMessages_ = {};
 std::map<std::string_view, std::vector<ActorId>> Logs::actorTypeToActorId_ = {};
 std::map<ActorId, std::string_view> Logs::actorIdToActorType_ = {};
+std::vector<Logs::NewDieLogLine> Logs::newDieLogLines_ = {};
 ActorId Logs::maxActorId_ = 0;
 
 std::ostream& operator<<(std::ostream& os, const Logs::LogMessage& lm) {

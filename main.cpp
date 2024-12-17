@@ -116,7 +116,7 @@ void EasyMain() {
                 std::max(1ull, 9000 / Logs::GetMaxActorId()));
     mainFrame.SetGreedSeet(&gseet);
 
-    for (int i = 0; i < Logs::GetMaxActorId(); ++i) {
+    for (ActorId i = 0; i <= Logs::GetMaxActorId(); ++i) {
       if (!gseet.HaveCoord(i)) {
         continue;
       }

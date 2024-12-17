@@ -17,7 +17,7 @@ public:
   bool HaveCoord(ActorId id) const {
     return coordedId_.count(id);
   }
-  void ReadConfig(std::string fileName, Config cfg);
+  void ReadConfig(std::string fileName);
 
 private:
   std::vector<std::vector<ActorId>> tables_;

@@ -33,8 +33,10 @@ void LogReader::ReadFile(const std::string_view fileName) {
       char* startLogLine = reinterpret_cast<char*>(data_.data() + lastLogLineStart);
       char* endLogLine = reinterpret_cast<char*>(data_.data() + charIndex);
 
-      if (std::string_view(startLogLine, startLogLine + 4) != "Send" &&
-          std::string_view(startLogLine, startLogLine + 4) != "Rece") {
+      if (std::string_view(startLogLine, startLogLine + 3) != "Sen" &&
+          std::string_view(startLogLine, startLogLine + 3) != "Rec" &&
+          std::string_view(startLogLine, startLogLine + 3) != "New" && 
+          std::string_view(startLogLine, startLogLine + 3) != "Die") {
         lastLogLineStart = charIndex + 1;
         continue;
       }

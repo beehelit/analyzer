@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <string>
 #include <algorithm>
+#include <set>
 
 using ActorId = uint64_t;
 using Time = uint64_t;
@@ -45,6 +46,19 @@ public:
                 std::string_view argActorType) :
       RealLogLine(type, to, from, message, time)
       { actorType = argActorType;}
+  };
+
+  struct NewDieLogLine {
+    std::string_view type;
+    std::string_view id;
+    std::string_view time;
+
+    NewDieLogLine() = default;
+    NewDieLogLine(const NewDieLogLine&) = default;
+    ~NewDieLogLine() = default;
+    NewDieLogLine& operator=(const NewDieLogLine&) = default;
+
+    bool operator==(const NewDieLogLine&) const = default;    
   };
 
   struct ParsedLogLine {
@@ -109,24 +123,12 @@ public:
     NormalizeLogMessagesTime();
 
     CreateActorTypeToActorId();
-    CreateActorIdToActorType();    
-  }
-
-/*
-  static void MoveFromLogLines(LogReader& logReader) {
-    logLines_ = std::move(logReader.logLines_);
-
-    CreateRealLogLines();
-    ParseRealLogLines();
-    SetMessageToParsedLineInd();
-
-    CreateLogMessages();
-    NormalizeLogMessagesTime();
-
-    CreateActorTypeToActorId();
     CreateActorIdToActorType();
+
+
+    GetActorLifeInfo();
   }
-*/
+
   static const std::vector<RealLogLine>& GetRealLogLines() {
     return realLogLines_;
   }
@@ -188,11 +190,56 @@ public:
 
 private:
 
-  static void CreateRealLogLines() {
-    realLogLines_.reserve(logLines_.size());
-    for (auto logLine : logLines_) {
+  static void GetActorLifeInfo() {
+    for (std::string_view logLine : logLines_) {
       size_t charInd = 0, lastCharInd = 0;
       size_t curWordNum = 0;
+
+      if (logLine[0] != 'N' && logLine[0] != 'D') {
+        continue;
+      }
+
+      NewDieLogLine newDieLogLine;
+
+      for (; charInd < logLine.size(); ++charInd) {
+        if (logLine[charInd] == ' ') {
+          switch (curWordNum) {
+            case 0: {
+              newDieLogLine.type = 
+                std::string_view(logLine.begin() + lastCharInd, logLine.begin() + charInd);
+              break;
+            }
+
+            case 1: {
+              newDieLogLine.id = 
+                std::string_view(logLine.begin() + lastCharInd, logLine.begin() + charInd);
+              break;
+            }
+
+            case 2: {
+              newDieLogLine.time = 
+                std::string_view(logLine.begin() + lastCharInd, logLine.begin() + charInd);
+              break;
+            }
+          }
+
+          lastCharInd = charInd + 1;
+          curWordNum++;
+        }
+      }
+
+      newDieLogLines_.push_back(newDieLogLine);
+    }
+  }
+
+  static void CreateRealLogLines() {
+    for (std::string_view logLine : logLines_) {
+      size_t charInd = 0, lastCharInd = 0;
+      size_t curWordNum = 0;
+
+      if (logLine[0] != 'R' && logLine[0] != 'S') {
+        continue;
+      }
 
       RealLogLine curRealLogLine;
 
@@ -372,12 +419,17 @@ private:
   }
 
   static void CreateActorTypeToActorId() {
+    std::set<ActorId> added;
+
     for (const ParsedLogLine& parsedLogLine: parsedLogLines_) {
       if (!parsedLogLine.actorType) {
         continue;
       }
 
-      actorTypeToActorId_[parsedLogLine.type].push_back(parsedLogLine.to);
+      if (!added.count(parsedLogLine.to)) {
+        actorTypeToActorId_[*parsedLogLine.actorType].push_back(parsedLogLine.to);
+        added.insert(parsedLogLine.to);
+      }
     }
   }
 
@@ -404,6 +456,8 @@ private:
 
   static std::map<std::string_view, std::vector<ActorId>> actorTypeToActorId_;
   static std::map<ActorId, std::string_view> actorIdToActorType_;
+
+  static std::vector<NewDieLogLine> newDieLogLines_;
 
   static ActorId maxActorId_;
 };
