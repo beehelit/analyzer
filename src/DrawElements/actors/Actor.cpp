@@ -4,6 +4,10 @@
 #include "analizer/src/window/RectWinDraw.hpp"
 
 void Actor::Draw(const Drawer *drawer) const {
+  if (!IsVisible()) {
+    return;
+  }
+
   arctic::Vec2Si32 coord = offset_;
 
   Camera* camera = drawer->GetCamera();

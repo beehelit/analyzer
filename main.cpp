@@ -121,7 +121,14 @@ void EasyMain() {
         continue;
       }
 
-      mainFrame.AddDrawElement(new Actor(gseet.GetCoord(i), std::max(1ull, 9000 / Logs::GetMaxActorId()), i));
+      bool visible = Logs::IsAlife(i, timeLine.GetTime());
+
+      mainFrame.AddDrawElement(
+        new Actor(gseet.GetCoord(i), 
+                                      std::max(1ull, 9000 / Logs::GetMaxActorId()), 
+                                      i, 
+                                      visible)
+      );
     }
 
     for (Logs::LogMessage event : Logs::GetLogMessages()) {

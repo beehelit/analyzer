@@ -127,6 +127,7 @@ public:
 
 
     GetActorLifeInfo();
+    SetActorLifeTime();
   }
 
   static const std::vector<RealLogLine>& GetRealLogLines() {
@@ -188,7 +189,57 @@ public:
     actorIdToActorType_.clear();
   }
 
+  static bool IsAlife(ActorId id, Time time) {
+    // std::cout << lifeTime_.size() << std::endl;
+
+    if (!lifeTime_.count(id)) {
+      return false;
+    }
+
+    if (lifeTime_[id].first <= time && lifeTime_[id].second >= time) {
+      return true;
+    }
+
+    return false;
+  }
+
 private:
+
+  static void SetActorLifeTime() {
+    std::map<ActorId, Time> newActors;
+    std::map<ActorId, Time> dieActors; 
+
+    for (const NewDieLogLine& newDieLogLine : newDieLogLines_) {
+      if (!realActorIdToActorNumId_.count(newDieLogLine.id)) {
+        continue;
+      }
+
+      if (newDieLogLine.type == "New") {
+        if (newActors.count(realActorIdToActorNumId_.at(newDieLogLine.id))) {
+          throw std::runtime_error("actor created yet");
+        }
+
+        newActors[
+          realActorIdToActorNumId_.at(newDieLogLine.id)] = 
+          fromTimestempToTime(std::string(newDieLogLine.time)) - oldMinTime_;
+      } else if (newDieLogLine.type == "Die") {
+        if (dieActors.count(realActorIdToActorNumId_.at(newDieLogLine.id))) {
+          throw std::runtime_error("actor die yet");
+        }
+
+        dieActors[
+          realActorIdToActorNumId_.at(newDieLogLine.id)] = 
+          fromTimestempToTime(std::string(newDieLogLine.time)) - oldMinTime_;
+      }
+    }
+
+    Time maxTime = GetMaxTime();
+
+    for (ActorId id = 0; id <= maxActorId_; ++id) {
+      lifeTime_[id].first = (newActors.count(id)) ? newActors[id] : 0;
+      lifeTime_[id].second = (dieActors.count(id)) ? dieActors[id] : maxTime;
+    }
+  }
 
   static void GetActorLifeInfo() {
     for (std::string_view logLine : logLines_) {
@@ -215,18 +266,15 @@ private:
                 std::string_view(logLine.begin() + lastCharInd, logLine.begin() + charInd);
               break;
             }
-
-            case 2: {
-              newDieLogLine.time = 
-                std::string_view(logLine.begin() + lastCharInd, logLine.begin() + charInd);
-              break;
-            }
           }
 
           lastCharInd = charInd + 1;
           curWordNum++;
         }
       }
+
+      newDieLogLine.time = 
+        std::string_view(logLine.begin() + lastCharInd, logLine.begin() + charInd);
 
       newDieLogLines_.push_back(newDieLogLine);
     }
@@ -412,6 +460,8 @@ private:
       minTime = std::min(minTime, message.start);
     }
 
+    oldMinTime_ = minTime;
+
     for (LogMessage& message: logMessages_) {
       message.start -= minTime;
       message.end -= minTime;
@@ -458,8 +508,12 @@ private:
   static std::map<ActorId, std::string_view> actorIdToActorType_;
 
   static std::vector<NewDieLogLine> newDieLogLines_;
+  static std::map<ActorId, std::pair<Time, Time>> lifeTime_;
 
   static ActorId maxActorId_;
+
+
+  static Time oldMinTime_;
 };
 
 std::ostream& operator<<(std::ostream& os, const Logs::LogMessage& lm);

@@ -25,6 +25,10 @@ void RectWinDraw::Draw() const {
   Drawer::Draw();
 
   for (const Actor* actor : GetActorStorage()) {
+    if (!actor->IsVisible()) {
+      continue;
+    }
+
     const std::map<ActorId, std::string_view>& idToType = Logs::GetActorIdToActorType();
     std::string text = static_cast<std::string>(idToType.at(actor->GetId()));
 
