@@ -45,7 +45,7 @@ void EasyMain() {
   Logs::ReadLogs("data/storage_start_err.log");
 
   GreedSeet gseet(std::pair(WindowSize().x, WindowSize().y), 
-                  std::max(1ul, 9000 / Logs::GetMaxActorId()));
+                  std::max(static_cast<ActorId>(1), 9000 / Logs::GetMaxActorId()));
   gseet.PrepareTables();
 
   Camera camera;
@@ -135,7 +135,7 @@ void EasyMain() {
 
       mainFrame.AddDrawElement(
         new Actor(gseet.GetCoord(i), 
-                                      std::max(1ul, 9000 / Logs::GetMaxActorId()), 
+                                      std::max(static_cast<ActorId>(1), 9000 / Logs::GetMaxActorId()), 
                                       i, 
                                       visible)
       );
