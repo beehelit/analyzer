@@ -7,12 +7,14 @@
 #include <log/Logs.hpp>
 #include <map>
 
+using namespace arctic;
+
 class ActorTable {
 public:
-    const arctic::Si32 kXDelta = 4;
-    const arctic::Si32 kYDelta = 2;
+    const  Si32 kXDelta = 30;
+    const  Si32 kYDelta = 35;
 
-    ActorTable(arctic::Font& font) :
+    ActorTable( Font& font) :
         gFont_(font) {}
 
 
@@ -29,29 +31,37 @@ public:
     }
 
     void AddActor(ActorId id);
-    void SetLineLength(arctic::Si32 lineLength) { lineLength_ = lineLength; }
-    void SetYAdd(arctic::Si32 yAdd) { yAdd_ = yAdd; }
-    arctic::Si32 GetY() const { return positions_.back().y; }
+    void SetLineLength( Si32 lineLength) { lineLength_ = lineLength; }
 
-    arctic::Vec2Si32 GetLeftDownCornerPosition(ActorId id) const {
+    void SetYAdd( Si32 yAdd) { yAdd_ = yAdd; }
+     Si32 GetYAdd() const { return yAdd_; }
+
+    void SetXAdd( Si32 xAdd) { xAdd_ = xAdd; }
+     Si32 GetXAdd() const { return xAdd_; }
+
+     Si32 GetY() const { return positions_.back().y + yAdd_; }
+     Si32 GetLineLength() const { return lineLength_; }
+
+     Vec2Si32 GetLeftDownCornerPosition(ActorId id) const {
         size_t positionIndex = idToPositionInd_.at(id);
 
         return positions_[positionIndex] - blocksSize_[positionIndex] + 
-               arctic::Vec2Si32(0, yAdd_);
+                Vec2Si32(xAdd_, yAdd_);
     }
 
 
-    using RightUpKornerPositon = arctic::Vec2Si32;
-    using BlockSize = arctic::Vec2Si32;
+    using RightUpKornerPositon =  Vec2Si32;
+    using BlockSize =  Vec2Si32;
 private:
     std::map<ActorId, size_t> idToPositionInd_;
 
     std::vector<BlockSize> blocksSize_;
     std::vector<RightUpKornerPositon> positions_;
 
-    arctic::Si32 lineLength_ = 1920;
+     Si32 lineLength_ = 1920;
 
-    arctic::Font& gFont_;
+     Font& gFont_;
 
-    arctic::Si32 yAdd_ = 0;
+     Si32 yAdd_ = 0;
+     Si32 xAdd_ = 0;
 };

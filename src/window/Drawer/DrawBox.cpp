@@ -10,9 +10,9 @@
 #include <iostream>
 
 void DrawBox::DrawWithOption() const {
-    arctic::DrawRectangle(
+     DrawRectangle(
         space_, 
-        arctic::Vec2Si32(0, 0), 
+         Vec2Si32(0, 0), 
         GetDrawSprite().Size(),
         options_.background_color);
 
@@ -46,18 +46,18 @@ void DrawBox::DrawWithOption() const {
         }
     }
 
-    arctic::Sprite curSpace = space_;
-    arctic::Si32 width = curSpace.Width();
-    arctic::Si32 height = curSpace.Height();
+     Sprite curSpace = space_;
+     Si32 width = curSpace.Width();
+     Si32 height = curSpace.Height();
 
     if (curOptions.flex_type == "row") {
-        std::vector<std::pair<arctic::Si32, arctic::Si32>> widthBorders;
+        std::vector<std::pair< Si32,  Si32>> widthBorders;
         widthBorders.reserve(curOptions.flex_list.size());
 
-        std::vector<arctic::Sprite> drawerSprites_;
+        std::vector< Sprite> drawerSprites_;
         drawerSprites_.resize(curOptions.flex_list.size());
 
-        widthBorders.emplace_back(0, (arctic::Si32)(width * curOptions.flex_list[0]));        
+        widthBorders.emplace_back(0, ( Si32)(width * curOptions.flex_list[0]));        
 
         for (size_t curWidthBorderNum = 1; 
              curWidthBorderNum < curOptions.flex_list.size();
@@ -74,20 +74,20 @@ void DrawBox::DrawWithOption() const {
              curWidthBorderNum < curOptions.flex_list.size();
              ++curWidthBorderNum) {
             drawerSprites_[curWidthBorderNum].Reference(curSpace,
-                arctic::Vec2Si32(widthBorders[curWidthBorderNum].first, 0),
-                arctic::Vec2Si32(widthBorders[curWidthBorderNum].second, curSpace.Height())
+                 Vec2Si32(widthBorders[curWidthBorderNum].first, 0),
+                 Vec2Si32(widthBorders[curWidthBorderNum].second, curSpace.Height())
             );
 
             drawers_[curWidthBorderNum]->SetDrawSprite(drawerSprites_[curWidthBorderNum]);
         }
     } else if (curOptions.flex_type == "column") {
-        std::vector<std::pair<arctic::Si32, arctic::Si32>> heightBorders;
+        std::vector<std::pair< Si32,  Si32>> heightBorders;
         heightBorders.reserve(curOptions.flex_list.size());
 
-        std::vector<arctic::Sprite> drawerSprites_;
+        std::vector< Sprite> drawerSprites_;
         drawerSprites_.resize(curOptions.flex_list.size());
 
-        heightBorders.emplace_back(0, (arctic::Si32)(height * curOptions.flex_list[0]));        
+        heightBorders.emplace_back(0, ( Si32)(height * curOptions.flex_list[0]));        
 
         for (size_t curHeightBorderNum = 1; 
              curHeightBorderNum < curOptions.flex_list.size();
@@ -104,8 +104,8 @@ void DrawBox::DrawWithOption() const {
              curHeightBorderNum < curOptions.flex_list.size();
              ++curHeightBorderNum) {
             drawerSprites_[curHeightBorderNum].Reference(curSpace,
-                arctic::Vec2Si32(0, heightBorders[curHeightBorderNum].first),
-                arctic::Vec2Si32(curSpace.Width(), heightBorders[curHeightBorderNum].second)
+                 Vec2Si32(0, heightBorders[curHeightBorderNum].first),
+                 Vec2Si32(curSpace.Width(), heightBorders[curHeightBorderNum].second)
             );
 
             drawers_[curHeightBorderNum]->SetDrawSprite(drawerSprites_[curHeightBorderNum]);

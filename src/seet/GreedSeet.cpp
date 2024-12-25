@@ -9,6 +9,8 @@
 
 #include "ActorTable.hpp"
 
+using namespace arctic;
+
 void GreedSeet::ReadConfig(std::string fileName) {
   std::ifstream seetIn(fileName);
 
@@ -49,60 +51,29 @@ void GreedSeet::PrepareTables() {
     }
   }
 
-  std::vector<ActorTable> actorTables;
+  // std::vector<ActorTable> actorTables;
   for (size_t i = 0; i < tables_.size(); ++i) {
-    actorTables.emplace_back(gFont_);
-    actorTables[i].SetLineLength(windowSize_.x);
+    actorTables_.emplace_back(gFont_);
+    actorTables_[i].SetLineLength(windowSize_.x);
   }
 
   for (size_t tableNum = 0; tableNum < tables_.size(); ++tableNum) {
     for (const ActorId& actorId : tables_[tableNum]) {
-      actorTables[tableNum].AddActor(actorId);
-    }
-
-    if (tableNum > 0) {
-      actorTables[tableNum].SetYAdd(actorTables[tableNum-1].GetY() + 5);
+      actorTables_[tableNum].AddActor(actorId);
     }
   }
 
-
-  // size_t windowWidth = windowSize_.x;
-  // size_t windowHeight = windowSize_.y;
-
-  // size_t actorPerLine = windowWidth / (actorRadius_ * 10);
+  for (size_t tableNum = 2; tableNum < tables_.size(); ++tableNum) {
+    actorTables_[tableNum].SetYAdd(actorTables_[tableNum-1].GetY() + 5);
+  }
+  actorTables_[0].SetYAdd(actorTables_[actorTables_.size() - 1].GetY() + 5);
   
   coords_.resize(Logs::GetMaxActorId() + 1);
-/*
-  std::vector<size_t> tablesHeight(tables_.size());
-  for (size_t tableNum = 0; tableNum < tables_.size(); ++tableNum) {
-    tablesHeight[tableNum] = (tables_[tableNum].size() / actorPerLine + 
-                             (tables_[tableNum].size() % actorPerLine > 0)) * 5*actorRadius_;
-  }
-*/
 
-/*
-  size_t curHeightAdd = 15*actorRadius_;
-  for (size_t i = 0; i < tables_.size(); ++i) {
-    for (size_t j = 0; j < tables_[i].size(); ++j) {
-
-      coords_[tables_[i][j]] =
-          arctic::Vec2Si32(
-            (j % actorPerLine) * 10*actorRadius_, 
-            j / actorPerLine * 5*actorRadius_ + curHeightAdd
-          );
-
-      coordActorId_[std::pair(coords_[tables_[i][j]].x, coords_[tables_[i][j]].y)] = tables_[i][j];
-
-      coordedId_.insert(tables_[i][j]);
-    }
-
-    curHeightAdd += tablesHeight[i] + 20*actorRadius_;
-  }
-*/
 
   for (size_t i = 0; i < tables_.size(); ++i) {
     for (size_t j = 0; j < tables_[i].size(); ++j) {
-      coords_[tables_[i][j]] = actorTables[i].GetLeftDownCornerPosition(tables_[i][j]);
+      coords_[tables_[i][j]] = actorTables_[i].GetLeftDownCornerPosition(tables_[i][j]);
       coordActorId_[std::pair(coords_[tables_[i][j]].x, coords_[tables_[i][j]].y)] = tables_[i][j];
 
       coordedId_.insert(tables_[i][j]);
@@ -116,10 +87,10 @@ GreedSeet::GreedSeet(std::pair<uint64_t, uint64_t> windowSize, uint64_t actorRad
   actorRadius_ = actorRadius;
 }
 
-arctic::Vec2Si32 GreedSeet::GetCoord(ActorId id) {
+ Vec2Si32 GreedSeet::GetCoord(ActorId id) {
   return coords_[id];
 }
 
-ActorId GreedSeet::GetId(arctic::Vec2Si32 coord) {
+ActorId GreedSeet::GetId( Vec2Si32 coord) {
   return coordActorId_[{coord.x, coord.y}];
 }

@@ -9,10 +9,10 @@ void Fps::Draw(const Drawer *drawer) const {
   long long curFps = FpsCounter::GetFps();
   std::string text = std::to_string(curFps);
 
-  arctic::Si32 windowHeight = drawer->GetWindow()->GetFrameSprite().Size().y;
+   Si32 windowHeight = drawer->GetWindow()->GetFrameSprite().Size().y;
 
   gFont_.Draw(drawer->GetDrawSprite(), text.c_str(), 0, windowHeight,
-              arctic::kTextOriginTop, arctic::kTextAlignmentLeft,
-              arctic::kDrawBlendingModeColorize, arctic::kFilterNearest,
-              arctic::Rgba(0, 255, 0));
+               kTextOriginTop,  kTextAlignmentLeft,
+               kDrawBlendingModeColorize,  kFilterNearest,
+               Rgba(0, 255, 0));
 }

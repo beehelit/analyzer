@@ -6,6 +6,8 @@
 
 #include "engine/rgba.h"
 
+using namespace arctic;
+
 struct DrawBoxOptions {
     std::uint64_t padding_top = 0, 
                   padding_bottom = 0, 
@@ -20,5 +22,5 @@ struct DrawBoxOptions {
     std::string_view flex_type = "column";
     std::vector<double> flex_list;
 
-    arctic::Rgba background_color = arctic::Rgba(0, 0, 0);
+     Rgba background_color =  Rgba(0, 0, 0);
 };

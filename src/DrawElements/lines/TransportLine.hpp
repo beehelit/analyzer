@@ -5,7 +5,11 @@
 #include <window/Drawer/Drawer.hpp>
 
 #include "engine/arctic_types.h"
+#include "engine/easy_drawing.h"
+#include "engine/vec2f.h"
 #include "engine/vec2si32.h"
+
+using namespace arctic;
 
 class TransportLine : public IDrawElement {
 public:
@@ -17,11 +21,11 @@ public:
       drawer->GetActorIdToStorageInd().at(fromTo_.second)
     ];
 
-    arctic::Vec2Si32 fromCoord = fromActor->GetOffset();
-    arctic::Vec2Si32 toCoord = toActor->GetOffset();
+     Vec2Si32 fromCoord = fromActor->GetOffset();
+     Vec2Si32 toCoord = toActor->GetOffset();
 
     Camera* camera = drawer->GetCamera();
-    arctic::Vec2Si32 center = drawer->GetWindow()->GetFrameSprite().Size() / 2;
+     Vec2Si32 center = drawer->GetWindow()->GetFrameSprite().Size() / 2;
 
     fromCoord -= camera->GetOffset();
     toCoord -= camera->GetOffset();
@@ -34,18 +38,21 @@ public:
     toCoord.x = center.x - (center.x - toCoord.x) * camera->GetScaleFactor();
     toCoord.y = center.y - (center.y - toCoord.y) * camera->GetScaleFactor();
 
-    arctic::DrawLine(drawer->GetDrawSprite(), fromCoord, toCoord,
-                     arctic::Rgba(255, 0, 0));
+     Sprite sprite = drawer->GetDrawSprite();
+
+     DrawArrow(sprite,  Vec2F(fromCoord),  Vec2F(toCoord),
+                     0.1, 0.5, 0.1,
+                      Rgba(120, 0, 0));
   }
 
   DrawElementType GetDrawElementType() const override {
     return DrawElementType::TRANSPORT_LINE;
   }
 
-  TransportLine(arctic::Si32 from, arctic::Si32 to) : fromTo_(from, to) {}
+  TransportLine( Si32 from,  Si32 to) : fromTo_(from, to) {}
 
-  std::pair<arctic::Si32, arctic::Si32> GetFromTo() const { return fromTo_; }
+  std::pair< Si32,  Si32> GetFromTo() const { return fromTo_; }
 
 private:
-  std::pair<arctic::Si32, arctic::Si32> fromTo_;
+  std::pair< Si32,  Si32> fromTo_;
 };

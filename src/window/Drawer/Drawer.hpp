@@ -16,8 +16,8 @@ public:
   virtual void Draw() const;
   void AddDrawElement(IDrawElement *drawElement);
 
-  virtual arctic::Sprite GetDrawSprite() const = 0;
-  virtual void SetDrawSprite(arctic::Sprite sprite) = 0;
+  virtual  Sprite GetDrawSprite() const = 0;
+  virtual void SetDrawSprite( Sprite sprite) = 0;
 
   virtual const Window* GetWindow() const = 0;
 

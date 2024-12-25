@@ -7,9 +7,11 @@
 
 #include <optional>
 
+using namespace arctic;
+
 class Mouse : public IListener {
 public:
-  arctic::Vec2Si32 GetOffset() { return offset_; }
+   Vec2Si32 GetOffset() { return offset_; }
 
   bool IsLeftDown() const { return leftMouse_; }
 
@@ -19,7 +21,7 @@ public:
 
   void SafeOffset() { safeOffset_ = offset_; }
 
-  arctic::Vec2Si32 GetSafeOffset() { return safeOffset_; }
+   Vec2Si32 GetSafeOffset() { return safeOffset_; }
 
   bool GetFlag() { return leftMouseFlag_; }
 
@@ -28,8 +30,8 @@ public:
 private:
   bool leftMouse_ = false;
 
-  arctic::Vec2Si32 offset_ = {};
-  arctic::Vec2Si32 safeOffset_ = {};
+   Vec2Si32 offset_ = {};
+   Vec2Si32 safeOffset_ = {};
 
   bool leftMouseFlag_ = false;
 

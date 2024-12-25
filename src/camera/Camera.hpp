@@ -8,22 +8,24 @@
 
 #include <optional>
 
+using namespace arctic;
+
 class Camera : public IListener {
 public:
-  Camera(arctic::Vec2Si32 cameraOffset, double scaleFactor)
+  Camera( Vec2Si32 cameraOffset, double scaleFactor)
       : offset_(cameraOffset), scaleFactor_(scaleFactor) {}
 
-  Camera() : offset_(arctic::Vec2Si32(0, 0)), scaleFactor_(1.0) {}
+  Camera() : offset_( Vec2Si32(0, 0)), scaleFactor_(1.0) {}
 
-  arctic::Vec2Si32 GetOffset() { return offset_; }
+   Vec2Si32 GetOffset() { return offset_; }
   double GetScaleFactor() { return scaleFactor_; }
 
-  void SetOffset(arctic::Vec2Si32 offset) { offset_ = offset; }
+  void SetOffset( Vec2Si32 offset) { offset_ = offset; }
   void SetScaleFactor(double scaleFactor) { scaleFactor_ = scaleFactor; }
 
   void Listen() override;
 
 private:
-  arctic::Vec2Si32 offset_;
+   Vec2Si32 offset_;
   double scaleFactor_;
 };

@@ -1,8 +1,10 @@
 #include "ActorTable.hpp"
 #include "arctic/engine/vec2si32.h"
 
+using namespace arctic;
+
 void ActorTable::AddActor(ActorId id) {
-    arctic::Vec2Si32 curBlockSize = gFont_.EvaluateSize(
+     Vec2Si32 curBlockSize = gFont_.EvaluateSize(
         std::string(Logs::GetActorIdToActorType().at(id)).c_str(),
         false
     );
@@ -18,11 +20,11 @@ void ActorTable::AddActor(ActorId id) {
 
     if (positions_.back().x + kXDelta + curBlockSize.x > lineLength_) {
         positions_.push_back(
-            curBlockSize + arctic::Vec2Si32(0, positions_.back().y + kYDelta)
+            curBlockSize +  Vec2Si32(0, positions_.back().y + kYDelta)
         );
     } else {
         positions_.push_back(
-            arctic::Vec2Si32(positions_.back().x + kXDelta + curBlockSize.x, positions_.back().y)
+             Vec2Si32(positions_.back().x + kXDelta + curBlockSize.x, positions_.back().y)
         );
     }
 }

@@ -5,18 +5,20 @@
 #include "engine/rgba.h"
 #include "engine/vec2si32.h"
 
-const arctic::Sprite kNoneSprite = arctic::Sprite();
+using namespace arctic;
+
+const  Sprite kNoneSprite =  Sprite();
 
 class Window {
 public:
-  virtual void Fill(arctic::Rgba color) const {
-    arctic::DrawRectangle(frameSprite_, arctic::Vec2Si32(0, 0),
+  virtual void Fill( Rgba color) const {
+     DrawRectangle(frameSprite_,  Vec2Si32(0, 0),
                           frameSprite_.Size(), color);
   }
 
-  arctic::Sprite GetFrameSprite() const { return frameSprite_; }
+   Sprite GetFrameSprite() const { return frameSprite_; }
 
-  Window(arctic::Sprite frameSprite) : frameSprite_(frameSprite) {}
+  Window( Sprite frameSprite) : frameSprite_(frameSprite) {}
 
   void AddSubWindow(Window *window) { subWindows_.push_back(window); }
 
@@ -30,7 +32,7 @@ public:
 
   Window() { frameSprite_ = kNoneSprite; }
 
-  virtual void SetSprite(arctic::Sprite sprite) { frameSprite_ = sprite; }
+  virtual void SetSprite( Sprite sprite) { frameSprite_ = sprite; }
 
   void ClearSprite() { frameSprite_ = kNoneSprite; }
 
@@ -38,6 +40,6 @@ private:
   Window(const Window &) = delete;
   Window &operator=(const Window &) = delete;
 
-  arctic::Sprite frameSprite_;
+   Sprite frameSprite_;
   std::vector<Window *> subWindows_;
 };

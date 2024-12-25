@@ -4,13 +4,13 @@
 #include "analizer/src/window/buttons/Button.hpp"
 #include <functional>
 
-class CButton : public Button {
+class CButton : public VisualizatorButton {
 public:
-  CButton(arctic::Sprite sprite, std::function<void()> action)
-      : Window(sprite), Button(sprite, action) {}
+  CButton( Sprite sprite, std::function<void()> action)
+      : Window(sprite), VisualizatorButton(sprite, action) {}
 
-  CButton(arctic::Sprite sprite, Mouse* mouse, std::function<void()> action)
-      : Window(sprite), Button(sprite, mouse, action) {}
+  CButton( Sprite sprite, Mouse* mouse, std::function<void()> action)
+      : Window(sprite), VisualizatorButton(sprite, mouse, action) {}
 
   CButton() = default;
 

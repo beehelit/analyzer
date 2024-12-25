@@ -4,7 +4,7 @@
 #include <window/RectangleWindow/RectangleWindow.hpp>
 #include <window/buttons/cbutton/CButton.hpp>
 
-using Time = uint64_t;
+using VisualisationTime = uint64_t;
 
 class TimeLine : public RectangleWindow, public CButton, public IDrawElement {
 public:
@@ -15,7 +15,7 @@ public:
     speed_ = 1;
   }
 
-  void SetMaxTime(Time maxTime) { maxTime_ = maxTime; }
+  void SetMaxTime(VisualisationTime maxTime) { maxTime_ = maxTime; }
 
   void Draw(const Drawer* drawer) const override;
   void Action() override;
@@ -32,7 +32,7 @@ public:
 
   bool GetStatus() const { return status_; }
 
-  Time GetTime() const { return time_; }
+  VisualisationTime GetTime() const { return time_; }
 
   DrawElementType GetDrawElementType() const override {
     return DrawElementType::TIME_LINE;
@@ -42,8 +42,8 @@ public:
   void SetSpeed(int speed) { speed_ = speed; }
 
 private:
-  Time time_;
-  Time maxTime_;
+  VisualisationTime time_;
+  VisualisationTime maxTime_;
 
   bool status_;
 

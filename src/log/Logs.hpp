@@ -12,7 +12,7 @@
 #include <set>
 
 using ActorId = uint64_t;
-using Time = uint64_t;
+using VisualisationTime = uint64_t;
 
 class Logs {
 public:
@@ -66,7 +66,7 @@ public:
     ActorId to;
     ActorId from;
     std::string_view message;
-    Time time;
+    VisualisationTime time;
     std::optional<std::string_view> actorType;
 
     ParsedLogLine() = default;
@@ -80,14 +80,14 @@ public:
                   ActorId to,
                   ActorId from,
                   std::string_view message,
-                  Time time) :
+                  VisualisationTime time) :
     type(type), to(to), from(from), message(message), time(time) {}
 
     ParsedLogLine(std::string_view type,
                   ActorId to,
                   ActorId from,
                   std::string_view message,
-                  Time time,
+                  VisualisationTime time,
                   std::string_view argActorType) :
     ParsedLogLine(type, to, from, message, time)
     {actorType = argActorType;}
@@ -96,8 +96,8 @@ public:
   struct LogMessage {
     ActorId to;
     ActorId from;
-    Time start;
-    Time end;
+    VisualisationTime start;
+    VisualisationTime end;
     std::string_view message;
 
     LogMessage() = default;
@@ -107,7 +107,7 @@ public:
 
     bool operator==(const LogMessage&) const = default;
 
-    LogMessage(ActorId to, ActorId from, Time start, Time end, std::string_view message) :
+    LogMessage(ActorId to, ActorId from, VisualisationTime start, VisualisationTime end, std::string_view message) :
       to(to), from(from), start(start), end(end), message(message) {}
   };
 
@@ -158,12 +158,12 @@ public:
     return messageToParsedLineInd_;
   }
 
-  static Time GetMaxTime() {
+  static VisualisationTime GetMaxTime() {
     if (logMessages_.empty()) {
       return 0;
     }
 
-    Time maxTime = logMessages_.front().end;
+    VisualisationTime maxTime = logMessages_.front().end;
     for (const LogMessage& logMessage : logMessages_) {
       maxTime = std::max(maxTime, logMessage.end);
     }
@@ -189,8 +189,7 @@ public:
     actorIdToActorType_.clear();
   }
 
-  static bool IsAlife(ActorId id, Time time) {
-    // std::cout << lifeTime_.size() << std::endl;
+  static bool IsAlife(ActorId id, VisualisationTime time) {
 
     if (!lifeTime_.count(id)) {
       return false;
@@ -206,8 +205,8 @@ public:
 private:
 
   static void SetActorLifeTime() {
-    std::map<ActorId, Time> newActors;
-    std::map<ActorId, Time> dieActors; 
+    std::map<ActorId, VisualisationTime> newActors;
+    std::map<ActorId, VisualisationTime> dieActors; 
 
     for (const NewDieLogLine& newDieLogLine : newDieLogLines_) {
       if (!realActorIdToActorNumId_.count(newDieLogLine.id)) {
@@ -233,7 +232,7 @@ private:
       }
     }
 
-    Time maxTime = GetMaxTime();
+    VisualisationTime maxTime = GetMaxTime();
 
     for (ActorId id = 0; id <= maxActorId_; ++id) {
       lifeTime_[id].first = (newActors.count(id)) ? newActors[id] : 0;
@@ -380,7 +379,7 @@ private:
     maxActorId_ = curUnusedActorId;
   }
 
-  static Time fromTimestempToTime(std::string timeStemp) {
+  static VisualisationTime fromTimestempToTime(std::string timeStemp) {
     std::string tailWithMcS = timeStemp.substr(timeStemp.length() - 8);
     timeStemp.resize(timeStemp.length() - 8);
     tailWithMcS.pop_back();
@@ -391,7 +390,7 @@ private:
     tsStream >> std::get_time(&tm, "%Y-%m-%dT%H%N%S");
     auto tp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
 
-    Time cur =
+    VisualisationTime cur =
         std::chrono::duration_cast<std::chrono::seconds>(tp.time_since_epoch())
             .count();
     cur *= 1'000'000;
@@ -458,7 +457,7 @@ private:
       return;
     }
 
-    Time minTime = logMessages_.front().start;
+    VisualisationTime minTime = logMessages_.front().start;
     for (LogMessage& message : logMessages_) {
       minTime = std::min(minTime, message.start);
     }
@@ -516,12 +515,12 @@ private:
   static std::map<ActorId, std::string_view> actorIdToActorType_;
 
   static std::vector<NewDieLogLine> newDieLogLines_;
-  static std::map<ActorId, std::pair<Time, Time>> lifeTime_;
+  static std::map<ActorId, std::pair<VisualisationTime, VisualisationTime>> lifeTime_;
 
   static ActorId maxActorId_;
 
 
-  static Time oldMinTime_;
+  static VisualisationTime oldMinTime_;
 };
 
 std::ostream& operator<<(std::ostream& os, const Logs::LogMessage& lm);

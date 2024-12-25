@@ -33,13 +33,15 @@
 #include <iostream>
 #include <memory>
 
+using namespace arctic;
+
 void EasyMain() {
-  arctic::Font gFont_;
+  Font gFont_;
   gFont_.Load("data/arctic_one_bmf.fnt");
 
   Logs::ReadLogs("data/storage_start_err.log");
 
-  GreedSeet gseet(std::pair(arctic::WindowSize().x, arctic::WindowSize().y), 
+  GreedSeet gseet(std::pair(WindowSize().x, WindowSize().y), 
                   std::max(1ull, 9000 / Logs::GetMaxActorId()));
   gseet.PrepareTables();
 
@@ -62,12 +64,12 @@ void EasyMain() {
     timeLine.SetSpeed(timeLine.GetSpeed() + 10);
   });
 
-  while (!IsKeyDownward(arctic::kKeyEscape)) {
-    arctic::Clear();
-    arctic::ResizeScreen(arctic::WindowSize());
+  while (!IsKeyDownward( kKeyEscape)) {
+     Clear();
+     ResizeScreen( WindowSize());
 
     DrawBox screen;
-    screen.SetDrawSprite(arctic::GetEngine()->GetBackbuffer());
+    screen.SetDrawSprite( GetEngine()->GetBackbuffer());
     screen.SetDrawOptions(DrawBoxOptions{
       .flex_type="column",
       .flex_list={0.05, 0.95}  
@@ -76,31 +78,31 @@ void EasyMain() {
     DrawBox footer;
     footer.SetDrawOptions(DrawBoxOptions{
       .flex_type="row",
-      .background_color=arctic::Rgba(131, 131, 131),
+      .background_color= Rgba(131, 131, 131),
       .flex_list={0.02, 0.96, 0.02}
     });
 
     DrawBox playerPausePlay;
     DrawBox timeLineBox;
     timeLineBox.SetDrawOptions(DrawBoxOptions{
-      .background_color=arctic::Rgba(255, 0, 255)
+      .background_color= Rgba(255, 0, 255)
     });
     DrawBox speedUpBox;
     speedUpBox.SetDrawOptions(DrawBoxOptions{
-      .background_color=arctic::Rgba(100, 100, 140)
+      .background_color= Rgba(100, 100, 140)
     });
 
     timeLineBox.SetDrawElement(&timeLine);
     
     playerPausePlay.SetDrawOptions(DrawBoxOptions{
-      .background_color=arctic::Rgba(0, 0, 0, 0)
+      .background_color= Rgba(0, 0, 0, 0)
     });
 
     playerPausePlay.SetDrawElement(&ppp);
 
     speedUpBox.SetDrawElement(&speedUpButton);
     speedUpBox.SetDrawOptions(DrawBoxOptions{
-      .background_color=arctic::Rgba(130, 56, 90)
+      .background_color= Rgba(130, 56, 90)
     });
 
     footer.AddDrawer(&playerPausePlay);
@@ -112,7 +114,7 @@ void EasyMain() {
     screen.AddDrawer(&footer);
     screen.AddDrawer(&mainFrame);
 
-    mainFrame.SetBackgroundColor(arctic::Rgba(232, 227, 227));
+    mainFrame.SetBackgroundColor( Rgba(232, 227, 227));
 
     screen.Draw();
 
@@ -156,17 +158,17 @@ void EasyMain() {
     speedUpButton.Listen();
     mainFrame.Listen();
 
-    Time curTime = timeLine.GetTime();
+    VisualisationTime curTime = timeLine.GetTime();
     std::string time = std::to_string(curTime / 1'000'000) + '.' + 
                        std::to_string(curTime % 1'000'000) + "s";
 
-    arctic::Vec2Si32 timeSize = gFont_.EvaluateSize(time.c_str(), false);
+     Vec2Si32 timeSize = gFont_.EvaluateSize(time.c_str(), false);
     gFont_.Draw(mainFrame.GetDrawSprite(), time.c_str(),
                 mainFrame.GetDrawSprite().Size().x - timeSize.x, mainFrame.GetDrawSprite().Size().y - timeSize.y,
-                arctic::kTextOriginTop, arctic::kTextAlignmentLeft,
-                arctic::kDrawBlendingModeColorize, arctic::kFilterNearest,
-                arctic::Rgba(255, 0, 0));
+                 kTextOriginTop,  kTextAlignmentLeft,
+                 kDrawBlendingModeColorize,  kFilterNearest,
+                 Rgba(255, 0, 0));
 
-    arctic::ShowFrame();
+     ShowFrame();
   }
 }

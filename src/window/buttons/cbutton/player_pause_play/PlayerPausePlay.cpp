@@ -6,7 +6,7 @@
 #include <iostream>
 
 bool PlayerPausePlay::IsMouseIn() const {
-  arctic::Vec2Si32 curMouseCoord = GetMouseOffset();
+   Vec2Si32 curMouseCoord = GetMouseOffset();
   if (curMouseCoord.x > usePix_.front().size() || curMouseCoord.x < 0 ||
       curMouseCoord.y > usePix_.size() || curMouseCoord.y < 0) {
     return false;
@@ -20,12 +20,12 @@ bool PlayerPausePlay::IsMouseIn() const {
 }
 
 void PlayerPausePlay::Draw(const Drawer *drawer) const {
-  arctic::Rgba color = (!isActive_) ? arctic::Rgba(0, 255, 0) : arctic::Rgba(255, 0, 0);
+   Rgba color = (!isActive_) ?  Rgba(0, 255, 0) :  Rgba(255, 0, 0);
 
   for (size_t i = 0; i < usePix_.size(); ++i) {
     for (size_t j = 0; j < usePix_[i].size(); ++j) {
       if (usePix_[i][j]) {
-        arctic::SetPixel(drawer->GetDrawSprite(), j, i, color);
+         SetPixel(drawer->GetDrawSprite(), j, i, color);
       }
     }
   }
@@ -38,7 +38,7 @@ void PlayerPausePlay::Action() {
   DrawPicture();
 }
 
-void PlayerPausePlay::SetSprite(arctic::Sprite sprite) {
+void PlayerPausePlay::SetSprite( Sprite sprite) {
   Window::SetSprite(sprite);
 
   usePix_.clear();

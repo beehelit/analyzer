@@ -4,6 +4,8 @@
 
 #include "engine/font.h"
 
+using namespace arctic;
+
 class Fps : public IDrawElement {
 public:
   Fps() { gFont_.Load("data/arctic_one_bmf.fnt"); }
@@ -15,5 +17,5 @@ public:
   }
 
 private:
-  mutable arctic::Font gFont_;
+  mutable  Font gFont_;
 };

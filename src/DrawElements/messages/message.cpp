@@ -19,22 +19,22 @@ void Message::Draw(const Drawer *drawer) const {
 
   double cur = len * progress_;
 
-  arctic::Vec2Si32 curOffset =
+   Vec2Si32 curOffset =
       from->GetOffset() +
-      arctic::Vec2Si32((arctic::Vec2D(to->GetOffset() - from->GetOffset())) /
+       Vec2Si32(( Vec2D(to->GetOffset() - from->GetOffset())) /
                        len * cur);
 
-  arctic::Vec2Si32 coord = curOffset;
+   Vec2Si32 coord = curOffset;
 
   Camera* camera = drawer->GetCamera();
   coord -= camera->GetOffset();
 
-  arctic::Vec2Si32 center = drawer->GetWindow()->GetFrameSprite().Size() / 2;
+   Vec2Si32 center = drawer->GetWindow()->GetFrameSprite().Size() / 2;
 
   coord.x = center.x - (center.x - coord.x) * camera->GetScaleFactor();
   coord.y = center.y - (center.y - coord.y) * camera->GetScaleFactor();
 
-  arctic::DrawCircle(drawer->GetDrawSprite(), coord,
+   DrawCircle(drawer->GetDrawSprite(), coord,
                      from->GetRadius() * camera->GetScaleFactor(),
-                     arctic::Rgba(255, 255, 0));
+                      Rgba(255, 255, 0));
 }

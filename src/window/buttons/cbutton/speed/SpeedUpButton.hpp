@@ -6,7 +6,7 @@
 
 class SpeedUpButton : public IDrawElement, public CButton {
 public:
-  SpeedUpButton(arctic::Sprite sprite, Mouse *mouse,
+  SpeedUpButton( Sprite sprite, Mouse *mouse,
                 std::function<void()> action)
       : Window(sprite), CButton(sprite, mouse, action) {}
 
@@ -18,7 +18,7 @@ public:
 
   void Listen() override;
 
-  void SetSprite(arctic::Sprite sprite) override;
+  void SetSprite( Sprite sprite) override;
 
   void Draw(const Drawer *drawer) const override;
   DrawElementType GetDrawElementType() const override {

@@ -9,11 +9,11 @@
 
 class RectangleWindow : virtual public MWindow {
 public:
-  RectangleWindow(arctic::Sprite sprite) : Window(sprite) {}
+  RectangleWindow( Sprite sprite) : Window(sprite) {}
 
   RectangleWindow() = default;
 
-  arctic::Vec2Si32 GetWindowSize() const { return GetFrameSprite().Size(); }
+   Vec2Si32 GetWindowSize() const { return GetFrameSprite().Size(); }
 
   bool IsMouseIn() const override;
 };

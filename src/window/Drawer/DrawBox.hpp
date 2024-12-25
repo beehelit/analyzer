@@ -22,11 +22,11 @@ public:
 
   void DrawWithOption() const;
   
-  arctic::Sprite GetDrawSprite() const override {
+   Sprite GetDrawSprite() const override {
     return space_;
   }
 
-  void SetDrawSprite(arctic::Sprite sprite) override {
+  void SetDrawSprite( Sprite sprite) override {
     space_ = sprite;
   }
 
@@ -42,7 +42,7 @@ public:
 
 private:
 
-  arctic::Sprite space_;
+   Sprite space_;
 
   std::vector<Drawer*> drawers_;
 

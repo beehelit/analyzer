@@ -9,19 +9,53 @@
 #include "engine/easy_drawing.h"
 #include "engine/rgba.h"
 #include "engine/vec2d.h"
+#include "engine/vec2f.h"
 #include "engine/vec2si32.h"
 #include "seet/GreedSeet.hpp"
 
 #include <iostream>
 
-arctic::Sprite RectWinDraw::GetDrawSprite() const { return GetFrameSprite(); }
-void RectWinDraw::SetDrawSprite(arctic::Sprite sprite) { SetSprite(sprite); }
+ Sprite RectWinDraw::GetDrawSprite() const { return GetFrameSprite(); }
+void RectWinDraw::SetDrawSprite( Sprite sprite) { SetSprite(sprite); }
 
 const Window *RectWinDraw::GetWindow() const { return this; }
 
+const std::vector< Rgba> layersColors_ = {
+   Rgba(245, 120, 145, 40)
+};
+
 void RectWinDraw::Draw() const {
-  arctic::DrawRectangle(GetDrawSprite(), arctic::Vec2Si32(0, 0),
+   DrawRectangle(GetDrawSprite(),  Vec2Si32(0, 0),
                         GetDrawSprite().Size(), backgroundColor_);
+
+  if (gs_) {
+    const GreedSeet* gs = *gs_;
+
+    const std::vector<ActorTable>& actorTables = gs->GetActorTables();
+    for (size_t actorTableNum = 1; actorTableNum < actorTables.size(); ++actorTableNum) {
+       Vec2Si32 leftDownCorner(
+        actorTables[actorTableNum].GetXAdd(), 
+        actorTables[actorTableNum].GetYAdd());
+      
+       Vec2Si32 rightUpCorner = 
+        leftDownCorner +  Vec2Si32(actorTables[actorTableNum].GetLineLength(),
+        -leftDownCorner.y + actorTables[actorTableNum].GetY());
+
+      Camera* camera = GetCamera();
+       Vec2Si32 center = GetWindow()->GetFrameSprite().Size() / 2;
+
+      leftDownCorner -= camera->GetOffset();
+      rightUpCorner -= camera->GetOffset();
+
+      leftDownCorner.x = center.x - (center.x - leftDownCorner.x) * camera->GetScaleFactor();
+      leftDownCorner.y = center.y - (center.y - leftDownCorner.y) * camera->GetScaleFactor();
+      
+      rightUpCorner.x = center.x - (center.x - rightUpCorner.x) * camera->GetScaleFactor();
+      rightUpCorner.y = center.y - (center.y - rightUpCorner.y) * camera->GetScaleFactor();
+
+       DrawRectangle(GetDrawSprite(), leftDownCorner, rightUpCorner, layersColors_[actorTableNum-1]);
+    }
+  }
 
   for (const Actor* actor : GetActorStorage()) {
     if (!actor->IsVisible()) {
@@ -31,26 +65,33 @@ void RectWinDraw::Draw() const {
     const std::map<ActorId, std::string_view>& idToType = Logs::GetActorIdToActorType();
     std::string text = static_cast<std::string>(idToType.at(actor->GetId()));
 
-    arctic::Vec2Si32 coord = actor->GetOffset();
+     Vec2Si32 coord = actor->GetOffset();
     Camera* camera = GetCamera();
     coord -= camera->GetOffset();
 
-    arctic::Vec2Si32 center = GetWindow()->GetFrameSprite().Size() / 2;
+     Vec2Si32 center = GetWindow()->GetFrameSprite().Size() / 2;
 
     coord.x = center.x - (center.x - coord.x) * camera->GetScaleFactor();
     coord.y = center.y - (center.y - coord.y) * camera->GetScaleFactor();
 
-    arctic::Vec2Si32 typeBlockSize = gFont_.EvaluateSize(text.c_str(), false);
-    arctic::DrawRectangle(
-      GetDrawSprite(), 
-      coord - arctic::Vec2Si32(8, 30), 
-      coord + typeBlockSize - arctic::Vec2Si32(8, 30), 
-      arctic::Rgba(71, 100, 150));
+     Sprite sprite = GetDrawSprite();
+
+     Vec2Si32 typeBlockSize = gFont_.EvaluateSize(text.c_str(), false);
+     Vec2F leftDownBlockCorner =  Vec2F(coord) -  Vec2F(8, 40);
+     DrawBlock(
+      sprite, 
+      leftDownBlockCorner, 
+       Vec2F(coord + typeBlockSize) -  Vec2F(-5, 20) -
+      leftDownBlockCorner, 
+      5.0,
+       Rgba(128, 160, 190),
+      2.0,
+       Rgba(0, 0, 0));
 
     gFont_.Draw(GetDrawSprite(), text.c_str(), coord.x, coord.y,
-                arctic::kTextOriginTop, arctic::kTextAlignmentLeft,
-                arctic::kDrawBlendingModeColorize, arctic::kFilterNearest,
-                arctic::Rgba(0, 255, 0));
+                 kTextOriginTop,  kTextAlignmentLeft,
+                 kDrawBlendingModeColorize,  kFilterNearest,
+                 Rgba(0, 0, 0));
   }
 
   Drawer::Draw();
@@ -68,7 +109,7 @@ void RectWinDraw::Listen() {
 
         GetCamera()->SetOffset(
             GetCamera()->GetOffset() +
-            arctic::Vec2Si32(arctic::Vec2D(GetMouse()->GetOffset() -
+             Vec2Si32( Vec2D(GetMouse()->GetOffset() -
                                            GetMouse()->GetSafeOffset()) /
                              GetCamera()->GetScaleFactor()));
       }
@@ -81,46 +122,11 @@ void RectWinDraw::Listen() {
 
     if (IsMouseIn()) {
       GetCamera()->SetScaleFactor(GetCamera()->GetScaleFactor() -
-                                  arctic::MouseWheelDelta() * 0.001);
-/*
-      const std::vector<Actor*>& actorStorage = GetActorStorage();
-      for (const Actor* actor : actorStorage) {
-        arctic::Vec2Si32 coord = actor->GetOffset();
-        Camera* camera = GetCamera();
-        coord -= camera->GetOffset();
-
-        arctic::Vec2Si32 center = GetWindow()->GetFrameSprite().Size() / 2;
-
-        coord.x = center.x - (center.x - coord.x) * camera->GetScaleFactor();
-        coord.y = center.y - (center.y - coord.y) * camera->GetScaleFactor();
-
-        arctic::Si32 radius = actor->GetRadius();
-
-        arctic::Vec2Si32 mouseOffset = GetMouseOffset();
-        if (std::sqrt((1.0 * coord.x - mouseOffset.x) * (1.0 * coord.x - mouseOffset.x) +
-            (1.0 * coord.y - mouseOffset.y) * (1.0 * coord.y - mouseOffset.y)) <= radius) {
-          
-          // LogReader* lr = GetLogReader();
-          GreedSeet* gs = GetGreedSeet();
-
-          ActorId id = gs->GetId(coord);
-
-          std::string_view text = Logs::GetActorIdToActorType().at(id);
-          arctic::Si32 windowHeight = GetWindow()->GetFrameSprite().Size().y;
-          arctic::Font gFont_;
-          gFont_.Load("data/arctic_one_bmf.fnt");
-
-          gFont_.Draw(GetDrawSprite(), std::string(text).c_str(), GetMouseOffset().x, GetMouseOffset().y,
-                      arctic::kTextOriginTop, arctic::kTextAlignmentLeft,
-                      arctic::kDrawBlendingModeColorize, arctic::kFilterNearest,
-                      arctic::Rgba(0, 255, 0));
-        }
-      }
-*/
+                                   MouseWheelDelta() * 0.001);
     }
   }
 }
 
-void RectWinDraw::SetBackgroundColor(arctic::Rgba color) {
+void RectWinDraw::SetBackgroundColor( Rgba color) {
   backgroundColor_ = color;
 }

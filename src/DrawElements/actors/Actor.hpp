@@ -13,7 +13,7 @@
 
 class Actor : public IDrawElement {
 public:
-  Actor(arctic::Vec2Si32 offset, arctic::Si32 radius, uint64_t id, bool visible)
+  Actor( Vec2Si32 offset,  Si32 radius, uint64_t id, bool visible)
       : radius_(radius), offset_(offset), id_(id), visible_(visible) {}
 
   void Draw(const Drawer *drawer) const override;
@@ -22,9 +22,9 @@ public:
     return DrawElementType::ACTOR;
   }
 
-  arctic::Vec2Si32 GetOffset() const { return offset_; }
+   Vec2Si32 GetOffset() const { return offset_; }
 
-  arctic::Si32 GetRadius() const { return radius_; }
+   Si32 GetRadius() const { return radius_; }
 
   uint64_t GetId() const { return id_; }
 
@@ -32,8 +32,8 @@ public:
   bool IsVisible() const { return visible_; } 
 
 private:
-  arctic::Si32 radius_;
-  arctic::Vec2Si32 offset_;
+   Si32 radius_;
+   Vec2Si32 offset_;
 
   uint64_t id_;
 

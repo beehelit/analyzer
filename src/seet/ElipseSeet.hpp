@@ -9,13 +9,13 @@ class ElipseSeet {
 public:
   ElipseSeet(Window *window) : window_(window), seetCount_(0) {}
 
-  void SeetN(arctic::Ui32 count);
-  arctic::Vec2Si32 GetCoord(arctic::Ui32 number);
+  void SeetN( Ui32 count);
+   Vec2Si32 GetCoord( Ui32 number);
 
 private:
   double ElipseLen();
-  arctic::Vec2Si32 PixFromElipseCoord(double eliseCoord);
+   Vec2Si32 PixFromElipseCoord(double eliseCoord);
 
   Window *window_;
-  arctic::Ui32 seetCount_;
+   Ui32 seetCount_;
 };

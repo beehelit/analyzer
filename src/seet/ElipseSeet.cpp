@@ -5,7 +5,7 @@
 double ElipseSeet::ElipseLen() {
   // TODO for all window
   RectangleWindow* window = dynamic_cast<RectangleWindow *>(window_);
-  arctic::Vec2Si32 frameSize = window->GetWindowSize();
+   Vec2Si32 frameSize = window->GetWindowSize();
 
   int widthHalf = frameSize.x / 2;
   int heightHalf = frameSize.y / 2;
@@ -19,22 +19,22 @@ double ElipseSeet::ElipseLen() {
   return elipseLen;
 }
 
-void ElipseSeet::SeetN(arctic::Ui32 count) { seetCount_ = count; }
+void ElipseSeet::SeetN( Ui32 count) { seetCount_ = count; }
 
-arctic::Vec2Si32 ElipseSeet::PixFromElipseCoord(double elipseCoord) {
+ Vec2Si32 ElipseSeet::PixFromElipseCoord(double elipseCoord) {
   double radCoord = (elipseCoord / ElipseLen()) * 2 * std::acos(-1);
 
   // TODO for all window
   RectangleWindow* window = dynamic_cast<RectangleWindow *>(window_);
-  arctic::Vec2Si32 frameSize = window->GetWindowSize();
+   Vec2Si32 frameSize = window->GetWindowSize();
 
   double x = (frameSize.x / 2.0) * std::cos(radCoord);
   double y = (frameSize.y / 2.0) * std::sin(radCoord);
 
-  return arctic::Vec2Si32(x + frameSize.x / 2.0, y + frameSize.y / 2.0);
+  return  Vec2Si32(x + frameSize.x / 2.0, y + frameSize.y / 2.0);
 }
 
-arctic::Vec2Si32 ElipseSeet::GetCoord(arctic::Ui32 number) {
+ Vec2Si32 ElipseSeet::GetCoord( Ui32 number) {
   double elipseLen = ElipseLen();
   double delta = elipseLen / seetCount_;
 

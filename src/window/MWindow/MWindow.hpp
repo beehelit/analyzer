@@ -8,7 +8,7 @@
 
 #include <optional>
 
-const arctic::Vec2Si32 kUndefinedMousePosition = arctic::Vec2Si32(-1, -1);
+const  Vec2Si32 kUndefinedMousePosition =  Vec2Si32(-1, -1);
 
 class MWindow : virtual public Window, public IListener {
 public:
@@ -20,7 +20,7 @@ public:
 
   virtual bool IsMouseIn() const = 0;
 
-  arctic::Vec2Si32 GetMouseOffset() const;
+   Vec2Si32 GetMouseOffset() const;
 
   void SetMouse(Mouse *mouse) { mouse_ = mouse; }
 
@@ -32,11 +32,11 @@ public:
     return *mouse_;
   }
 
-  MWindow(arctic::Sprite sprite, Mouse *mouse) : MWindow(sprite) {
+  MWindow( Sprite sprite, Mouse *mouse) : MWindow(sprite) {
     mouse_ = mouse;
   }
 
-  MWindow(arctic::Sprite sprite) : Window(sprite) {}
+  MWindow( Sprite sprite) : Window(sprite) {}
 
   ~MWindow() = default;
 
