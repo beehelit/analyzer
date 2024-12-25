@@ -41,7 +41,7 @@ public:
      Sprite sprite = drawer->GetDrawSprite();
 
      DrawArrow(sprite,  Vec2F(fromCoord),  Vec2F(toCoord),
-                     0.1, 0.5, 0.1,
+                     2, 30, 50,
                       Rgba(120, 0, 0));
   }
 
