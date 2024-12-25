@@ -18,6 +18,7 @@ public:
     return coordedId_.count(id);
   }
   void ReadConfig(std::string fileName);
+  void PrepareTables();
 
 private:
   std::vector<std::vector<ActorId>> tables_;
@@ -26,4 +27,9 @@ private:
 
   std::map<std::string, size_t> actorNameSeet_;
   std::set<ActorId> coordedId_;
+
+  arctic::Vec2Si32 windowSize_;
+  uint64_t actorRadius_;
+
+  arctic::Font gFont_;
 };

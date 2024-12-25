@@ -34,7 +34,14 @@
 #include <memory>
 
 void EasyMain() {
+  arctic::Font gFont_;
+  gFont_.Load("data/arctic_one_bmf.fnt");
+
   Logs::ReadLogs("data/storage_start_err.log");
+
+  GreedSeet gseet(std::pair(arctic::WindowSize().x, arctic::WindowSize().y), 
+                  std::max(1ull, 9000 / Logs::GetMaxActorId()));
+  gseet.PrepareTables();
 
   Camera camera;
   Mouse mouse;
@@ -112,8 +119,6 @@ void EasyMain() {
     mainFrame.SetCamera(&camera);
     mainFrame.SetMouse(&mouse);
     
-    GreedSeet gseet(std::pair(mainFrame.GetWindowSize().x, mainFrame.GetWindowSize().y), 
-                std::max(1ull, 9000 / Logs::GetMaxActorId()));
     mainFrame.SetGreedSeet(&gseet);
 
     for (ActorId i = 0; i <= Logs::GetMaxActorId(); ++i) {
@@ -150,6 +155,17 @@ void EasyMain() {
     timeLine.Listen();
     speedUpButton.Listen();
     mainFrame.Listen();
+
+    Time curTime = timeLine.GetTime();
+    std::string time = std::to_string(curTime / 1'000'000) + '.' + 
+                       std::to_string(curTime % 1'000'000) + "s";
+
+    arctic::Vec2Si32 timeSize = gFont_.EvaluateSize(time.c_str(), false);
+    gFont_.Draw(mainFrame.GetDrawSprite(), time.c_str(),
+                mainFrame.GetDrawSprite().Size().x - timeSize.x, mainFrame.GetDrawSprite().Size().y - timeSize.y,
+                arctic::kTextOriginTop, arctic::kTextAlignmentLeft,
+                arctic::kDrawBlendingModeColorize, arctic::kFilterNearest,
+                arctic::Rgba(255, 0, 0));
 
     arctic::ShowFrame();
   }

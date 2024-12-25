@@ -6,6 +6,7 @@
 #include "analizer/src/window/RectangleWindow/RectangleWindow.hpp"
 #include "analizer/src/window/Window.hpp"
 
+#include "engine/easy_drawing.h"
 #include "engine/rgba.h"
 #include "engine/vec2d.h"
 #include "engine/vec2si32.h"
@@ -21,8 +22,6 @@ const Window *RectWinDraw::GetWindow() const { return this; }
 void RectWinDraw::Draw() const {
   arctic::DrawRectangle(GetDrawSprite(), arctic::Vec2Si32(0, 0),
                         GetDrawSprite().Size(), backgroundColor_);
-
-  Drawer::Draw();
 
   for (const Actor* actor : GetActorStorage()) {
     if (!actor->IsVisible()) {
@@ -41,11 +40,20 @@ void RectWinDraw::Draw() const {
     coord.x = center.x - (center.x - coord.x) * camera->GetScaleFactor();
     coord.y = center.y - (center.y - coord.y) * camera->GetScaleFactor();
 
+    arctic::Vec2Si32 typeBlockSize = gFont_.EvaluateSize(text.c_str(), false);
+    arctic::DrawRectangle(
+      GetDrawSprite(), 
+      coord - arctic::Vec2Si32(8, 30), 
+      coord + typeBlockSize - arctic::Vec2Si32(8, 30), 
+      arctic::Rgba(71, 100, 150));
+
     gFont_.Draw(GetDrawSprite(), text.c_str(), coord.x, coord.y,
                 arctic::kTextOriginTop, arctic::kTextAlignmentLeft,
                 arctic::kDrawBlendingModeColorize, arctic::kFilterNearest,
                 arctic::Rgba(0, 255, 0));
   }
+
+  Drawer::Draw();
 }
 
 void RectWinDraw::Listen() {
