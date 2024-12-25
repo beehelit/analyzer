@@ -35,6 +35,6 @@ void Message::Draw(const Drawer *drawer) const {
   coord.y = center.y - (center.y - coord.y) * camera->GetScaleFactor();
 
   arctic::DrawCircle(drawer->GetDrawSprite(), coord,
-                     from->GetRadius() * 2.0 * camera->GetScaleFactor(),
+                     from->GetRadius() * camera->GetScaleFactor(),
                      arctic::Rgba(255, 255, 0));
 }

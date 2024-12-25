@@ -343,7 +343,10 @@ private:
   }
 
   static void ParseRealLogLines() {
-    ActorId curUnusedActorId = 0;
+    realActorIdToActorNumId_["[0:0:0]"] = 0;
+    actorNumIdToRealActorId_[0] = "[0:0:0]";
+
+    ActorId curUnusedActorId = 1;
 
     parsedLogLines_.reserve(realLogLines_.size());
 
@@ -471,6 +474,9 @@ private:
   static void CreateActorTypeToActorId() {
     std::set<ActorId> added;
 
+    added.insert(0);
+    actorTypeToActorId_["UNIVERSE"] = {0};
+
     for (const ParsedLogLine& parsedLogLine: parsedLogLines_) {
       if (!parsedLogLine.actorType) {
         continue;
@@ -484,6 +490,8 @@ private:
   }
 
   static void CreateActorIdToActorType() {
+    actorIdToActorType_[0] = "UNIVERSE";
+
     for (const ParsedLogLine& parsedLogLine: parsedLogLines_) {
       if (!parsedLogLine.actorType) {
         continue;
