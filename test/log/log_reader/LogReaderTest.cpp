@@ -1,5 +1,4 @@
 #include "catch2/catch_test_macros.hpp"
-#include <_types/_uint8_t.h>
 #include <log/log_reader/LogReader.hpp>
 
 #define CATCH_CONFIG_MAIN

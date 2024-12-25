@@ -2,7 +2,6 @@
 
 #include <DrawElements/IDrawElement.hpp>
 #include <DrawElements/actors/Actor.hpp>
-#include <_types/_uint64_t.h>
 #include <camera/Camera.hpp>
 #include <window/Window.hpp>
 #include <map>

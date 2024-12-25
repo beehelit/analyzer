@@ -165,6 +165,24 @@ file(GLOB SRC_FILES
     ${HEADER_DIR_1}/*.hpp
     ${HEADER_DIR_2}/*.h
     ${HEADER_DIR_2}/*.hpp
+
+    src/window/Drawer/*.cpp
+    src/window/*.cpp
+    src/seet/*.cpp
+    src/camera/*.cpp
+    src/mouse/*.cpp
+    src/log/log_reader/*.cpp
+    src/log/*.cpp
+    src/DrawElements/actors/*.cpp
+    src/DrawElements/fps/*.cpp
+    src/window/MWindow/*.cpp
+    src/window/buttons/cbutton/*.cpp
+    src/window/buttons/cbutton/player_pause_play/*.cpp
+    src/window/RectangleWindow/*.cpp
+    src/window/buttons/cbutton/time_line/*.cpp
+    src/window/buttons/cbutton/speed/*.cpp
+    src/DrawElements/messages/*.cpp
+    src/window/Drawer/*.cpp
 )
 ENDIF (APPLE)
 file(GLOB SRC_FILES_TO_REMOVE

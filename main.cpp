@@ -33,16 +33,19 @@
 #include <iostream>
 #include <memory>
 
+#include <fstream>
+
 using namespace arctic;
 
 void EasyMain() {
+
   Font gFont_;
   gFont_.Load("data/arctic_one_bmf.fnt");
 
   Logs::ReadLogs("data/storage_start_err.log");
 
   GreedSeet gseet(std::pair(WindowSize().x, WindowSize().y), 
-                  std::max(1ull, 9000 / Logs::GetMaxActorId()));
+                  std::max(1ul, 9000 / Logs::GetMaxActorId()));
   gseet.PrepareTables();
 
   Camera camera;
@@ -78,8 +81,8 @@ void EasyMain() {
     DrawBox footer;
     footer.SetDrawOptions(DrawBoxOptions{
       .flex_type="row",
-      .background_color= Rgba(131, 131, 131),
-      .flex_list={0.02, 0.96, 0.02}
+      .flex_list={0.02, 0.96, 0.02},
+      .background_color= Rgba(131, 131, 131)
     });
 
     DrawBox playerPausePlay;
@@ -132,7 +135,7 @@ void EasyMain() {
 
       mainFrame.AddDrawElement(
         new Actor(gseet.GetCoord(i), 
-                                      std::max(1ull, 9000 / Logs::GetMaxActorId()), 
+                                      std::max(1ul, 9000 / Logs::GetMaxActorId()), 
                                       i, 
                                       visible)
       );

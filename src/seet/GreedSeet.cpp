@@ -2,7 +2,6 @@
 
 #include "DrawElements/actors/Actor.hpp"
 #include "arctic/engine/vec2si32.h"
-#include <_types/_uint64_t.h>
 #include <algorithm>
 #include <fstream>
 #include <set>

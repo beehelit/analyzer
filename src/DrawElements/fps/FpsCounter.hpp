@@ -1,6 +1,5 @@
 #pragma once
 
-#include <_types/_uint64_t.h>
 #include <chrono>
 
 class FpsCounter {

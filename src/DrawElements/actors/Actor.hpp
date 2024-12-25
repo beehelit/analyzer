@@ -1,7 +1,6 @@
 #pragma once
 
 #include <DrawElements/IDrawElement.hpp>
-#include <_types/_uint64_t.h>
 #include <camera/Camera.hpp>
 #include <window/RectangleWindow/RectangleWindow.hpp>
 

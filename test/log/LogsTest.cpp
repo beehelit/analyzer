@@ -1,5 +1,4 @@
 #include "catch2/catch_test_macros.hpp"
-#include <_types/_uint8_t.h>
 #include <log/log_reader/LogReader.hpp>
 #include <log/Logs.hpp>
 
@@ -36,10 +35,7 @@ void prepareFile() {
 TEST_CASE("Тест Logs", "[common]") {
     prepareFile();
 
-    LogReader logReader;
-    logReader.ReadFile("abacaba");
-
-    Logs::MoveFromLogLines(logReader);
+    Logs::ReadLogs("abacaba");
     const std::vector<std::string_view>& readLogLines_ = Logs::GetLogLines();
 
     REQUIRE(readLogLines_.size() == realLines.size());
@@ -51,10 +47,7 @@ TEST_CASE("Тест Logs", "[common]") {
 TEST_CASE("Тест Logs", "[test Receive line parse]") {
     prepareFile();
 
-    LogReader logReader;
-    logReader.ReadFile("abacaba");
-
-    Logs::MoveFromLogLines(logReader);
+    Logs::ReadLogs("abacaba");
     const std::vector<Logs::RealLogLine>& realLogLines = Logs::GetRealLogLines();
 
     Logs::RealLogLine expected = Logs::RealLogLine(
@@ -79,10 +72,7 @@ TEST_CASE("Тест Logs", "[test Receive line parse]") {
 TEST_CASE("Тест Logs", "[test Send line parse]") {
     prepareFile();
 
-    LogReader logReader;
-    logReader.ReadFile("abacaba");
-
-    Logs::MoveFromLogLines(logReader);
+    Logs::ReadLogs("abacaba");
     const std::vector<Logs::RealLogLine>& realLogLines = Logs::GetRealLogLines();
 
     Logs::RealLogLine expected = Logs::RealLogLine(
@@ -105,17 +95,14 @@ TEST_CASE("Тест Logs", "[test Send line parse]") {
 TEST_CASE("Тест Logs", "[test Parsed lines]") {
     prepareFile();
 
-    LogReader logReader;
-    logReader.ReadFile("abacaba");
-
-    Logs::MoveFromLogLines(logReader);
+    Logs::ReadLogs("abacaba");
     const std::vector<Logs::ParsedLogLine>& parsedLogLines = Logs::GetParsedLogLines();
 
 
     Logs::ParsedLogLine expected = Logs::ParsedLogLine(
         "Receive",
-        0,
         1,
+        2,
         "0x00001423FFDDAC50",
         1732777200847489,
         "TABLET_BOOTSTRAPPER"
@@ -134,10 +121,7 @@ TEST_CASE("Тест Logs", "[test Parsed lines]") {
 TEST_CASE("Test Logs", "[test SetMessageToParsedLineInd]") {
     prepareFile();
 
-    LogReader logReader;
-    logReader.ReadFile("abacaba");
-
-    Logs::MoveFromLogLines(logReader);
+    Logs::ReadLogs("abacaba");
     const std::map<std::string_view, std::vector<size_t>>& messageToParsedLineInd = Logs::GetMessageToParsedLineInd();
 
     REQUIRE(messageToParsedLineInd.at("0x00001423FFDDAC50") == std::vector<size_t>{0, 1});
@@ -157,14 +141,11 @@ TEST_CASE("Test Logs", "[test CreateLogMessages + Normalize]") {
     out.write(realLinesAll.c_str(), realLinesAll.size());
     out.close();
 
-    LogReader logReader;
-    logReader.ReadFile("abacaba");
-
-    Logs::MoveFromLogLines(logReader);
+    Logs::ReadLogs("abacaba");
     const std::vector<Logs::LogMessage>& logMessages = Logs::GetLogMessages();
 
     std::vector<Logs::LogMessage> expected = {
-        Logs::LogMessage(0, 0, 0, 100000, "0x00001423FFDEFFF0")
+        Logs::LogMessage(1, 1, 0, 100000, "0x00001423FFDEFFF0")
     };
 
     REQUIRE(logMessages == expected);

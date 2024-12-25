@@ -1,7 +1,6 @@
 #include "LogReader.hpp"
 
 #include "engine/easy_util.h"
-#include <_types/_uint8_t.h>
 #include <algorithm>
 #include <fstream>
 #include <map>
@@ -16,6 +15,7 @@ std::vector<uint8_t> LogReader::data_ = {};
 std::vector<std::string_view> LogReader::logLines_ = {};
 
 void LogReader::ReadFile(const std::string_view fileName) {
+  data_.clear();
   ReadFile_(fileName, &data_);
 
   size_t cntLogLines = 0;
@@ -25,6 +25,7 @@ void LogReader::ReadFile(const std::string_view fileName) {
     }
   }
 
+  logLines_.clear();
   logLines_.reserve(cntLogLines);
 
   size_t lastLogLineStart = 0;
@@ -56,7 +57,7 @@ const std::vector<std::string_view>& LogReader::GetLogLines() {
 }
 
 void LogReader::ReadFile_(const std::string_view fileName, std::vector<uint8_t>* data) {
-  std::ifstream in(fileName, std::ios_base::in | std::ios_base::binary);
+  std::ifstream in(std::string(fileName), std::ios_base::in | std::ios_base::binary);
 
   if (in.rdstate() & std::ios_base::failbit) {
     throw std::runtime_error("Error in ReadFile. Can't open the file");

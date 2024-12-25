@@ -1,7 +1,6 @@
 #pragma once
 
 #include <log/log_reader/LogReader.hpp>
-#include <_types/_uint64_t.h>
 
 #include <sstream>
 #include <string_view>
