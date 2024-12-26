@@ -16,6 +16,8 @@ std::vector<Logs::NewDieLogLine> Logs::newDieLogLines_ = {};
 std::map<ActorId, std::pair<VisualisationTime, VisualisationTime>> Logs::lifeTime_ = {};
 ActorId Logs::maxActorId_ = 0;
 VisualisationTime Logs::oldMinTime_ = 0;
+std::map<std::string_view, std::string_view> Logs::actorTypesMap_ = {};
+std::vector<uint8_t> Logs::actorTypesMapConfigData_ = {};
 
 std::ostream& operator<<(std::ostream& os, const Logs::LogMessage& lm) {
   return os << "[" 

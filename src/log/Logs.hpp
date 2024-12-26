@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <log/log_reader/LogReader.hpp>
 
 #include <sstream>
@@ -9,6 +10,8 @@
 #include <string>
 #include <algorithm>
 #include <set>
+
+#include <iostream>
 
 using ActorId = uint64_t;
 using VisualisationTime = uint64_t;
@@ -114,6 +117,9 @@ public:
     LogReader::ReadFile(file);
     logLines_ = LogReader::GetLogLines();
 
+    LogReader::ReadFile_("data/actor_types_map.config", &actorTypesMapConfigData_);
+    SetNewActorTypes(actorTypesMapConfigData_);
+
     CreateRealLogLines();
     ParseRealLogLines();
     SetMessageToParsedLineInd();
@@ -127,6 +133,32 @@ public:
 
     GetActorLifeInfo();
     SetActorLifeTime();
+
+  }
+
+  static void SetNewActorTypes(const std::vector<uint8_t>& actorTypesMapConfigData) {
+    size_t lastWordStart = 0;
+    std::string_view lastWord;
+
+
+    for (size_t curCharNum = 0; curCharNum < actorTypesMapConfigData.size(); ++curCharNum) {
+      if (actorTypesMapConfigData[curCharNum] == '=') {
+        lastWord = std::string_view(
+          reinterpret_cast<const char*>(actorTypesMapConfigData.data() + lastWordStart), 
+          reinterpret_cast<const char*>(actorTypesMapConfigData.data() + curCharNum)
+        );
+        lastWordStart = curCharNum+1;
+      } else if (actorTypesMapConfigData[curCharNum] == '\n') {
+        std::string_view oldLastWord = lastWord;
+        lastWord = std::string_view(
+          reinterpret_cast<const char*>(actorTypesMapConfigData.data() + lastWordStart), 
+          reinterpret_cast<const char*>(actorTypesMapConfigData.data() + curCharNum)
+        );
+        lastWordStart = curCharNum+1;
+
+        actorTypesMap_[oldLastWord] = lastWord;  
+      }
+    }
   }
 
   static const std::vector<RealLogLine>& GetRealLogLines() {
@@ -481,7 +513,12 @@ private:
       }
 
       if (!added.count(parsedLogLine.to)) {
-        actorTypeToActorId_[*parsedLogLine.actorType].push_back(parsedLogLine.to);
+        std::string_view actorType = *parsedLogLine.actorType;
+        if (actorTypesMap_.count(actorType)) {
+          actorType = actorTypesMap_[actorType];
+        }
+
+        actorTypeToActorId_[actorType].push_back(parsedLogLine.to);
         added.insert(parsedLogLine.to);
       }
     }
@@ -495,7 +532,15 @@ private:
         continue;
       }
 
-      actorIdToActorType_[parsedLogLine.to] = *parsedLogLine.actorType;
+      std::string_view actorType = *parsedLogLine.actorType;
+      if (actorTypesMap_.count(actorType)) {
+
+        if (actorTypesMap_[actorType]=="BSDBLocalRecovery")
+        std::cout << actorTypesMap_[actorType] << " A" << std::endl;
+        actorType = actorTypesMap_[actorType];
+      }
+
+      actorIdToActorType_[parsedLogLine.to] = actorType;
     }
   }
 
@@ -520,6 +565,10 @@ private:
 
 
   static VisualisationTime oldMinTime_;
+
+  static std::map<std::string_view, std::string_view> actorTypesMap_;
+
+  static std::vector<uint8_t> actorTypesMapConfigData_;
 };
 
 std::ostream& operator<<(std::ostream& os, const Logs::LogMessage& lm);
