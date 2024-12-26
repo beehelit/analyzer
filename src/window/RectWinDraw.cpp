@@ -57,43 +57,6 @@ void RectWinDraw::Draw() const {
     }
   }
 
-  for (const Actor* actor : GetActorStorage()) {
-    if (!actor->IsVisible()) {
-      continue;
-    }
-
-    const std::map<ActorId, std::string_view>& idToType = Logs::GetActorIdToActorType();
-    std::string text = static_cast<std::string>(idToType.at(actor->GetId()));
-
-     Vec2Si32 coord = actor->GetOffset();
-    Camera* camera = GetCamera();
-    coord -= camera->GetOffset();
-
-     Vec2Si32 center = GetWindow()->GetFrameSprite().Size() / 2;
-
-    coord.x = center.x - (center.x - coord.x) * camera->GetScaleFactor();
-    coord.y = center.y - (center.y - coord.y) * camera->GetScaleFactor();
-
-     Sprite sprite = GetDrawSprite();
-
-     Vec2Si32 typeBlockSize = gFont_.EvaluateSize(text.c_str(), false);
-     Vec2F leftDownBlockCorner =  Vec2F(coord) -  Vec2F(8, 40);
-     DrawBlock(
-      sprite, 
-      leftDownBlockCorner, 
-       Vec2F(coord + typeBlockSize) -  Vec2F(-5, 20) -
-      leftDownBlockCorner, 
-      5.0,
-       Rgba(128, 160, 190),
-      2.0,
-       Rgba(0, 0, 0));
-
-    gFont_.Draw(GetDrawSprite(), text.c_str(), coord.x, coord.y,
-                 kTextOriginTop,  kTextAlignmentLeft,
-                 kDrawBlendingModeColorize,  kFilterNearest,
-                 Rgba(0, 0, 0));
-  }
-
   Drawer::Draw();
 }
 

@@ -11,17 +11,17 @@ void Message::Draw(const Drawer *drawer) const {
     drawer->GetActorIdToStorageInd().at(line_->GetFromTo().second)
   ];
 
-  double len = std::sqrt((1.0 * from->GetOffset().x - to->GetOffset().x) *
-                             (1.0 * from->GetOffset().x - to->GetOffset().x) +
+  double len = std::sqrt((1.0 * from->GetActorCenter().x - to->GetActorCenter().x) *
+                             (1.0 * from->GetActorCenter().x - to->GetActorCenter().x) +
 
-                         (1.0 * from->GetOffset().y - to->GetOffset().y) *
-                             (1.0 * from->GetOffset().y - to->GetOffset().y));
+                         (1.0 * from->GetActorCenter().y - to->GetActorCenter().y) *
+                             (1.0 * from->GetActorCenter().y - to->GetActorCenter().y));
 
   double cur = len * progress_;
 
    Vec2Si32 curOffset =
-      from->GetOffset() +
-       Vec2Si32(( Vec2D(to->GetOffset() - from->GetOffset())) /
+      from->GetActorCenter() +
+       Vec2Si32(( Vec2D(to->GetActorCenter() - from->GetActorCenter())) /
                        len * cur);
 
    Vec2Si32 coord = curOffset;

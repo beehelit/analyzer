@@ -21,8 +21,8 @@ public:
       drawer->GetActorIdToStorageInd().at(fromTo_.second)
     ];
 
-     Vec2Si32 fromCoord = fromActor->GetOffset();
-     Vec2Si32 toCoord = toActor->GetOffset();
+     Vec2Si32 fromCoord = fromActor->GetActorCenter();
+     Vec2Si32 toCoord = toActor->GetActorCenter();
 
     Camera* camera = drawer->GetCamera();
      Vec2Si32 center = drawer->GetWindow()->GetFrameSprite().Size() / 2;

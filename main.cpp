@@ -137,7 +137,7 @@ void EasyMain() {
         new Actor(gseet.GetCoord(i), 
                                       std::max(static_cast<ActorId>(1), 9000 / Logs::GetMaxActorId()), 
                                       i, 
-                                      visible)
+                                      visible, gFont_)
       );
     }
 
