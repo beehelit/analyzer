@@ -24,6 +24,10 @@ const std::vector< Rgba> layersColors_ = {
    Rgba(245, 120, 145, 40)
 };
 
+const std::vector<std::string> layersNames_ = {
+  "BS"
+};
+
 void RectWinDraw::Draw() const {
    DrawRectangle(GetDrawSprite(),  Vec2Si32(0, 0),
                         GetDrawSprite().Size(), backgroundColor_);
@@ -34,8 +38,8 @@ void RectWinDraw::Draw() const {
     const std::vector<ActorTable>& actorTables = gs->GetActorTables();
     for (size_t actorTableNum = 1; actorTableNum < actorTables.size(); ++actorTableNum) {
        Vec2Si32 leftDownCorner(
-        actorTables[actorTableNum].GetXAdd(), 
-        actorTables[actorTableNum].GetYAdd());
+        actorTables[actorTableNum].GetXAdd() - 50, 
+        actorTables[actorTableNum].GetYAdd() - 150);
       
        Vec2Si32 rightUpCorner = 
         leftDownCorner +  Vec2Si32(actorTables[actorTableNum].GetLineLength(),
@@ -54,6 +58,12 @@ void RectWinDraw::Draw() const {
       rightUpCorner.y = center.y - (center.y - rightUpCorner.y) * camera->GetScaleFactor();
 
        DrawRectangle(GetDrawSprite(), leftDownCorner, rightUpCorner, layersColors_[actorTableNum-1]);
+
+      gFont_.Draw(GetDrawSprite(), layersNames_[actorTableNum-1].c_str(), 
+      leftDownCorner.x, leftDownCorner.y + 30,
+                    kTextOriginTop,  kTextAlignmentLeft,
+                    kDrawBlendingModeColorize,  kFilterNearest,
+                    Rgba(160, 0, 0));
     }
   }
 
