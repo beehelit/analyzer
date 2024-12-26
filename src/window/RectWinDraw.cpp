@@ -21,11 +21,17 @@ void RectWinDraw::SetDrawSprite( Sprite sprite) { SetSprite(sprite); }
 const Window *RectWinDraw::GetWindow() const { return this; }
 
 const std::vector< Rgba> layersColors_ = {
-   Rgba(245, 120, 145, 40)
+   Rgba(245, 120, 145, 40),
+   Rgba(0, 0, 253, 30),
+   Rgba(0, 130, 50, 10),
+   Rgba(230, 7, 7, 82)
 };
 
 const std::vector<std::string> layersNames_ = {
-  "BS"
+  "PDisk",
+  "VDisk",
+  "BSQueue",
+  "DSProxy"
 };
 
 void RectWinDraw::Draw() const {

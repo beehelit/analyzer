@@ -63,9 +63,9 @@ void GreedSeet::PrepareTables() {
   }
 
   for (size_t tableNum = 2; tableNum < tables_.size(); ++tableNum) {
-    actorTables_[tableNum].SetYAdd(actorTables_[tableNum-1].GetY() + 100);
+    actorTables_[tableNum].SetYAdd(actorTables_[tableNum-1].GetY() + 200);
   }
-  actorTables_[0].SetYAdd(actorTables_[actorTables_.size() - 1].GetY() + 100);
+  actorTables_[0].SetYAdd(actorTables_[actorTables_.size() - 1].GetY() + 200);
   
   coords_.resize(Logs::GetMaxActorId() + 1);
 
