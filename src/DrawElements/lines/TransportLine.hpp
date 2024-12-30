@@ -35,22 +35,25 @@ public:
     fromCoord.y =
         center.y - (center.y - fromCoord.y) * camera->GetScaleFactor();
 
-    Vec2Si32 typeBlockSize = fromActor->GetSize();
-    Vec2F leftDownBlockCorner = Vec2F(fromCoord) -  Vec2F(8, 40);
-    Vec2F rightUpCorner = Vec2F(fromCoord + typeBlockSize) -  Vec2F(-5, 20);
-    Vec2Si32 fromCenter = Vec2Si32(leftDownBlockCorner + (rightUpCorner - leftDownBlockCorner) / 2);
+    Vec2Si32 typeBlockSizeFrom = fromActor->GetSize();
+    Vec2F leftDownBlockCornerFrom = Vec2F(fromCoord) -  Vec2F(8, 40);
+    Vec2F rightUpCornerFrom = Vec2F(fromCoord + typeBlockSizeFrom) -  Vec2F(-5, 20);
+    Vec2Si32 fromCenter = Vec2Si32(leftDownBlockCornerFrom + (rightUpCornerFrom - leftDownBlockCornerFrom) / 2);
 
     toCoord.x = center.x - (center.x - toCoord.x) * camera->GetScaleFactor();
     toCoord.y = center.y - (center.y - toCoord.y) * camera->GetScaleFactor();
 
-    typeBlockSize = toActor->GetSize();
-    leftDownBlockCorner = Vec2F(toCoord) -  Vec2F(8, 40);
-    rightUpCorner = Vec2F(toCoord + typeBlockSize) -  Vec2F(-5, 20);
-    Vec2Si32 toCenter = Vec2Si32(leftDownBlockCorner + (rightUpCorner - leftDownBlockCorner) / 2);    
+    Vec2Si32 typeBlockSizeTo = toActor->GetSize();
+    Vec2F leftDownBlockCornerTo = Vec2F(toCoord) -  Vec2F(8, 40);
+    Vec2F rightUpCornerTo = Vec2F(toCoord + typeBlockSizeTo) -  Vec2F(-5, 20);
+    Vec2Si32 toCenter = Vec2Si32(leftDownBlockCornerTo + (rightUpCornerTo - leftDownBlockCornerTo) / 2);
+
+    Vec2F fromEdge = BlockEdgePos(leftDownBlockCornerFrom, Vec2F(typeBlockSizeFrom), 5.0, Vec2F(toCenter - fromCenter));
+    Vec2F toEdge = BlockEdgePos(leftDownBlockCornerTo, Vec2F(typeBlockSizeTo), 5.0, Vec2F(toCenter - fromCenter));
 
      Sprite sprite = drawer->GetDrawSprite();
 
-     DrawArrow(sprite,  Vec2F(fromCenter),  Vec2F(toCenter),
+     DrawArrow(sprite,  Vec2F(fromEdge),  Vec2F(toEdge),
                      2, 30, 50,
                       Rgba(120, 0, 0));
   }
