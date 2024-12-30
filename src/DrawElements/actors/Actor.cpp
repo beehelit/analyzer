@@ -2,6 +2,7 @@
 
 #include "analizer/src/window/Drawer/Drawer.hpp"
 #include "analizer/src/window/RectWinDraw.hpp"
+#include "engine/arctic_types.h"
 #include "engine/vec2f.h"
 #include "engine/vec2si32.h"
 
@@ -10,10 +11,12 @@
 using ActorId = uint64_t;
 
 void Actor::Draw(const Drawer *drawer) const {
+
+/*  
   if (!IsVisible()) {
     return;
   }
-
+*/
   const std::map<ActorId, std::string_view>& idToType = Logs::GetActorIdToActorType();
   std::string text = static_cast<std::string>(idToType.at(GetId()));  
 
@@ -33,9 +36,15 @@ void Actor::Draw(const Drawer *drawer) const {
     Vec2F leftDownBlockCorner = Vec2F(coord) -  Vec2F(8, 40);
     Vec2F rightUpCorner = Vec2F(coord + typeBlockSize) -  Vec2F(-5, 20);
 
-  Rgba blockColor = Rgba(128, 160, 190);
+  
+  Ui8 alpha = 255;
+  if (!IsVisible()) {
+    alpha = 50;
+  }
+
+  Rgba blockColor = Rgba(128, 160, 190, alpha);
   if (active_) {
-    blockColor = Rgba(255, 160, 190);
+    blockColor = Rgba(255, 160, 190, alpha);
   }
 
     DrawBlock(
