@@ -13,7 +13,7 @@ endif(NOT CMAKE_BUILD_TYPE)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}.")
 
-set(PROJECT_NAME analizer)
+set(PROJECT_NAME analyzer)
 # Output Variables
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 # Folders files
