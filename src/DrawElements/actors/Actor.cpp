@@ -2,6 +2,7 @@
 
 #include "analizer/src/window/Drawer/Drawer.hpp"
 #include "analizer/src/window/RectWinDraw.hpp"
+#include "engine/vec2f.h"
 #include "engine/vec2si32.h"
 
 #include <log/Logs.hpp>
@@ -31,6 +32,22 @@ void Actor::Draw(const Drawer *drawer) const {
     Vec2Si32 typeBlockSize = gFont_.EvaluateSize(text.c_str(), false);
     Vec2F leftDownBlockCorner = Vec2F(coord) -  Vec2F(8, 40);
     Vec2F rightUpCorner = Vec2F(coord + typeBlockSize) -  Vec2F(-5, 20);
+/*
+  leftDownBlockCorner -= Vec2F(camera->GetOffset());
+  rightUpCorner -= Vec2F(camera->GetOffset());
+
+  leftDownBlockCorner.x = center.x - (center.x - leftDownBlockCorner.x) * camera->GetScaleFactor();
+  leftDownBlockCorner.y = center.y - (center.y - leftDownBlockCorner.y) * camera->GetScaleFactor();
+
+  rightUpCorner.x = center.x - (center.x - rightUpCorner.x) * camera->GetScaleFactor();
+  rightUpCorner.y = center.y - (center.y - rightUpCorner.y) * camera->GetScaleFactor();
+*/
+
+/*
+  coord -= camera->GetOffset();
+  coord.x = center.x - (center.x - coord.x) * camera->GetScaleFactor();
+  coord.y = center.y - (center.y - coord.y) * camera->GetScaleFactor();
+*/
 
     DrawBlock(
     sprite, 

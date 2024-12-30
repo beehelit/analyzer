@@ -47,6 +47,8 @@ public:
   void SetVisible(bool visible) { visible_ = visible; }
   bool IsVisible() const { return visible_; } 
 
+  Vec2Si32 GetSize() { return gFont_.EvaluateSize(std::string(Logs::GetActorIdToActorType().at(GetId())).c_str(), false); }
+
 private:
    Si32 radius_;
   Vec2Si32 offset_;

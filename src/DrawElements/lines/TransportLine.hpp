@@ -21,8 +21,8 @@ public:
       drawer->GetActorIdToStorageInd().at(fromTo_.second)
     ];
 
-     Vec2Si32 fromCoord = fromActor->GetActorCenter();
-     Vec2Si32 toCoord = toActor->GetActorCenter();
+     Vec2Si32 fromCoord = fromActor->GetOffset();
+     Vec2Si32 toCoord = toActor->GetOffset();
 
     Camera* camera = drawer->GetCamera();
      Vec2Si32 center = drawer->GetWindow()->GetFrameSprite().Size() / 2;
@@ -35,12 +35,22 @@ public:
     fromCoord.y =
         center.y - (center.y - fromCoord.y) * camera->GetScaleFactor();
 
+    Vec2Si32 typeBlockSize = fromActor->GetSize();
+    Vec2F leftDownBlockCorner = Vec2F(fromCoord) -  Vec2F(8, 40);
+    Vec2F rightUpCorner = Vec2F(fromCoord + typeBlockSize) -  Vec2F(-5, 20);
+    Vec2Si32 fromCenter = Vec2Si32(leftDownBlockCorner + (rightUpCorner - leftDownBlockCorner) / 2);
+
     toCoord.x = center.x - (center.x - toCoord.x) * camera->GetScaleFactor();
     toCoord.y = center.y - (center.y - toCoord.y) * camera->GetScaleFactor();
 
+    typeBlockSize = toActor->GetSize();
+    leftDownBlockCorner = Vec2F(toCoord) -  Vec2F(8, 40);
+    rightUpCorner = Vec2F(toCoord + typeBlockSize) -  Vec2F(-5, 20);
+    Vec2Si32 toCenter = Vec2Si32(leftDownBlockCorner + (rightUpCorner - leftDownBlockCorner) / 2);    
+
      Sprite sprite = drawer->GetDrawSprite();
 
-     DrawArrow(sprite,  Vec2F(fromCoord),  Vec2F(toCoord),
+     DrawArrow(sprite,  Vec2F(fromCenter),  Vec2F(toCenter),
                      2, 30, 50,
                       Rgba(120, 0, 0));
   }
