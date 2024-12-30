@@ -17,8 +17,8 @@ using ActorId = uint64_t;
 
 class Actor : public IDrawElement {
 public:
-  Actor( Vec2Si32 offset,  Si32 radius, uint64_t id, bool visible, Font font)
-      : radius_(radius), offset_(offset), id_(id), visible_(visible), gFont_(font) {
+  Actor( Vec2Si32 offset,  Si32 radius, uint64_t id, bool visible, bool active, Font font)
+      : radius_(radius), offset_(offset), id_(id), visible_(visible), active_(active), gFont_(font) {
 
     const std::map<ActorId, std::string_view>& idToType = Logs::GetActorIdToActorType();
     std::string text = static_cast<std::string>(idToType.at(GetId()));
@@ -57,6 +57,7 @@ private:
   uint64_t id_;
 
   bool visible_ = true;
+  bool active_ = false;
 
   mutable Font gFont_;
 };

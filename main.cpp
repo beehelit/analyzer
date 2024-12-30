@@ -132,12 +132,15 @@ void EasyMain() {
       }
 
       bool visible = Logs::IsAlife(i, timeLine.GetTime());
+      bool active = Logs::CheckActorActivity(i, timeLine.GetTime());
 
       mainFrame.AddDrawElement(
         new Actor(gseet.GetCoord(i), 
                                       std::max(static_cast<ActorId>(1), 9000 / Logs::GetMaxActorId()), 
                                       i, 
-                                      visible, gFont_)
+                                      visible, 
+                                      active,
+                                      gFont_)
       );
     }
 

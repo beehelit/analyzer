@@ -25,6 +25,7 @@ public:
     std::string_view message;
     std::string_view time;
     std::optional<std::string_view> actorType;
+    std::optional<std::string_view> threadId; 
 
     RealLogLine() = default;
     RealLogLine(const RealLogLine&) = default;
@@ -70,6 +71,7 @@ public:
     std::string_view message;
     VisualisationTime time;
     std::optional<std::string_view> actorType;
+    std::optional<std::string_view> threadId;
 
     ParsedLogLine() = default;
     ParsedLogLine(const ParsedLogLine&) = default;
@@ -134,6 +136,42 @@ public:
     GetActorLifeInfo();
     SetActorLifeTime();
 
+    SetActorThreadActive();
+  }
+
+  static bool CheckActorActivity(ActorId id, VisualisationTime time) {
+    if (!actorActivityTime_.count(id)) {
+      return false;
+    }
+
+    // std::cout << actorActivityTime_[id].first << " " << time << " " << actorActivityTime_[id].second << "\n";
+
+    return actorActivityTime_[id].first <= time &&
+           actorActivityTime_[id].second >= time;
+  }
+
+  static void SetActorThreadActive() {
+    VisualisationTime maxTime = Logs::GetMaxTime();
+
+    std::map<std::string_view, ActorId> usedThreads;
+
+    for (const ParsedLogLine& parsedLogLine : parsedLogLines_) {
+      if (parsedLogLine.type != "Receive") {
+        continue;
+      }
+
+      ActorId curActorId = parsedLogLine.to;
+      std::string_view curThreadId = *parsedLogLine.threadId;
+
+      actorActivityTime_[curActorId].first = parsedLogLine.time - oldMinTime_;
+      actorActivityTime_[curActorId].second = maxTime - oldMinTime_;
+
+      if (usedThreads.count(curThreadId)) {
+        actorActivityTime_[usedThreads[curThreadId]].second = parsedLogLine.time - oldMinTime_;
+      }
+
+      usedThreads[curThreadId] = curActorId;
+    }
   }
 
   static void SetNewActorTypes(const std::vector<uint8_t>& actorTypesMapConfigData) {
@@ -353,6 +391,12 @@ private:
                 std::string_view(logLine.begin() + lastCharInd, logLine.begin() + charInd);
               break;
             }
+
+            case 5 : {
+              curRealLogLine.actorType = 
+                std::string_view(logLine.begin() + lastCharInd, logLine.begin() + charInd);
+              break;
+            }
           }
 
           lastCharInd = charInd + 1;
@@ -361,7 +405,7 @@ private:
       }
 
       if (curRealLogLine.type == "Receive") {
-        curRealLogLine.actorType = 
+        curRealLogLine.threadId = 
           std::string_view(logLine.begin() + lastCharInd, logLine.begin() + charInd);
       } else {
         curRealLogLine.time = 
@@ -402,6 +446,7 @@ private:
 
       if (curParsedLogLine.type == "Receive") {
         curParsedLogLine.actorType = realLogLine.actorType;
+        curParsedLogLine.threadId = *realLogLine.threadId;
       }
 
       parsedLogLines_.push_back(curParsedLogLine);
@@ -534,9 +579,6 @@ private:
 
       std::string_view actorType = *parsedLogLine.actorType;
       if (actorTypesMap_.count(actorType)) {
-
-        if (actorTypesMap_[actorType]=="BSDBLocalRecovery")
-        std::cout << actorTypesMap_[actorType] << " A" << std::endl;
         actorType = actorTypesMap_[actorType];
       }
 
@@ -569,6 +611,8 @@ private:
   static std::map<std::string_view, std::string_view> actorTypesMap_;
 
   static std::vector<uint8_t> actorTypesMapConfigData_;
+
+  static std::map<ActorId, std::pair<VisualisationTime, VisualisationTime>> actorActivityTime_;
 };
 
 std::ostream& operator<<(std::ostream& os, const Logs::LogMessage& lm);

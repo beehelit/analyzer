@@ -19,6 +19,8 @@ VisualisationTime Logs::oldMinTime_ = 0;
 std::map<std::string_view, std::string_view> Logs::actorTypesMap_ = {};
 std::vector<uint8_t> Logs::actorTypesMapConfigData_ = {};
 
+std::map<ActorId, std::pair<VisualisationTime, VisualisationTime>> Logs::actorActivityTime_ = {};
+
 std::ostream& operator<<(std::ostream& os, const Logs::LogMessage& lm) {
   return os << "[" 
     << lm.to << ","
