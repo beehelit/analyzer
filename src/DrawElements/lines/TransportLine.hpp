@@ -49,7 +49,7 @@ public:
     Vec2Si32 toCenter = Vec2Si32(leftDownBlockCornerTo + (rightUpCornerTo - leftDownBlockCornerTo) / 2);
 
     Vec2F fromEdge = BlockEdgePos(leftDownBlockCornerFrom, Vec2F(typeBlockSizeFrom), 5.0, Vec2F(toCenter - fromCenter));
-    Vec2F toEdge = BlockEdgePos(leftDownBlockCornerTo, Vec2F(typeBlockSizeTo), 5.0, Vec2F(toCenter - fromCenter));
+    Vec2F toEdge = BlockEdgePos(leftDownBlockCornerTo, Vec2F(typeBlockSizeTo), 5.0, Vec2F(fromCenter - toCenter));
 
      Sprite sprite = drawer->GetDrawSprite();
 
@@ -97,7 +97,7 @@ public:
     Vec2Si32 toCenter = Vec2Si32(leftDownBlockCornerTo + (rightUpCornerTo - leftDownBlockCornerTo) / 2);
 
     Vec2F fromEdge = BlockEdgePos(leftDownBlockCornerFrom, Vec2F(typeBlockSizeFrom), 5.0, Vec2F(toCenter - fromCenter));
-    Vec2F toEdge = BlockEdgePos(leftDownBlockCornerTo, Vec2F(typeBlockSizeTo), 5.0, Vec2F(toCenter - fromCenter));
+    Vec2F toEdge = BlockEdgePos(leftDownBlockCornerTo, Vec2F(typeBlockSizeTo), 5.0, Vec2F(fromCenter - toCenter));
 
     double len = std::sqrt((fromEdge - toEdge).x * (fromEdge - toEdge).x + 
                  (fromEdge - toEdge).y * (fromEdge - toEdge).y);
