@@ -82,19 +82,40 @@ void EasyMain() {
     DrawBox footer;
     footer.SetDrawOptions(DrawBoxOptions{
       .flex_type="row",
-      .flex_list={0.02, 0.96, 0.02},
+      .flex_list={0.02, 0.90, 0.08},
       .background_color= Rgba(131, 131, 131)
     });
 
     DrawBox playerPausePlay;
     DrawBox timeLineBox;
     timeLineBox.SetDrawOptions(DrawBoxOptions{
-      .background_color= Rgba(255, 0, 255)
+      .background_color= Rgba(131, 131, 131),
+      .padding_right=0.05,
+      .padding_left=0.05,
+      .padding_top=0.3,
+      .padding_bottom=0.3
     });
+
+    DrawBox speedBox;
+    speedBox.SetDrawOptions(DrawBoxOptions{
+      .flex_type="column",
+      .flex_list={0.5, 0.5}
+    });
+
+    DrawBox speedChangeBox;
+    speedChangeBox.SetDrawOptions(DrawBoxOptions{
+      .flex_type="row",
+    });
+
     DrawBox speedUpBox;
     speedUpBox.SetDrawOptions(DrawBoxOptions{
-      .background_color= Rgba(100, 100, 140)
+      .background_color=Rgba(131, 131, 131),
+      .padding_right=0.3,
+      .padding_left=0.3,
+      .padding_top=0.2,
+      .padding_bottom=0.2
     });
+
 
     timeLineBox.SetDrawElement(&timeLine);
     
@@ -105,13 +126,19 @@ void EasyMain() {
     playerPausePlay.SetDrawElement(&ppp);
 
     speedUpBox.SetDrawElement(&speedUpButton);
-    speedUpBox.SetDrawOptions(DrawBoxOptions{
-      .background_color= Rgba(130, 56, 90)
-    });
 
     footer.AddDrawer(&playerPausePlay);
     footer.AddDrawer(&timeLineBox);
-    footer.AddDrawer(&speedUpBox);
+
+    footer.AddDrawer(&speedBox);
+    //footer.AddDrawer(&speedUpBox);
+
+    RectWinDraw empty1, empty2;
+    speedBox.AddDrawer(&empty1);
+    speedBox.AddDrawer(&speedChangeBox);
+
+    speedChangeBox.AddDrawer(&empty2);
+    speedChangeBox.AddDrawer(&speedUpBox);
 
     RectWinDraw mainFrame;
 

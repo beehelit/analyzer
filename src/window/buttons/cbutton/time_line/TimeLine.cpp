@@ -16,16 +16,17 @@ void TimeLine::Action() {
 }
 
 void TimeLine::Draw(const Drawer *drawer) const {
-   Si32 width = drawer->GetDrawSprite().Size().x;
+   Si32 width = GetFrameSprite().Size().x;
+   
   double curX = (1.0 * time_ / maxTime_) * width;
 
-   DrawRectangle(drawer->GetDrawSprite(),  Vec2Si32(0, 0),
-                        drawer->GetDrawSprite().Size(),
+   DrawRectangle(GetFrameSprite(),  Vec2Si32(0, 0),
+                        GetFrameSprite().Size(),
                          Rgba(255, 255, 255));
 
 
    DrawRectangle(
-      drawer->GetDrawSprite(),  Vec2Si32(0, 0),
-       Vec2Si32(curX, drawer->GetDrawSprite().Size().y),
+      GetFrameSprite(),  Vec2Si32(0, 0),
+       Vec2Si32(curX, GetFrameSprite().Size().y),
        Rgba(13, 131, 13));
 }

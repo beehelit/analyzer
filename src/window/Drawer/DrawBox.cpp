@@ -19,12 +19,25 @@ void DrawBox::DrawWithOption() const {
     if (drawElement_) {
         if (IDrawElement::IsWindowed(drawElement_->GetDrawElementType())) {
             Window* window = dynamic_cast<Window*>(drawElement_);
-            window->SetSprite(GetDrawSprite());
-/*
-            std::cout << GetDrawSprite().Size().x << " " << GetDrawSprite().Size().y << std::endl;
-            std::cout << GetDrawSprite().RefPos().x << " " << GetDrawSprite().RefPos().y << std::endl;
-            std::cout << std::endl;
-*/
+
+
+            Sprite sprite = Sprite();
+            Vec2Si32 oldSize = GetDrawSprite().Size();
+
+            Vec2Si32 size = GetDrawSprite().Size();
+            Vec2Si32 point = Vec2Si32(0, 0);
+
+            size.x -= oldSize.x * options_.padding_right;
+            size.y -= oldSize.y * options_.padding_top;
+
+            point.x += oldSize.x * options_.padding_left;
+            size.x -= oldSize.x * options_.padding_left;
+
+            point.y += oldSize.y * options_.padding_bottom;
+            size.y -= oldSize.y * options_.padding_bottom;
+
+            sprite.Reference(GetDrawSprite(), point, size);
+            window->SetSprite(sprite);
         }
 
         drawElement_->Draw(this);
@@ -46,72 +59,84 @@ void DrawBox::DrawWithOption() const {
         }
     }
 
-     Sprite curSpace = space_;
-     Si32 width = curSpace.Width();
-     Si32 height = curSpace.Height();
+    Sprite curSpace = space_;
+    Si32 width = curSpace.Width();
+    Si32 height = curSpace.Height();
+
+    std::vector<std::pair<Si32, Si32>> borders;
+    borders.reserve(curOptions.flex_list.size());
+
+    std::vector<Sprite> drawerSprites;
+    drawerSprites.resize(curOptions.flex_list.size());
 
     if (curOptions.flex_type == "row") {
-        std::vector<std::pair< Si32,  Si32>> widthBorders;
-        widthBorders.reserve(curOptions.flex_list.size());
-
-        std::vector< Sprite> drawerSprites_;
-        drawerSprites_.resize(curOptions.flex_list.size());
-
-        widthBorders.emplace_back(0, ( Si32)(width * curOptions.flex_list[0]));        
-
-        for (size_t curWidthBorderNum = 1; 
-             curWidthBorderNum < curOptions.flex_list.size();
-             ++curWidthBorderNum) {
-            widthBorders.emplace_back(widthBorders.back().second+1,
-                widthBorders.back().second + width * curOptions.flex_list[curWidthBorderNum]);
-
-            if (curWidthBorderNum == curOptions.flex_list.size() - 1) {
-                widthBorders.back().second = width;
-            }
-        }
-
-        for (size_t curWidthBorderNum = 0;
-             curWidthBorderNum < curOptions.flex_list.size();
-             ++curWidthBorderNum) {
-            drawerSprites_[curWidthBorderNum].Reference(curSpace,
-                 Vec2Si32(widthBorders[curWidthBorderNum].first, 0),
-                 Vec2Si32(widthBorders[curWidthBorderNum].second, curSpace.Height())
-            );
-
-            drawers_[curWidthBorderNum]->SetDrawSprite(drawerSprites_[curWidthBorderNum]);
-        }
+        borders.emplace_back(0, (Si32)(width * curOptions.flex_list[0]));        
     } else if (curOptions.flex_type == "column") {
-        std::vector<std::pair< Si32,  Si32>> heightBorders;
-        heightBorders.reserve(curOptions.flex_list.size());
+        borders.emplace_back(0, (Si32)(height * curOptions.flex_list[0]));
+    }
 
-        std::vector< Sprite> drawerSprites_;
-        drawerSprites_.resize(curOptions.flex_list.size());
+    for (size_t curBorderNum = 1; 
+            curBorderNum < curOptions.flex_list.size();
+            ++curBorderNum) {
 
-        heightBorders.emplace_back(0, ( Si32)(height * curOptions.flex_list[0]));        
+        if (curOptions.flex_type == "row") {
+            borders.emplace_back(borders.back().second+1,
+                borders.back().second + width * curOptions.flex_list[curBorderNum]);
 
-        for (size_t curHeightBorderNum = 1; 
-             curHeightBorderNum < curOptions.flex_list.size();
-             ++curHeightBorderNum) {
-            heightBorders.emplace_back(heightBorders.back().second+1,
-                heightBorders.back().second + height*curOptions.flex_list[curHeightBorderNum]);
-
-            if (curHeightBorderNum == curOptions.flex_list.size() - 1) {
-                heightBorders.back().second = height;
+            if (curBorderNum == curOptions.flex_list.size() - 1) {
+                borders.back().second = width;
             }
-        }
+        } else if (curOptions.flex_type == "column") {
+            borders.emplace_back(borders.back().second+1,
+                borders.back().second + height*curOptions.flex_list[curBorderNum]);
 
-        for (size_t curHeightBorderNum = 0;
-             curHeightBorderNum < curOptions.flex_list.size();
-             ++curHeightBorderNum) {
-            drawerSprites_[curHeightBorderNum].Reference(curSpace,
-                 Vec2Si32(0, heightBorders[curHeightBorderNum].first),
-                 Vec2Si32(curSpace.Width(), heightBorders[curHeightBorderNum].second)
-            );
-
-            drawers_[curHeightBorderNum]->SetDrawSprite(drawerSprites_[curHeightBorderNum]);
+            if (curBorderNum == curOptions.flex_list.size() - 1) {
+                borders.back().second = height;
+            }
         }
     }
 
+    struct SpritePointSize {
+        Vec2Si32 point;
+        Vec2Si32 size;
+    };
+
+    std::vector<SpritePointSize> forSprites(drawerSprites.size());
+    for (size_t curBorderNum = 0;
+            curBorderNum < curOptions.flex_list.size();
+            ++curBorderNum) {
+
+        if (curOptions.flex_type == "row") {
+            forSprites[curBorderNum].point = Vec2Si32(borders[curBorderNum].first, 0);
+            forSprites[curBorderNum].size = Vec2Si32(borders[curBorderNum].second - borders[curBorderNum].first, curSpace.Height());
+        } else if (curOptions.flex_type == "column") {
+            forSprites[curBorderNum].point = Vec2Si32(0, borders[curBorderNum].first);
+            forSprites[curBorderNum].size = Vec2Si32(curSpace.Width(), borders[curBorderNum].second - borders[curBorderNum].first);
+        }
+    }
+
+    for (size_t spriteNum = 0; spriteNum < forSprites.size(); ++spriteNum) {
+        Vec2Si32 size = forSprites[spriteNum].size;
+
+        forSprites[spriteNum].size.x -= size.x * curOptions.padding_right;
+
+        forSprites[spriteNum].size.y -= size.y * curOptions.padding_top;
+
+        forSprites[spriteNum].point.x += size.x * (curOptions.padding_left);
+        forSprites[spriteNum].size.x -= size.x * (curOptions.padding_left);
+
+        forSprites[spriteNum].point.y += size.y * (curOptions.padding_bottom);
+        forSprites[spriteNum].size.y -= size.y * (curOptions.padding_bottom);
+    }
+
+    for (size_t curBorderNum = 0;
+            curBorderNum < curOptions.flex_list.size();
+            ++curBorderNum) {
+        
+        drawerSprites[curBorderNum].Reference(curSpace, forSprites[curBorderNum].point, forSprites[curBorderNum].size);
+        drawers_[curBorderNum]->SetDrawSprite(drawerSprites[curBorderNum]);
+    }
+    
     for (const Drawer* drawer : drawers_) {
         drawer->Draw();
     }

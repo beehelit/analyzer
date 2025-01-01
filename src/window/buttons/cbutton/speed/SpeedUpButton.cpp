@@ -20,7 +20,7 @@ void SpeedUpButton::Draw(const Drawer *drawer) const {
   for (size_t i = 0; i < usePix_.size(); ++i) {
     for (size_t j = 0; j < usePix_[i].size(); ++j) {
       if (usePix_[i][j]) {
-         SetPixel(drawer->GetDrawSprite(), j, i, color);
+         SetPixel(GetFrameSprite(), j, i, color);
       }
     }
   }
@@ -48,11 +48,11 @@ void SpeedUpButton::DrawPicture() {
   size_t height = usePix_.size();
   size_t width = usePix_.front().size();
 
-  size_t plusWidth = width / 10;
-  size_t plusHeight = height / 10;
+  size_t plusWidth = width / 6;
+  size_t plusHeight = height / 5;
 
   size_t centerX = width / 2;
-  size_t centerY = width / 2;
+  size_t centerY = height / 2;
 
   for (int x = centerX - plusWidth; x < centerX + plusWidth; ++x) {
     for (int y = 0; y < height; ++y) {

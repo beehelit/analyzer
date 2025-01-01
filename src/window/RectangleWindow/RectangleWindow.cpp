@@ -16,6 +16,6 @@ bool RectangleWindow::IsMouseIn() const {
 
   return mousePos.x > spritePos.x && 
          mousePos.y > spritePos.y &&
-         mousePos.x < spriteSize.x && // ?
-         mousePos.y < spriteSize.y; // ? 
+         mousePos.x < spritePos.x + spriteSize.x &&
+         mousePos.y < spritePos.y + spriteSize.y;
 }

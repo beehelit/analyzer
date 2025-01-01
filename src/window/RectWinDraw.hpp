@@ -60,5 +60,5 @@ private:
   std::optional<GreedSeet*> gs_;
   mutable  Font gFont_;
 
-   Rgba backgroundColor_;
+   Rgba backgroundColor_=Rgba(0, 0, 0);
 };
