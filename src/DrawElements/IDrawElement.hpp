@@ -9,6 +9,7 @@ enum class DrawElementType {
   FPS,
   PLAYER_PAUSE_PLAY_BUTTON,
   SPEED_UP_BUTTON,
+  SPEED_DOWN_BUTTON,
   TIME_LINE,
   MESSAGE
 };
@@ -30,6 +31,9 @@ public:
         return true;
 
       case DrawElementType::SPEED_UP_BUTTON:
+        return true;
+
+      case DrawElementType::SPEED_DOWN_BUTTON:
         return true;
         
       default:

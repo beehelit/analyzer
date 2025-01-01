@@ -23,7 +23,11 @@ public:
     CButton::Listen();
 
     if (status_ && time_ < maxTime_) {
-      time_ += speed_;
+      if (speed_ < 0 && time_ < -speed_) {
+        time_ = 0;
+      } else {
+        time_ += speed_;
+      }
       time_ = std::min(time_, maxTime_);
     }
   }

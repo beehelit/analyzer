@@ -80,14 +80,14 @@ void DrawBox::DrawWithOption() const {
             ++curBorderNum) {
 
         if (curOptions.flex_type == "row") {
-            borders.emplace_back(borders.back().second+1,
+            borders.emplace_back(borders.back().second,
                 borders.back().second + width * curOptions.flex_list[curBorderNum]);
 
             if (curBorderNum == curOptions.flex_list.size() - 1) {
                 borders.back().second = width;
             }
         } else if (curOptions.flex_type == "column") {
-            borders.emplace_back(borders.back().second+1,
+            borders.emplace_back(borders.back().second,
                 borders.back().second + height*curOptions.flex_list[curBorderNum]);
 
             if (curBorderNum == curOptions.flex_list.size() - 1) {

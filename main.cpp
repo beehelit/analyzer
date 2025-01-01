@@ -14,6 +14,7 @@
 #include <window/Drawer/DrawBox.hpp>
 #include <window/RectangleWindow/Footer.hpp>
 #include <window/buttons/cbutton/speed/SpeedUpButton.hpp>
+#include <window/buttons/cbutton/speed/SpeedDownButton.hpp>
 #include <window/buttons/cbutton/time_line/TimeLine.hpp>
 #include <DrawElements/messages/message.hpp>
 
@@ -65,7 +66,13 @@ void EasyMain() {
   SpeedUpButton speedUpButton;
   speedUpButton.SetMouse(&mouse);
   speedUpButton.SetAction([&timeLine]() {
-    timeLine.SetSpeed(timeLine.GetSpeed() + 10);
+    timeLine.SetSpeed(timeLine.GetSpeed() + 2);
+  });
+
+  SpeedDownButton speedDownButton;
+  speedDownButton.SetMouse(&mouse);
+  speedDownButton.SetAction([&timeLine]() {
+    timeLine.SetSpeed(timeLine.GetSpeed() - 2);
   });
 
   while (!IsKeyDownward( kKeyEscape)) {
@@ -116,6 +123,12 @@ void EasyMain() {
       .padding_bottom=0.2
     });
 
+    DrawBox speedDownBox;
+    speedDownBox.SetDrawOptions(DrawBoxOptions{
+      .background_color=Rgba(131, 131, 131),
+      .padding_right=0.3,
+      .padding_left=0.3
+    });
 
     timeLineBox.SetDrawElement(&timeLine);
     
@@ -126,6 +139,7 @@ void EasyMain() {
     playerPausePlay.SetDrawElement(&ppp);
 
     speedUpBox.SetDrawElement(&speedUpButton);
+    speedDownBox.SetDrawElement(&speedDownButton);
 
     footer.AddDrawer(&playerPausePlay);
     footer.AddDrawer(&timeLineBox);
@@ -133,11 +147,11 @@ void EasyMain() {
     footer.AddDrawer(&speedBox);
     //footer.AddDrawer(&speedUpBox);
 
-    RectWinDraw empty1, empty2;
+    RectWinDraw empty1;
     speedBox.AddDrawer(&empty1);
     speedBox.AddDrawer(&speedChangeBox);
 
-    speedChangeBox.AddDrawer(&empty2);
+    speedChangeBox.AddDrawer(&speedDownBox);
     speedChangeBox.AddDrawer(&speedUpBox);
 
     RectWinDraw mainFrame;
@@ -196,6 +210,7 @@ void EasyMain() {
     ppp.Listen();
     timeLine.Listen();
     speedUpButton.Listen();
+    speedDownButton.Listen();
     mainFrame.Listen();
 
     VisualisationTime curTime = timeLine.GetTime();
