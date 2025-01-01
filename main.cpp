@@ -7,6 +7,7 @@
 #include <log/log_reader/LogReader.hpp>
 #include <log/Logs.hpp>
 #include <DrawElements/lines/TransportLine.hpp>
+#include <DrawElements/lines/SelfTransportLine.hpp>
 #include <DrawElements//fps/FpsCounter.hpp>
 #include <DrawElements/fps/Fps.hpp>
 #include <window/buttons/cbutton/CButton.hpp>
@@ -150,7 +151,13 @@ void EasyMain() {
       }
 
       if (event.start <= timeLine.GetTime() && event.end >= timeLine.GetTime()) {
-        TransportLine* tLine = new TransportLine(event.from, event.to);
+        TransportLine* tLine = nullptr;
+        if (event.from == event.to) {
+          tLine = new SelfTransportLine(event.from, event.to);
+        } else {
+          tLine = new TransportLine(event.from, event.to);
+        }
+
         mainFrame.AddDrawElement(tLine);
         mainFrame.AddDrawElement(new Message(
           tLine, (1.0 * timeLine.GetTime() - event.start) / (event.end - event.start)

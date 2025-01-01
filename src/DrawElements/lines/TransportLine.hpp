@@ -58,7 +58,7 @@ public:
                       Rgba(120, 0, 0));
   }
 
-  Vec2Si32 GetTransportLinePoint(const Drawer* drawer, double part) const {
+  virtual Vec2Si32 GetTransportLinePoint(const Drawer* drawer, double part) const {
     part = std::min(part, 1.);
     part = std::max(part, 0.);
 
@@ -117,6 +117,6 @@ public:
 
   std::pair< Si32,  Si32> GetFromTo() const { return fromTo_; }
 
-private:
+protected:
   std::pair< Si32,  Si32> fromTo_;
 };
