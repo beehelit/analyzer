@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 ################### Variables. ####################
 # Change if you want modify path or other values. #
@@ -14,20 +13,20 @@ endif(NOT CMAKE_BUILD_TYPE)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}.")
 
-set(PROJECT_NAME analizer)
+set(PROJECT_NAME analyzer)
 # Output Variables
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 # Folders files
 set(DATA_DIR .)
-set(CPP_DIR_1 ../arctic/engine)
+set(CPP_DIR_1 submodules/arctic/engine)
 set(CPP_DIR_2 .)
-set(HEADER_DIR_1 ../arctic/engine)
+set(HEADER_DIR_1 submodules/arctic/engine)
 set(HEADER_DIR_2 .)
 
 file(GLOB_RECURSE RES_SOURCES "${DATA_DIR}/data/*")
 
 SET(CMAKE_CXX_COMPILER             "/usr/bin/clang++")
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 ############## Define Project. ###############
 # ---- This the main options of project ---- #
@@ -94,7 +93,9 @@ ELSE (APPLE)
 ENDIF (APPLE)
 
 include_directories(${CMAKE_SOURCE_DIR}/..)
-include_directories(${CMAKE_SOURCE_DIR}/../arctic)
+include_directories(${CMAKE_SOURCE_DIR}/submodules)
+include_directories(${CMAKE_SOURCE_DIR}/submodules/arctic)
+include_directories(${CMAKE_SOURCE_DIR}/src)
 
 ################# Flags ################
 # Defines Flags for Windows and Linux. #
@@ -135,7 +136,24 @@ file(GLOB SRC_FILES
     ${HEADER_DIR_2}/*.hpp
 
     #iamnotexist
-    src/MainFrame/*.cpp
+    # src/window/RectangleWindow/*.cpp
+    src/window/Drawer/*.cpp
+    src/window/*.cpp
+    src/seet/*.cpp
+    src/camera/*.cpp
+    src/mouse/*.cpp
+    src/log/log_reader/*.cpp
+    src/log/*.cpp
+    src/DrawElements/actors/*.cpp
+    src/DrawElements/fps/*.cpp
+    src/window/MWindow/*.cpp
+    src/window/buttons/cbutton/*.cpp
+    src/window/buttons/cbutton/player_pause_play/*.cpp
+    src/window/RectangleWindow/*.cpp
+    src/window/buttons/cbutton/time_line/*.cpp
+    src/window/buttons/cbutton/speed/*.cpp
+    src/DrawElements/messages/*.cpp
+    src/window/Drawer/*.cpp
 )
 ELSE (APPLE)
 file(GLOB SRC_FILES
@@ -147,6 +165,24 @@ file(GLOB SRC_FILES
     ${HEADER_DIR_1}/*.hpp
     ${HEADER_DIR_2}/*.h
     ${HEADER_DIR_2}/*.hpp
+
+    src/window/Drawer/*.cpp
+    src/window/*.cpp
+    src/seet/*.cpp
+    src/camera/*.cpp
+    src/mouse/*.cpp
+    src/log/log_reader/*.cpp
+    src/log/*.cpp
+    src/DrawElements/actors/*.cpp
+    src/DrawElements/fps/*.cpp
+    src/window/MWindow/*.cpp
+    src/window/buttons/cbutton/*.cpp
+    src/window/buttons/cbutton/player_pause_play/*.cpp
+    src/window/RectangleWindow/*.cpp
+    src/window/buttons/cbutton/time_line/*.cpp
+    src/window/buttons/cbutton/speed/*.cpp
+    src/DrawElements/messages/*.cpp
+    src/window/Drawer/*.cpp
 )
 ENDIF (APPLE)
 file(GLOB SRC_FILES_TO_REMOVE
@@ -190,3 +226,6 @@ target_link_libraries(
   #  ${GLES_LIBRARY}
 )
 ENDIF (APPLE)
+
+
+add_subdirectory(test)
