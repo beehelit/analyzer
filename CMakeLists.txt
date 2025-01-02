@@ -146,6 +146,7 @@ file(GLOB SRC_FILES
     src/log/*.cpp
     src/DrawElements/actors/*.cpp
     src/DrawElements/fps/*.cpp
+    src/DrawElements/lines/*.cpp
     src/window/MWindow/*.cpp
     src/window/buttons/cbutton/*.cpp
     src/window/buttons/cbutton/player_pause_play/*.cpp
@@ -175,6 +176,7 @@ file(GLOB SRC_FILES
     src/log/*.cpp
     src/DrawElements/actors/*.cpp
     src/DrawElements/fps/*.cpp
+    src/DrawElements/lines/*.cpp
     src/window/MWindow/*.cpp
     src/window/buttons/cbutton/*.cpp
     src/window/buttons/cbutton/player_pause_play/*.cpp

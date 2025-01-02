@@ -6,6 +6,7 @@
 #include <window/Window.hpp>
 #include <map>
 
+#include <DrawElements/messages/message.hpp>
 #include "engine/easy_sprite.h"
 
 #include <memory>
@@ -43,6 +44,8 @@ private:
   std::vector<IDrawElement *> drawStorage_;
   std::optional<Camera *> camera_;
 
-  std::vector<Actor *> actorStorage_;
+  std::vector<Actor*> actorStorage_;
+  std::vector<Message*> messageExtendedStorage_;
+
   std::map<uint64_t, size_t> actorIdToStorageInd_;
 };

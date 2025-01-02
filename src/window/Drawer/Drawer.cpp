@@ -27,6 +27,10 @@ void Drawer::AddDrawElement(IDrawElement *drawElement) {
     throw std::runtime_error("Null pointer, Add: drawElement");
   }
 
+  if (drawElement->GetDrawElementType() == DrawElementType::MESSAGE) {
+    messageExtendedStorage_.push_back(dynamic_cast<Message*>(drawElement));
+  }
+
   if (drawElement->GetDrawElementType() == DrawElementType::ACTOR) {
     actorStorage_.push_back(dynamic_cast<Actor *>(drawElement));
     actorIdToStorageInd_[dynamic_cast<Actor *>(drawElement)->GetId()] = actorStorage_.size() - 1;
