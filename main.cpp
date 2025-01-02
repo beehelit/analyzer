@@ -27,6 +27,7 @@
 #include "engine/easy_input.h"
 #include "engine/easy_sprite.h"
 #include "engine/easy_util.h"
+#include "engine/font.h"
 #include "engine/rgba.h"
 #include "engine/vec2d.h"
 #include "engine/vec2si32.h"
@@ -148,6 +149,8 @@ void EasyMain() {
     //footer.AddDrawer(&speedUpBox);
 
     RectWinDraw empty1;
+    empty1.SetBackgroundColor(Rgba(131, 131, 131));
+
     speedBox.AddDrawer(&empty1);
     speedBox.AddDrawer(&speedChangeBox);
 
@@ -216,13 +219,21 @@ void EasyMain() {
     VisualisationTime curTime = timeLine.GetTime();
     std::string time = std::to_string(curTime / 1'000'000) + '.' + 
                        std::to_string(curTime % 1'000'000) + "s";
-
-     Vec2Si32 timeSize = gFont_.EvaluateSize(time.c_str(), false);
+    Vec2Si32 timeSize = gFont_.EvaluateSize(time.c_str(), false);
     gFont_.Draw(mainFrame.GetDrawSprite(), time.c_str(),
                 mainFrame.GetDrawSprite().Size().x - timeSize.x, mainFrame.GetDrawSprite().Size().y - timeSize.y,
                  kTextOriginTop,  kTextAlignmentLeft,
                  kDrawBlendingModeColorize,  kFilterNearest,
                  Rgba(255, 0, 0));
+
+    int curSpeed = timeLine.GetSpeed();
+    std::string speed = "Speed: " + std::to_string(curSpeed) + "x";
+    Vec2Si32 speedSize = gFont_.EvaluateSize(speed.c_str(), false);
+    gFont_.Draw(footer.GetDrawSprite(), speed.c_str(),
+                footer.GetDrawSprite().Size().x - speedSize.x, 0,
+                kTextOriginBottom, kTextAlignmentRight,
+                kDrawBlendingModeColorize, kFilterNearest,
+                Rgba(0, 255, 120));
 
      ShowFrame();
   }

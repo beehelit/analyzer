@@ -54,7 +54,7 @@ void PlayerPausePlay::DrawPicture() {
   size_t height = usePix_.size();
   size_t width = usePix_.front().size();
 
-  size_t paddingWidth = usePix_.front().size() / 10;
+  size_t paddingWidth = usePix_.front().size() / 8;
   size_t paddingHeight = usePix_.size() / 10;
 
   int del = 0;
